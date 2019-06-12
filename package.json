@@ -1,0 +1,14 @@
+{
+  "name": "f1stats",
+  "version": "1.0.0",
+  "description": "Telegram bot for F1 stats",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mark Ajtay",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
