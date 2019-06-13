@@ -9,6 +9,7 @@
   "author": "Mark Ajtay",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "axios": "^0.19.0",
+    "telegraf": "^3.30.1"
   }
 }
