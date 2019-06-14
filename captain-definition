@@ -1,4 +1,7 @@
 {
   "schemaVersion": 2,
-  "templateId": "node/12.4.0"
+  "templateId": "node/12.4.0",
+  "dockerfileLines": [
+                        "ENV NODE_ENV production"
+                    ]
  }
