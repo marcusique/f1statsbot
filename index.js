@@ -8,6 +8,31 @@ const Telegraf = require('telegraf'),
 /* Welcome Message */
 bot.start(ctx => ctx.reply('Welcome to F1 Stats Bot!'));
 
+/* Get Current Constructors Standings [START]*/
+bot.command('/getcurrentconstructorsstandings', ctx => {
+  axios.get(`${apiUrl}current/constructorStandings.json`).then(function(res) {
+    const numOfLastRace =
+      res.data.MRData.StandingsTable.StandingsLists[0].round;
+    const constructorStandings =
+      res.data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
+    let preparedReply = [];
+    for (let i = 0; i < constructorStandings.length; i++) {
+      preparedReply.push(
+        `${i + 1}. ${constructorStandings[i].Constructor.name} (${
+          constructorStandings[i].points
+        })`
+      );
+    }
+    ctx.reply(
+      `<b>Current Constructors Standings after ${numOfLastRace} race(s):\n\n</b>${preparedReply.join(
+        '\n'
+      )}`,
+      { parse_mode: 'HTML' }
+    );
+  });
+});
+/* Get Current Constructor Standings [END]*/
+
 /* Get Current Driver Standings [START]*/
 bot.command('/getcurrentdriverstandings', ctx => {
   axios.get(`${apiUrl}current/driverStandings.json`).then(function(res) {
