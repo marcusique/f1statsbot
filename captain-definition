@@ -1,6 +1,4 @@
 {
   "schemaVersion": 2,
-  "dockerfileLines": [
-                        "ENV NODE_ENV production"
-                    ]
+  "dockerfileLines": "ENV NODE_ENV production"       
  }
