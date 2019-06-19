@@ -15,7 +15,7 @@ const Telegraf = require('telegraf'),
 bot.start(ctx => {
   ctx.reply(
     'Go to the main menu!',
-    Markup.keyboard([['Menu']])
+    Markup.keyboard([['🗂 Menu']])
       .oneTime()
       .resize()
       .extra()
@@ -26,8 +26,8 @@ bot.start(ctx => {
 const mainMenu = new Scene('menu');
 mainMenu.enter(ctx => {
   return ctx.reply(
-    'Main Menu',
-    Markup.keyboard([['Drivers', 'Constructors'], ['Schedule']])
+    '🗂 Select from the menu below ⬇️',
+    Markup.keyboard([['👱🏻‍♂️ Drivers', '🏎 Constructors'], ['🗓 Schedule']])
       .oneTime()
       .resize()
       .extra()
@@ -39,10 +39,10 @@ mainMenu.enter(ctx => {
 const drivers = new Scene('drivers');
 drivers.enter(ctx => {
   return ctx.reply(
-    'Drivers Scene',
+    '👱🏻‍♂️ Select from the menu below ⬇️',
     Markup.keyboard([
-      [`Current Standings (${currentYear})`, 'Standings by year'],
-      ['Main Menu']
+      [`🏅  Current Standings (${currentYear})`, '🎖 Standings by year'],
+      ['🗂 Main Menu']
     ])
       .oneTime()
       .resize()
@@ -50,8 +50,8 @@ drivers.enter(ctx => {
   );
 });
 
-/* Current Standings [START] */
-drivers.hears(`Current Standings (${currentYear})`, ctx => {
+/* 🏅 Current Standings [START] */
+drivers.hears(`🏅  Current Standings (${currentYear})`, ctx => {
   axios
     .get(`${apiUrl}current/driverStandings.json`)
     .then(res => {
@@ -83,10 +83,10 @@ drivers.hears(`Current Standings (${currentYear})`, ctx => {
       console.log(err);
     });
 });
-/* Current Standings [END] */
+/* 🏅 Current Standings [END] */
 
 /* Standings by Year [START] */
-drivers.hears('Standings by year', ctx => {
+drivers.hears('🎖 Standings by year', ctx => {
   ctx.reply('Enter a year: ');
   drivers.on('text', ctx => {
     ctx.scene.state = { value: ctx.message.text };
@@ -131,7 +131,7 @@ drivers.hears('Standings by year', ctx => {
 });
 /* Standings by Year [END] */
 
-drivers.hears('Main Menu', ctx => {
+drivers.hears('🗂 Main Menu', ctx => {
   ctx.scene.enter('menu');
 });
 /*Drivers Scene [END]*/
@@ -140,10 +140,10 @@ drivers.hears('Main Menu', ctx => {
 const constructors = new Scene('constructors');
 constructors.enter(ctx => {
   return ctx.reply(
-    'Constructors Scene',
+    '🏎 Select from the menu below ⬇️',
     Markup.keyboard([
-      [`Current Standings (${currentYear})`, 'Standings by year'],
-      ['Main Menu']
+      [`🏅 Current Standings (${currentYear})`, '🎖 Standings by year'],
+      ['🗂 Main Menu']
     ])
       .oneTime()
       .resize()
@@ -151,8 +151,8 @@ constructors.enter(ctx => {
   );
 });
 
-/* Current Standings [START] */
-constructors.hears(`Current Standings (${currentYear})`, ctx => {
+/* 🏅 Current Standings [START] */
+constructors.hears(`🏅 Current Standings (${currentYear})`, ctx => {
   axios
     .get(`${apiUrl}current/constructorStandings.json`)
     .then(res => {
@@ -169,7 +169,7 @@ constructors.hears(`Current Standings (${currentYear})`, ctx => {
         );
       }
       ctx.reply(
-        `<b>Current Constructors Standings after ${numOfLastRace} race(s):\n\n</b>${preparedReply.join(
+        `<b>Current 🏎 Constructors Standings after ${numOfLastRace} race(s):\n\n</b>${preparedReply.join(
           '\n'
         )}`,
         { parse_mode: 'HTML' }
@@ -180,10 +180,10 @@ constructors.hears(`Current Standings (${currentYear})`, ctx => {
       console.log(err);
     });
 });
-/* Current Standings [END] */
+/* 🏅 Current Standings [END] */
 
 /* Standings by Year [START] */
-constructors.hears('Standings by year', ctx => {
+constructors.hears('🎖 Standings by year', ctx => {
   ctx.reply('Enter a year: ');
   constructors.on('text', ctx => {
     ctx.scene.state = { value: ctx.message.text };
@@ -206,7 +206,7 @@ constructors.hears('Standings by year', ctx => {
             );
           }
           ctx.reply(
-            `<b>Constructors Standings in ${
+            `<b>🏎 Constructors Standings in ${
               ctx.message.text
             }:</b> \n\n${preparedReply.join('\n')}`,
             { parse_mode: 'HTML' }
@@ -225,20 +225,20 @@ constructors.hears('Standings by year', ctx => {
 });
 /* Standings by Year [END] */
 
-constructors.hears('Main Menu', ctx => {
+constructors.hears('🗂 Main Menu', ctx => {
   ctx.scene.enter('menu');
 });
 /* Constructor Scene [END] */
 
-/* Schedule Scene [START] */
+/* 🗓 Schedule Scene [START] */
 const schedule = new Scene('schedule');
 schedule.enter(ctx => {
   return ctx.reply(
-    'Schedule Scene',
+    '🗓 Select from the menu below ⬇️',
     Markup.keyboard([
-      ['Previous Race', 'Next Race'],
-      [`Current Schedule (${currentYear})`],
-      ['Main Menu']
+      ['🔙 Previous Race', '🔜 Next Race'],
+      [`🗓 Current Schedule (${currentYear})`],
+      ['🗂 Main Menu']
     ])
       .oneTime()
       .resize()
@@ -246,7 +246,7 @@ schedule.enter(ctx => {
   );
 });
 
-schedule.hears(`Current Schedule (${currentYear})`, ctx => {
+schedule.hears(`🗓 Current Schedule (${currentYear})`, ctx => {
   axios.get(`${apiUrl}current.json`).then(res => {
     const currentSchedule = res.data.MRData.RaceTable.Races;
     let preparedReply = [];
@@ -258,19 +258,22 @@ schedule.hears(`Current Schedule (${currentYear})`, ctx => {
       );
     }
     ctx.reply(
-      `<b>Race Schedule for ${currentYear}:</b>\n\n${preparedReply.join('\n')}`,
+      `<b>Race 🗓 Schedule for ${currentYear}:</b>\n\n${preparedReply.join(
+        '\n'
+      )}`,
       { parse_mode: 'HTML' }
     );
     ctx.scene.reenter();
   });
 });
 
-schedule.hears('Previous Race', ctx => {
+schedule.hears('🔙 Previous Race', ctx => {
   axios.get(`${apiUrl}current/last/results.json`).then(res => {
     const results = res.data.MRData.RaceTable.Races[0].Results;
     const raceName = res.data.MRData.RaceTable.Races[0].raceName;
+    const gpName = res.data.MRData.RaceTable.Races[0].Circuit.Location.country;
+    const wikiReportUrl = res.data.MRData.RaceTable.Races[0].url;
     let preparedReply = [];
-    console.log(results);
     for (let i = 0; i < results.length; i++) {
       preparedReply.push(
         `${i + 1}. ${results[i].Driver.givenName} ${
@@ -278,25 +281,29 @@ schedule.hears('Previous Race', ctx => {
         } (${results[i].points})`
       );
     }
-    ctx.reply(`<b>${raceName} results</b>: \n\n${preparedReply.join('\n')}`, {
-      parse_mode: 'HTML'
-    });
+    ctx.reply(
+      `${flag(gpName)}${raceName} results: \n\n${preparedReply.join('\n')}`,
+      Markup.inlineKeyboard([
+        Markup.urlButton('Race Report (Wikipedia)', `${wikiReportUrl}`)
+      ]).extra()
+    );
+    ctx.scene.reenter();
   });
 });
 
-schedule.hears('Next Race', ctx => {
+schedule.hears('🔜 Next Race', ctx => {
   axios
     .get(`${apiUrl}current/last/results.json`)
     .then(res => {
-      let lastRace = parseInt(res.data.MRData.RaceTable.round);
-      let nextRace = lastRace + 1;
-      let totalRaces = parseInt(res.data.MRData.total) + 1;
+      const lastRace = parseInt(res.data.MRData.RaceTable.round);
+      const nextRace = lastRace + 1;
+      const totalRaces = parseInt(res.data.MRData.total) + 1;
       if (nextRace <= totalRaces) {
         axios
           .get(`${apiUrl}current/${nextRace}.json`)
           .then(res => {
-            let raceInfo = res.data.MRData.RaceTable;
-            let gpWikiLink = raceInfo.Races[0].url;
+            const raceInfo = res.data.MRData.RaceTable;
+            const gpWikiLink = raceInfo.Races[0].url;
             ctx.reply(
               `The next race is ${flag(
                 raceInfo.Races[0].Circuit.Location.country
@@ -310,6 +317,7 @@ schedule.hears('Next Race', ctx => {
                 Markup.urlButton('Wikipedia', `${gpWikiLink}`)
               ]).extra()
             );
+            ctx.scene.reenter();
           })
           .catch(err => {
             console.log(err);
@@ -321,14 +329,13 @@ schedule.hears('Next Race', ctx => {
     });
 });
 
-schedule.hears('Main Menu', ctx => {
+schedule.hears('🗂 Main Menu', ctx => {
   ctx.scene.enter('menu');
 });
-/* Schedule Scene [END] */
+/* 🗓 Schedule Scene [END] */
 
 // Create scene manager
 const stage = new Stage();
-//stage.command('cancel', leave())
 
 // Scene registration
 stage.register(mainMenu);
@@ -338,9 +345,9 @@ stage.register(schedule);
 
 bot.use(session());
 bot.use(stage.middleware());
-bot.hears('Menu', ctx => ctx.scene.enter('menu'));
-bot.hears('Drivers', ctx => ctx.scene.enter('drivers'));
-bot.hears('Constructors', ctx => ctx.scene.enter('constructors'));
-bot.hears('Schedule', ctx => ctx.scene.enter('schedule'));
+bot.hears('🗂 Menu', ctx => ctx.scene.enter('menu'));
+bot.hears('👱🏻‍♂️ Drivers', ctx => ctx.scene.enter('drivers'));
+bot.hears('🏎 Constructors', ctx => ctx.scene.enter('constructors'));
+bot.hears('🗓 Schedule', ctx => ctx.scene.enter('schedule'));
 
 bot.launch();
