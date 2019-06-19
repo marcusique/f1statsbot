@@ -14,7 +14,7 @@ const Telegraf = require('telegraf'),
 /* Welcome Message */
 bot.start(ctx => {
   ctx.reply(
-    'I can do a lot of things! Go to the main menu!',
+    'Go to the main menu!',
     Markup.keyboard([['Menu']])
       .oneTime()
       .resize()
@@ -247,7 +247,7 @@ schedule.enter(ctx => {
 });
 
 schedule.hears(`Current Schedule (${currentYear})`, ctx => {
-  axios.get(`${apiUrl}current.json`).then(function(res) {
+  axios.get(`${apiUrl}current.json`).then(res => {
     const currentSchedule = res.data.MRData.RaceTable.Races;
     let preparedReply = [];
     for (let i = 0; i < currentSchedule.length; i++) {
@@ -263,6 +263,62 @@ schedule.hears(`Current Schedule (${currentYear})`, ctx => {
     );
     ctx.scene.reenter();
   });
+});
+
+schedule.hears('Previous Race', ctx => {
+  axios.get(`${apiUrl}current/last/results.json`).then(res => {
+    const results = res.data.MRData.RaceTable.Races[0].Results;
+    const raceName = res.data.MRData.RaceTable.Races[0].raceName;
+    let preparedReply = [];
+    console.log(results);
+    for (let i = 0; i < results.length; i++) {
+      preparedReply.push(
+        `${i + 1}. ${results[i].Driver.givenName} ${
+          results[i].Driver.familyName
+        } (${results[i].points})`
+      );
+    }
+    ctx.reply(`<b>${raceName} results</b>: \n\n${preparedReply.join('\n')}`, {
+      parse_mode: 'HTML'
+    });
+  });
+});
+
+schedule.hears('Next Race', ctx => {
+  axios
+    .get(`${apiUrl}current/last/results.json`)
+    .then(res => {
+      let lastRace = parseInt(res.data.MRData.RaceTable.round);
+      let nextRace = lastRace + 1;
+      let totalRaces = parseInt(res.data.MRData.total) + 1;
+      if (nextRace <= totalRaces) {
+        axios
+          .get(`${apiUrl}current/${nextRace}.json`)
+          .then(res => {
+            let raceInfo = res.data.MRData.RaceTable;
+            let gpWikiLink = raceInfo.Races[0].url;
+            ctx.reply(
+              `The next race is ${flag(
+                raceInfo.Races[0].Circuit.Location.country
+              )} ${raceInfo.Races[0].raceName} at ${
+                raceInfo.Races[0].Circuit.circuitName
+              }, starting at ${raceInfo.Races[0].time.substring(
+                0,
+                5
+              )} UTC time on ${raceInfo.Races[0].date} (Sunday).`,
+              Markup.inlineKeyboard([
+                Markup.urlButton('Wikipedia', `${gpWikiLink}`)
+              ]).extra()
+            );
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    });
 });
 
 schedule.hears('Main Menu', ctx => {
@@ -287,24 +343,4 @@ bot.hears('Drivers', ctx => ctx.scene.enter('drivers'));
 bot.hears('Constructors', ctx => ctx.scene.enter('constructors'));
 bot.hears('Schedule', ctx => ctx.scene.enter('schedule'));
 
-// /* Get Current Race Schedule [START]*/
-// bot.command('getraceschedule', ctx => {
-//   axios.get(`${apiUrl}current.json`).then(function(res) {
-//     const currentSchedule = res.data.MRData.RaceTable.Races;
-//     const currentYear = new Date().getFullYear();
-//     let preparedReply = [];
-//     for (let i = 0; i < currentSchedule.length; i++) {
-//       preparedReply.push(
-//         `${i + 1}: ${flag(currentSchedule[i].Circuit.Location.country)} ${
-//           currentSchedule[i].raceName
-//         } 📆 ${currentSchedule[i].date}`
-//       );
-//     }
-//     ctx.reply(
-//       `<b>Race Schedule for ${currentYear}:</b>\n\n${preparedReply.join('\n')}`,
-//       { parse_mode: 'HTML' }
-//     );
-//   });
-// });
-// /* Get Current Race Schedule [END]*/
 bot.launch();
