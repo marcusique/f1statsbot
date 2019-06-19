@@ -16,7 +16,7 @@ bot.start(ctx => {
   console.log(ctx);
   ctx.reply(
     `Hi there, ${ctx.from.first_name} 👋🏻
-I can help you to navigate in Formula 1 world! 🏎 
+I can help you to navigate in the world of Formula 1! 🏎 
 Forget about checking race stats in browser, I will help you to get them much faster 💨
 Hit /help to learn more about me or go straight to the main menu by pressing the button below ⬇️`,
     Markup.keyboard([['🗂 Menu']])
