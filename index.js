@@ -1,78 +1,102 @@
 const Telegraf = require('telegraf'),
+  Markup = require('telegraf/markup'),
+  Stage = require('telegraf/stage'),
+  session = require('telegraf/session'),
+  { leave } = Stage,
+  Scene = require('telegraf/scenes/base'),
   keys = require('./config/keys'),
   apiUrl = keys.apiUrl,
   { flag } = require('country-emoji'),
   bot = new Telegraf(keys.telegramBotToken),
-  axios = require('axios');
+  axios = require('axios'),
+  currentYear = new Date().getFullYear();
 
 /* Welcome Message */
-bot.start(ctx => ctx.reply('Welcome to F1 Stats Bot!'));
-
-/* Get Current Constructors Standings [START]*/
-bot.command('/getcurrentconstructorsstandings', ctx => {
-  axios.get(`${apiUrl}current/constructorStandings.json`).then(function(res) {
-    const numOfLastRace =
-      res.data.MRData.StandingsTable.StandingsLists[0].round;
-    const constructorStandings =
-      res.data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
-    let preparedReply = [];
-    for (let i = 0; i < constructorStandings.length; i++) {
-      preparedReply.push(
-        `${i + 1}. ${constructorStandings[i].Constructor.name} (${
-          constructorStandings[i].points
-        })`
-      );
-    }
-    ctx.reply(
-      `<b>Current Constructors Standings after ${numOfLastRace} race(s):\n\n</b>${preparedReply.join(
-        '\n'
-      )}`,
-      { parse_mode: 'HTML' }
-    );
-  });
+bot.start(ctx => {
+  ctx.reply(
+    'I can do a lot of things! Go to the main menu!',
+    Markup.keyboard([['Menu']])
+      .oneTime()
+      .resize()
+      .extra()
+  );
 });
-/* Get Current Constructor Standings [END]*/
 
-/* Get Current Driver Standings [START]*/
-bot.command('/getcurrentdriverstandings', ctx => {
-  axios.get(`${apiUrl}current/driverStandings.json`).then(function(res) {
-    const numOfLastRace =
-      res.data.MRData.StandingsTable.StandingsLists[0].round;
-    const driverStandings =
-      res.data.MRData.StandingsTable.StandingsLists[0].DriverStandings;
-    let preparedReply = [];
-    for (let i = 0; i < driverStandings.length; i++) {
-      preparedReply.push(
-        i +
-          1 +
-          '. ' +
-          driverStandings[i].Driver.givenName +
-          ' ' +
-          driverStandings[i].Driver.familyName +
-          ` (${driverStandings[i].points})`
-      );
-    }
-    ctx.reply(
-      `<b>Current Driver standings after ${numOfLastRace} race(s):</b> \n\n${preparedReply.join(
-        '\n'
-      )}`,
-      { parse_mode: 'HTML' }
-    );
-  });
+/*Main Menu Scene [START]*/
+const mainMenu = new Scene('menu');
+mainMenu.enter(ctx => {
+  return ctx.reply(
+    'Main Menu',
+    Markup.keyboard([['Drivers', 'Constructors'], ['Schedule']])
+      .oneTime()
+      .resize()
+      .extra()
+  );
 });
-/* Get Current Driver Standings [END]*/
+/*Main Menu Scene [END]*/
 
-/* Get Driver Standings by a Given Year [START]*/
-bot.command('/getdriverstandings', ctx => {
+/*Drivers Scene [START]*/
+const drivers = new Scene('drivers');
+drivers.enter(ctx => {
+  return ctx.reply(
+    'Drivers Scene',
+    Markup.keyboard([
+      [`Current Standings (${currentYear})`, 'Standings by year'],
+      ['Main Menu']
+    ])
+      .oneTime()
+      .resize()
+      .extra()
+  );
+});
+
+/* Current Standings [START] */
+drivers.hears(`Current Standings (${currentYear})`, ctx => {
+  axios
+    .get(`${apiUrl}current/driverStandings.json`)
+    .then(res => {
+      const numOfLastRace =
+        res.data.MRData.StandingsTable.StandingsLists[0].round;
+      const driverStandings =
+        res.data.MRData.StandingsTable.StandingsLists[0].DriverStandings;
+      let preparedReply = [];
+      for (let i = 0; i < driverStandings.length; i++) {
+        preparedReply.push(
+          i +
+            1 +
+            '. ' +
+            driverStandings[i].Driver.givenName +
+            ' ' +
+            driverStandings[i].Driver.familyName +
+            ` (${driverStandings[i].points})`
+        );
+      }
+      ctx.reply(
+        `<b>Current Driver standings after ${numOfLastRace} race(s):</b> \n\n${preparedReply.join(
+          '\n'
+        )}`,
+        { parse_mode: 'HTML' }
+      );
+      ctx.scene.reenter();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+/* Current Standings [END] */
+
+/* Standings by Year [START] */
+drivers.hears('Standings by year', ctx => {
   ctx.reply('Enter a year: ');
-  bot.on('text', ctx => {
+  drivers.on('text', ctx => {
+    ctx.scene.state = { value: ctx.message.text };
     if (
-      ctx.message.text >= 1950 &&
-      ctx.message.text <= new Date().getFullYear()
+      ctx.scene.state.value >= 1950 &&
+      ctx.scene.state.value <= new Date().getFullYear()
     ) {
       axios
-        .get(`${apiUrl}${ctx.message.text}/driverStandings.json`)
-        .then(function(res) {
+        .get(`${apiUrl}${ctx.scene.state.value}/driverStandings.json`)
+        .then(res => {
           const driverStandings =
             res.data.MRData.StandingsTable.StandingsLists[0].DriverStandings;
           let preparedReply = [];
@@ -93,8 +117,9 @@ bot.command('/getdriverstandings', ctx => {
             }:</b> \n\n${preparedReply.join('\n')}`,
             { parse_mode: 'HTML' }
           );
+          ctx.scene.reenter();
         })
-        .catch(function(err) {
+        .catch(err => {
           console.log(err);
         });
     } else {
@@ -104,44 +129,71 @@ bot.command('/getdriverstandings', ctx => {
     }
   });
 });
-/* Get Driver Standings by a Given Year [END]*/
+/* Standings by Year [END] */
 
-/* Get Current Constructors Standings [START]*/
-bot.command('/getcurrentconstructorsstandings', ctx => {
-  axios.get(`${apiUrl}current/constructorStandings.json`).then(function(res) {
-    const numOfLastRace =
-      res.data.MRData.StandingsTable.StandingsLists[0].round;
-    const constructorStandings =
-      res.data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
-    let preparedReply = [];
-    for (let i = 0; i < constructorStandings.length; i++) {
-      preparedReply.push(
-        `${i + 1}. ${constructorStandings[i].Constructor.name} (${
-          constructorStandings[i].points
-        })`
-      );
-    }
-    ctx.reply(
-      `<b>Current Constructors Standings after ${numOfLastRace} race(s):\n\n</b>${preparedReply.join(
-        '\n'
-      )}`,
-      { parse_mode: 'HTML' }
-    );
-  });
+drivers.hears('Main Menu', ctx => {
+  ctx.scene.enter('menu');
 });
-/* Get Current Constructor Standings [END]*/
+/*Drivers Scene [END]*/
 
-/* Get Constructors Standings by a Given Year [START]*/
-bot.command('/getconstructorstandings', ctx => {
+/* Constructor Scene [START] */
+const constructors = new Scene('constructors');
+constructors.enter(ctx => {
+  return ctx.reply(
+    'Constructors Scene',
+    Markup.keyboard([
+      [`Current Standings (${currentYear})`, 'Standings by year'],
+      ['Main Menu']
+    ])
+      .oneTime()
+      .resize()
+      .extra()
+  );
+});
+
+/* Current Standings [START] */
+constructors.hears(`Current Standings (${currentYear})`, ctx => {
+  axios
+    .get(`${apiUrl}current/constructorStandings.json`)
+    .then(res => {
+      const numOfLastRace =
+        res.data.MRData.StandingsTable.StandingsLists[0].round;
+      const constructorStandings =
+        res.data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
+      let preparedReply = [];
+      for (let i = 0; i < constructorStandings.length; i++) {
+        preparedReply.push(
+          `${i + 1}. ${constructorStandings[i].Constructor.name} (${
+            constructorStandings[i].points
+          })`
+        );
+      }
+      ctx.reply(
+        `<b>Current Constructors Standings after ${numOfLastRace} race(s):\n\n</b>${preparedReply.join(
+          '\n'
+        )}`,
+        { parse_mode: 'HTML' }
+      );
+      ctx.scene.reenter();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+/* Current Standings [END] */
+
+/* Standings by Year [START] */
+constructors.hears('Standings by year', ctx => {
   ctx.reply('Enter a year: ');
-  bot.on('text', ctx => {
+  constructors.on('text', ctx => {
+    ctx.scene.state = { value: ctx.message.text };
     if (
-      ctx.message.text >= 1950 &&
-      ctx.message.text <= new Date().getFullYear()
+      ctx.scene.state.value >= 1958 &&
+      ctx.scene.state.value <= new Date().getFullYear()
     ) {
       axios
         .get(`${apiUrl}${ctx.message.text}/constructorStandings.json`)
-        .then(function(res) {
+        .then(res => {
           const constructorsStandings =
             res.data.MRData.StandingsTable.StandingsLists[0]
               .ConstructorStandings;
@@ -159,24 +211,44 @@ bot.command('/getconstructorstandings', ctx => {
             }:</b> \n\n${preparedReply.join('\n')}`,
             { parse_mode: 'HTML' }
           );
+          ctx.scene.reenter();
         })
-        .catch(function(err) {
+        .catch(err => {
           console.log(err);
         });
     } else {
       ctx.reply(
-        'Please enter a year between 1950 and ' + new Date().getFullYear() + '.'
+        'Please enter a year between 1958 and ' + new Date().getFullYear() + '.'
       );
     }
   });
 });
-/* Get Constructors Standings by a Given Year [END]*/
+/* Standings by Year [END] */
 
-/* Get Current Race Schedule [START]*/
-bot.command('/getraceschedule', ctx => {
+constructors.hears('Main Menu', ctx => {
+  ctx.scene.enter('menu');
+});
+/* Constructor Scene [END] */
+
+/* Schedule Scene [START] */
+const schedule = new Scene('schedule');
+schedule.enter(ctx => {
+  return ctx.reply(
+    'Schedule Scene',
+    Markup.keyboard([
+      ['Previous Race', 'Next Race'],
+      [`Current Schedule (${currentYear})`],
+      ['Main Menu']
+    ])
+      .oneTime()
+      .resize()
+      .extra()
+  );
+});
+
+schedule.hears(`Current Schedule (${currentYear})`, ctx => {
   axios.get(`${apiUrl}current.json`).then(function(res) {
     const currentSchedule = res.data.MRData.RaceTable.Races;
-    const currentYear = new Date().getFullYear();
     let preparedReply = [];
     for (let i = 0; i < currentSchedule.length; i++) {
       preparedReply.push(
@@ -189,7 +261,50 @@ bot.command('/getraceschedule', ctx => {
       `<b>Race Schedule for ${currentYear}:</b>\n\n${preparedReply.join('\n')}`,
       { parse_mode: 'HTML' }
     );
+    ctx.scene.reenter();
   });
 });
-/* Get Current Race Schedule [END]*/
+
+schedule.hears('Main Menu', ctx => {
+  ctx.scene.enter('menu');
+});
+/* Schedule Scene [END] */
+
+// Create scene manager
+const stage = new Stage();
+//stage.command('cancel', leave())
+
+// Scene registration
+stage.register(mainMenu);
+stage.register(drivers);
+stage.register(constructors);
+stage.register(schedule);
+
+bot.use(session());
+bot.use(stage.middleware());
+bot.hears('Menu', ctx => ctx.scene.enter('menu'));
+bot.hears('Drivers', ctx => ctx.scene.enter('drivers'));
+bot.hears('Constructors', ctx => ctx.scene.enter('constructors'));
+bot.hears('Schedule', ctx => ctx.scene.enter('schedule'));
+
+// /* Get Current Race Schedule [START]*/
+// bot.command('getraceschedule', ctx => {
+//   axios.get(`${apiUrl}current.json`).then(function(res) {
+//     const currentSchedule = res.data.MRData.RaceTable.Races;
+//     const currentYear = new Date().getFullYear();
+//     let preparedReply = [];
+//     for (let i = 0; i < currentSchedule.length; i++) {
+//       preparedReply.push(
+//         `${i + 1}: ${flag(currentSchedule[i].Circuit.Location.country)} ${
+//           currentSchedule[i].raceName
+//         } 📆 ${currentSchedule[i].date}`
+//       );
+//     }
+//     ctx.reply(
+//       `<b>Race Schedule for ${currentYear}:</b>\n\n${preparedReply.join('\n')}`,
+//       { parse_mode: 'HTML' }
+//     );
+//   });
+// });
+// /* Get Current Race Schedule [END]*/
 bot.launch();
