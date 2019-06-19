@@ -490,7 +490,10 @@ schedule.hears('🔜 Next Race', ctx => {
               }, starting at ${raceInfo.Races[0].time.substring(
                 0,
                 5
-              )} UTC time on ${raceInfo.Races[0].date} (Sunday).`,
+              )} UTC time on ${dateFormat(
+                raceInfo.Races[0].date,
+                'longDate'
+              )} (Sunday).`,
               Markup.inlineKeyboard([
                 Markup.urlButton('Wikipedia', `${gpWikiLink}`)
               ]).extra()
