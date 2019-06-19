@@ -2,7 +2,6 @@ const Telegraf = require('telegraf'),
   Markup = require('telegraf/markup'),
   Stage = require('telegraf/stage'),
   session = require('telegraf/session'),
-  { leave } = Stage,
   Scene = require('telegraf/scenes/base'),
   keys = require('./config/keys'),
   apiUrl = keys.apiUrl,
@@ -85,15 +84,47 @@ drivers.hears(`🏅  Current Standings (${currentYear})`, ctx => {
         res.data.MRData.StandingsTable.StandingsLists[0].DriverStandings;
       let preparedReply = [];
       for (let i = 0; i < driverStandings.length; i++) {
-        preparedReply.push(
-          i +
-            1 +
-            '. ' +
-            driverStandings[i].Driver.givenName +
-            ' ' +
-            driverStandings[i].Driver.familyName +
-            ` (${driverStandings[i].points})`
-        );
+        if (i === 0) {
+          preparedReply.push(
+            i +
+              1 +
+              '. ' +
+              driverStandings[i].Driver.givenName +
+              ' ' +
+              driverStandings[i].Driver.familyName +
+              ` (${driverStandings[i].points}) 🥇`
+          );
+        } else if (i === 1) {
+          preparedReply.push(
+            i +
+              1 +
+              '. ' +
+              driverStandings[i].Driver.givenName +
+              ' ' +
+              driverStandings[i].Driver.familyName +
+              ` (${driverStandings[i].points}) 🥈`
+          );
+        } else if (i === 2) {
+          preparedReply.push(
+            i +
+              1 +
+              '. ' +
+              driverStandings[i].Driver.givenName +
+              ' ' +
+              driverStandings[i].Driver.familyName +
+              ` (${driverStandings[i].points}) 🥉`
+          );
+        } else {
+          preparedReply.push(
+            i +
+              1 +
+              '. ' +
+              driverStandings[i].Driver.givenName +
+              ' ' +
+              driverStandings[i].Driver.familyName +
+              ` (${driverStandings[i].points})`
+          );
+        }
       }
       ctx.reply(
         `<b>Current Driver standings after ${numOfLastRace} race(s):</b> \n\n${preparedReply.join(
@@ -125,15 +156,47 @@ drivers.hears('🎖 Standings by year', ctx => {
             res.data.MRData.StandingsTable.StandingsLists[0].DriverStandings;
           let preparedReply = [];
           for (let i = 0; i < driverStandings.length; i++) {
-            preparedReply.push(
-              i +
-                1 +
-                '. ' +
-                driverStandings[i].Driver.givenName +
-                ' ' +
-                driverStandings[i].Driver.familyName +
-                ` (${driverStandings[i].points})`
-            );
+            if (i === 0) {
+              preparedReply.push(
+                i +
+                  1 +
+                  '. ' +
+                  driverStandings[i].Driver.givenName +
+                  ' ' +
+                  driverStandings[i].Driver.familyName +
+                  ` (${driverStandings[i].points}) 🥇`
+              );
+            } else if (i === 1) {
+              preparedReply.push(
+                i +
+                  1 +
+                  '. ' +
+                  driverStandings[i].Driver.givenName +
+                  ' ' +
+                  driverStandings[i].Driver.familyName +
+                  ` (${driverStandings[i].points}) 🥈`
+              );
+            } else if (i === 2) {
+              preparedReply.push(
+                i +
+                  1 +
+                  '. ' +
+                  driverStandings[i].Driver.givenName +
+                  ' ' +
+                  driverStandings[i].Driver.familyName +
+                  ` (${driverStandings[i].points}) 🥉`
+              );
+            } else {
+              preparedReply.push(
+                i +
+                  1 +
+                  '. ' +
+                  driverStandings[i].Driver.givenName +
+                  ' ' +
+                  driverStandings[i].Driver.familyName +
+                  ` (${driverStandings[i].points})`
+              );
+            }
           }
           ctx.reply(
             `<b>Driver Standings in ${
@@ -186,11 +249,31 @@ constructors.hears(`🏅 Current Standings (${currentYear})`, ctx => {
         res.data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
       let preparedReply = [];
       for (let i = 0; i < constructorStandings.length; i++) {
-        preparedReply.push(
-          `${i + 1}. ${constructorStandings[i].Constructor.name} (${
-            constructorStandings[i].points
-          })`
-        );
+        if (i === 0) {
+          preparedReply.push(
+            `${i + 1}. ${constructorStandings[i].Constructor.name} (${
+              constructorStandings[i].points
+            }) 🥇`
+          );
+        } else if (i === 1) {
+          preparedReply.push(
+            `${i + 1}. ${constructorStandings[i].Constructor.name} (${
+              constructorStandings[i].points
+            }) 🥈`
+          );
+        } else if (i === 2) {
+          preparedReply.push(
+            `${i + 1}. ${constructorStandings[i].Constructor.name} (${
+              constructorStandings[i].points
+            }) 🥉`
+          );
+        } else {
+          preparedReply.push(
+            `${i + 1}. ${constructorStandings[i].Constructor.name} (${
+              constructorStandings[i].points
+            })`
+          );
+        }
       }
       ctx.reply(
         `<b>Current 🏎 Constructors Standings after ${numOfLastRace} race(s):\n\n</b>${preparedReply.join(
@@ -223,11 +306,31 @@ constructors.hears('🎖 Standings by year', ctx => {
               .ConstructorStandings;
           let preparedReply = [];
           for (let i = 0; i < constructorsStandings.length; i++) {
-            preparedReply.push(
-              `${i + 1}. ${constructorsStandings[i].Constructor.name} (${
-                constructorsStandings[i].points
-              })`
-            );
+            if (i === 0) {
+              preparedReply.push(
+                `${i + 1}. ${constructorsStandings[i].Constructor.name} (${
+                  constructorsStandings[i].points
+                }) 🥇`
+              );
+            } else if (i === 1) {
+              preparedReply.push(
+                `${i + 1}. ${constructorsStandings[i].Constructor.name} (${
+                  constructorsStandings[i].points
+                }) 🥈`
+              );
+            } else if (i === 2) {
+              preparedReply.push(
+                `${i + 1}. ${constructorsStandings[i].Constructor.name} (${
+                  constructorsStandings[i].points
+                }) 🥉`
+              );
+            } else {
+              preparedReply.push(
+                `${i + 1}. ${constructorsStandings[i].Constructor.name} (${
+                  constructorsStandings[i].points
+                })`
+              );
+            }
           }
           ctx.reply(
             `<b>🏎 Constructors Standings in ${
