@@ -8,6 +8,7 @@ const Telegraf = require('telegraf'),
   { flag } = require('country-emoji'),
   bot = new Telegraf(keys.telegramBotToken),
   axios = require('axios'),
+  dateFormat = require('dateformat'),
   currentYear = new Date().getFullYear();
 
 /* Welcome Message */
@@ -374,24 +375,54 @@ schedule.enter(ctx => {
 });
 
 schedule.hears(`🗓 Current Schedule (${currentYear})`, ctx => {
-  axios.get(`${apiUrl}current.json`).then(res => {
-    const currentSchedule = res.data.MRData.RaceTable.Races;
-    let preparedReply = [];
-    for (let i = 0; i < currentSchedule.length; i++) {
-      preparedReply.push(
-        `${i + 1}: ${flag(currentSchedule[i].Circuit.Location.country)} ${
-          currentSchedule[i].raceName
-        } 📆 ${currentSchedule[i].date}`
-      );
-    }
-    ctx.reply(
-      `<b>Race 🗓 Schedule for ${currentYear}:</b>\n\n${preparedReply.join(
-        '\n'
-      )}`,
-      { parse_mode: 'HTML' }
+  axios
+    .all([
+      axios.get(`${apiUrl}current.json`),
+      axios.get(`${apiUrl}current/driverStandings.json`)
+    ])
+    .then(
+      axios.spread((resSchedule, resStandings) => {
+        const currentSchedule = resSchedule.data.MRData.RaceTable.Races;
+        const racesCompleted = parseInt(
+          resStandings.data.MRData.StandingsTable.StandingsLists[0].round
+        );
+        let preparedReply = [];
+        for (let i = 0; i < currentSchedule.length; i++) {
+          if (i < racesCompleted) {
+            preparedReply.push(
+              `✅${i + 1}. ${flag(
+                currentSchedule[i].Circuit.Location.country
+              )} ${currentSchedule[i].raceName} (${dateFormat(
+                currentSchedule[i].date,
+                'mmm dS'
+              )})`
+            );
+          } else if (i === racesCompleted) {
+            preparedReply.push(
+              `➡️${i + 1}. ${flag(
+                currentSchedule[i].Circuit.Location.country
+              )} ${currentSchedule[i].raceName} (${dateFormat(
+                currentSchedule[i].date,
+                'mmm dS'
+              )})`
+            );
+          } else {
+            preparedReply.push(
+              `${i + 1}. ${flag(currentSchedule[i].Circuit.Location.country)} ${
+                currentSchedule[i].raceName
+              } (${dateFormat(currentSchedule[i].date, 'mmm dS')})`
+            );
+          }
+        }
+        ctx.reply(
+          `<b>Race on Schedule for ${currentYear}:</b>\n\n${preparedReply.join(
+            '\n'
+          )}`,
+          { parse_mode: 'HTML' }
+        );
+        ctx.scene.reenter();
+      })
     );
-    ctx.scene.reenter();
-  });
 });
 
 schedule.hears('🔙 Previous Race', ctx => {
