@@ -13,7 +13,6 @@ const Telegraf = require('telegraf'),
 
 /* Welcome Message */
 bot.start(ctx => {
-  console.log(ctx);
   ctx.reply(
     `Hi there, ${ctx.from.first_name} 👋🏻
 I can help you to navigate in the world of Formula 1! 🏎 
