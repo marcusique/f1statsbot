@@ -433,11 +433,31 @@ schedule.hears('🔙 Previous Race', ctx => {
     const wikiReportUrl = res.data.MRData.RaceTable.Races[0].url;
     let preparedReply = [];
     for (let i = 0; i < results.length; i++) {
-      preparedReply.push(
-        `${i + 1}. ${results[i].Driver.givenName} ${
-          results[i].Driver.familyName
-        } (${results[i].points})`
-      );
+      if (i === 0) {
+        preparedReply.push(
+          `${i + 1}. ${results[i].Driver.givenName} ${
+            results[i].Driver.familyName
+          } (${results[i].points}) 🥇`
+        );
+      } else if (i === 1) {
+        preparedReply.push(
+          `${i + 1}. ${results[i].Driver.givenName} ${
+            results[i].Driver.familyName
+          } (${results[i].points}) 🥈`
+        );
+      } else if (i === 2) {
+        preparedReply.push(
+          `${i + 1}. ${results[i].Driver.givenName} ${
+            results[i].Driver.familyName
+          } (${results[i].points}) 🥉`
+        );
+      } else {
+        preparedReply.push(
+          `${i + 1}. ${results[i].Driver.givenName} ${
+            results[i].Driver.familyName
+          } (${results[i].points})`
+        );
+      }
     }
     ctx.reply(
       `${flag(gpName)}${raceName} results: \n\n${preparedReply.join('\n')}`,
