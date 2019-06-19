@@ -112,7 +112,7 @@ drivers.hears(`🏅  Current Standings (${currentYear})`, ctx => {
 
 /* Standings by Year [START] */
 drivers.hears('🎖 Standings by year', ctx => {
-  ctx.reply('Enter a year: ');
+  ctx.reply(`Enter a year between 1950 and ${currentYear} ⌨️ `);
   drivers.on('text', ctx => {
     ctx.scene.state = { value: ctx.message.text };
     if (
@@ -209,7 +209,7 @@ constructors.hears(`🏅 Current Standings (${currentYear})`, ctx => {
 
 /* Standings by Year [START] */
 constructors.hears('🎖 Standings by year', ctx => {
-  ctx.reply('Enter a year: ');
+  ctx.reply(`Enter a year between 1958 and ${currentYear} ⌨️ `);
   constructors.on('text', ctx => {
     ctx.scene.state = { value: ctx.message.text };
     if (
