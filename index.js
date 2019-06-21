@@ -38,6 +38,7 @@ As of today you can 💪🏻:
 👱🏻‍♂️ Get driver standings by a given year
 🏎 Get current constructor standings
 🏎 Get constructor standings by a given year
+🗓 Get previous qualification results
 🗓 Get previous race results
 🗓 Get next race schedule
 🗓 Get schedule for current season
