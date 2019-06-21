@@ -534,6 +534,8 @@ schedule.hears('🔜 Next Race', ctx => {
           .catch(err => {
             console.log(err);
           });
+      } else {
+        ctx.reply('Current season is over. See you next season ✊🏻')
       }
     })
     .catch(err => {
