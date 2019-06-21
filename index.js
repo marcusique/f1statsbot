@@ -11,6 +11,8 @@ const Telegraf = require('telegraf'),
   dateFormat = require('dateformat'),
   currentYear = new Date().getFullYear();
 
+bot.use(session());
+
 /* Welcome Message */
 bot.start(ctx => {
   ctx.reply(
@@ -212,9 +214,7 @@ drivers.hears('🎖 Standings by year', ctx => {
           console.log(err);
         });
     } else {
-      ctx.reply(
-        'Please enter a year between 1950 and ' + new Date().getFullYear() + '.'
-      );
+      ctx.reply(`Enter a year between 1950 and ${currentYear} ⌨️ `);
     }
   });
 });
@@ -346,9 +346,7 @@ constructors.hears('🎖 Standings by year', ctx => {
           console.log(err);
         });
     } else {
-      ctx.reply(
-        'Please enter a year between 1958 and ' + new Date().getFullYear() + '.'
-      );
+      ctx.reply(`Enter a year between 1958 and ${currentYear} ⌨️ `);
     }
   });
 });
@@ -365,7 +363,8 @@ schedule.enter(ctx => {
   return ctx.reply(
     '🗓 Select from the menu below ⬇️',
     Markup.keyboard([
-      ['🔙 Previous Race', '🔜 Next Race'],
+      ['🔙 Previous Qualification', '🔙 Previous Race'],
+      ['🔜 Next Race'],
       [`🗓 Current Schedule (${currentYear})`],
       ['🗂 Main Menu']
     ])
@@ -435,22 +434,52 @@ schedule.hears('🔙 Previous Race', ctx => {
     let preparedReply = [];
     for (let i = 0; i < results.length; i++) {
       if (i === 0) {
-        preparedReply.push(
-          `${i + 1}. ${results[i].Driver.givenName} ${
-            results[i].Driver.familyName
-          } (${results[i].points}) 🥇`
-        );
+        if (results[i].FastestLap.rank == 1) {
+          preparedReply.push(
+            `${i + 1}. ${results[i].Driver.givenName} ${
+              results[i].Driver.familyName
+            } (${results[i].points}) (⏱ – ${results[i].FastestLap.Time.time})`
+          );
+        } else {
+          preparedReply.push(
+            `${i + 1}. ${results[i].Driver.givenName} ${
+              results[i].Driver.familyName
+            } (${results[i].points}) 🥇`
+          );
+        }
       } else if (i === 1) {
-        preparedReply.push(
-          `${i + 1}. ${results[i].Driver.givenName} ${
-            results[i].Driver.familyName
-          } (${results[i].points}) 🥈`
-        );
+        if (results[i].FastestLap.rank == 1) {
+          preparedReply.push(
+            `${i + 1}. ${results[i].Driver.givenName} ${
+              results[i].Driver.familyName
+            } (${results[i].points}) (⏱ – ${results[i].FastestLap.Time.time})`
+          );
+        } else {
+          preparedReply.push(
+            `${i + 1}. ${results[i].Driver.givenName} ${
+              results[i].Driver.familyName
+            } (${results[i].points}) 🥈`
+          );
+        }
       } else if (i === 2) {
+        if (results[i].FastestLap.rank == 1) {
+          preparedReply.push(
+            `${i + 1}. ${results[i].Driver.givenName} ${
+              results[i].Driver.familyName
+            } (${results[i].points}) (⏱ – ${results[i].FastestLap.Time.time})`
+          );
+        } else {
+          preparedReply.push(
+            `${i + 1}. ${results[i].Driver.givenName} ${
+              results[i].Driver.familyName
+            } (${results[i].points}) 🥉`
+          );
+        }
+      } else if (results[i].FastestLap.rank == 1) {
         preparedReply.push(
           `${i + 1}. ${results[i].Driver.givenName} ${
             results[i].Driver.familyName
-          } (${results[i].points}) 🥉`
+          } (${results[i].points}) (⏱ – ${results[i].FastestLap.Time.time})`
         );
       } else {
         preparedReply.push(
@@ -463,7 +492,7 @@ schedule.hears('🔙 Previous Race', ctx => {
     ctx.reply(
       `${flag(gpName)}${raceName} results: \n\n${preparedReply.join('\n')}`,
       Markup.inlineKeyboard([
-        Markup.urlButton('Race Report (Wikipedia)', `${wikiReportUrl}`)
+        Markup.urlButton('Grand Prix Report (Wikipedia)', `${wikiReportUrl}`)
       ]).extra()
     );
     ctx.scene.reenter();
@@ -511,6 +540,71 @@ schedule.hears('🔜 Next Race', ctx => {
     });
 });
 
+schedule.hears('🔙 Previous Qualification', ctx => {
+  axios
+    .get(`${apiUrl}current/last/results.json`)
+    .then(res => {
+      const lastRace = res.data.MRData.RaceTable.round;
+      axios
+        .get(`${apiUrl}${currentYear}/${lastRace}/qualifying.json`)
+        .then(res => {
+          const raceName = res.data.MRData.RaceTable.Races[0].raceName;
+          const gpName =
+            res.data.MRData.RaceTable.Races[0].Circuit.Location.country;
+          const wikiReportUrl = res.data.MRData.RaceTable.Races[0].url;
+          const qualifyingResults =
+            res.data.MRData.RaceTable.Races[0].QualifyingResults;
+          let preparedReply = [];
+
+          for (let i = 0; i < qualifyingResults.length; i++) {
+            if (
+              qualifyingResults[i].Q3 &&
+              qualifyingResults[i].Q2 &&
+              qualifyingResults[i].Q1
+            ) {
+              preparedReply.push(
+                `${i + 1}. ${qualifyingResults[i].Driver.givenName} ${
+                  qualifyingResults[i].Driver.familyName
+                } (${qualifyingResults[i].Q3})`
+              );
+            } else if (qualifyingResults[i].Q2 && qualifyingResults[i].Q1) {
+              preparedReply.push(
+                `${i + 1}. ${qualifyingResults[i].Driver.givenName} ${
+                  qualifyingResults[i].Driver.familyName
+                } (${qualifyingResults[i].Q2})`
+              );
+            } else {
+              preparedReply.push(
+                `${i + 1}. ${qualifyingResults[i].Driver.givenName} ${
+                  qualifyingResults[i].Driver.familyName
+                } (${qualifyingResults[i].Q1})`
+              );
+            }
+          }
+          ctx.reply(
+            `${flag(
+              gpName
+            )}${raceName} Qualification results: \n\n${preparedReply.join(
+              '\n'
+            )}`,
+            Markup.inlineKeyboard([
+              Markup.urlButton(
+                'Grand Prix Report (Wikipedia)',
+                `${wikiReportUrl}`
+              )
+            ]).extra()
+          );
+          ctx.scene.reenter();
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
 schedule.hears('🗂 Main Menu', ctx => {
   ctx.scene.enter('menu');
 });
@@ -525,8 +619,8 @@ stage.register(drivers);
 stage.register(constructors);
 stage.register(schedule);
 
-bot.use(session());
 bot.use(stage.middleware());
+
 bot.hears('🗂 Menu', ctx => ctx.scene.enter('menu'));
 bot.hears('👱🏻‍♂️ Drivers', ctx => ctx.scene.enter('drivers'));
 bot.hears('🏎 Constructors', ctx => ctx.scene.enter('constructors'));
