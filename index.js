@@ -6,10 +6,10 @@ const Telegraf = require('telegraf'),
   keys = require('./config/keys'),
   apiUrl = keys.apiUrl,
   { flag } = require('country-emoji'),
-  bot = new Telegraf(keys.telegramBotToken),
   axios = require('axios'),
   dateFormat = require('dateformat'),
-  currentYear = new Date().getFullYear();
+  currentYear = new Date().getFullYear(),
+  bot = new Telegraf(keys.telegramBotToken);
 
 bot.use(session());
 
@@ -31,7 +31,8 @@ Hit /help to learn more about me or go straight to the main menu by pressing the
 bot.help(ctx => {
   ctx.reply(`To navigate through my functionality, simply follow the menu buttons ☑️
 If you experience any troubles using me, hit /start every time something goes wrong. I am still learning, so don't be harsh on me 🙏🏻
-I don't support persistent sessions yet ☹️, so if my developer updates me – you will lose your session with me. In this case just hit /start and everything should be ok 👍🏻.
+
+⚠️ I don't support persistent sessions yet ☹️, so if my developer updates me – you will lose your session with me. In this case just hit /start and everything should be ok 👍🏻.
 
 As of today you can 💪🏻:
 👱🏻‍♂️ Get current driver standings
@@ -39,7 +40,7 @@ As of today you can 💪🏻:
 🏎 Get current constructor standings
 🏎 Get constructor standings by a given year
 🗓 Get previous qualification results
-🗓 Get previous race results
+🗓 Get previous race results (including fastest lap)
 🗓 Get next race schedule
 🗓 Get schedule for current season
 
@@ -535,7 +536,7 @@ schedule.hears('🔜 Next Race', ctx => {
             console.log(err);
           });
       } else {
-        ctx.reply('Current season is over. See you next season ✊🏻')
+        ctx.reply('Current season is over. See you next season ✊🏻');
       }
     })
     .catch(err => {
