@@ -10,7 +10,7 @@ driversScene.enter(ctx => {
   return ctx.reply(
     '👱🏻‍♂️ Select from the menu below ⬇️',
     Markup.keyboard([
-      [`🏅  Current Standings (${currentYear})`, '🎖 Standings by year'],
+      [`🏆 Current Standings (${currentYear})`, '🎖 Standings by year'],
       ['🗂 Main Menu']
     ])
       .oneTime()
@@ -20,7 +20,7 @@ driversScene.enter(ctx => {
 });
 
 /* 🏅 Current Standings [START] */
-driversScene.hears(`🏅  Current Standings (${currentYear})`, ctx => {
+driversScene.hears(`🏆 Current Standings (${currentYear})`, ctx => {
   axios
     .get(`${apiUrl}current/driverStandings.json`)
     .then(res => {

@@ -10,7 +10,7 @@ constructorsScene.enter(ctx => {
   return ctx.reply(
     '🏎 Select from the menu below ⬇️',
     Markup.keyboard([
-      [`🏅 Current Standings (${currentYear})`, '🎖 Standings by year'],
+      [`🏆 Current Standings (${currentYear})`, '🎖 Standings by year'],
       ['🗂 Main Menu']
     ])
       .oneTime()
@@ -19,8 +19,8 @@ constructorsScene.enter(ctx => {
   );
 });
 
-/* 🏅 Current Standings [START] */
-constructorsScene.hears(`🏅 Current Standings (${currentYear})`, ctx => {
+/* 🏆 Current Standings [START] */
+constructorsScene.hears(`🏆 Current Standings (${currentYear})`, ctx => {
   axios
     .get(`${apiUrl}current/constructorStandings.json`)
     .then(res => {
@@ -68,7 +68,7 @@ constructorsScene.hears(`🏅 Current Standings (${currentYear})`, ctx => {
       console.log(err);
     });
 });
-/* 🏅 Current Standings [END] */
+/* 🏆 Current Standings [END] */
 
 /* Standings by Year [START] */
 constructorsScene.hears('🎖 Standings by year', ctx => {

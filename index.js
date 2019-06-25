@@ -66,8 +66,5 @@ bot.use(constructorsScene);
 bot.use(scheduleScene);
 
 bot.hears('🗂 Menu', ctx => ctx.scene.enter('mainScene'));
-bot.hears('👱🏻‍♂️ Drivers', ctx => ctx.scene.enter('driversScene'));
-bot.hears('🏎 Constructors', ctx => ctx.scene.enter('constructorsScene'));
-bot.hears('🗓 Schedule', ctx => ctx.scene.enter('scheduleScene'));
 
 bot.launch();

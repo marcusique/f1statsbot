@@ -13,4 +13,8 @@ mainScene.enter(ctx => {
   );
 });
 
+mainScene.hears('👱🏻‍♂️ Drivers', ctx => ctx.scene.enter('driversScene'));
+mainScene.hears('🏎 Constructors', ctx => ctx.scene.enter('constructorsScene'));
+mainScene.hears('🗓 Schedule', ctx => ctx.scene.enter('scheduleScene'));
+
 module.exports = mainScene;
