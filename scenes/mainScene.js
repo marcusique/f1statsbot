@@ -16,5 +16,8 @@ mainScene.enter(ctx => {
 mainScene.hears('👱🏻‍♂️ Drivers', ctx => ctx.scene.enter('driversScene'));
 mainScene.hears('🏎 Constructors', ctx => ctx.scene.enter('constructorsScene'));
 mainScene.hears('🗓 Schedule', ctx => ctx.scene.enter('scheduleScene'));
+mainScene.hears(/^[0-9]{4}$/, ctx => {
+  ctx.reply(`${ctx.from.first_name}, select from the menu below ⬇️`);
+});
 
 module.exports = mainScene;
