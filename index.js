@@ -50,20 +50,23 @@ If you are ready to start, hit the 🗂 Menu button below ⬇️
 });
 
 // Create scene manager
-const stage = new Stage();
+const stage = new Stage(
+  [mainScene, scheduleScene, driversScene, constructorsScene],
+  { default: 'mainScene' }
+);
 
 // Scene registration
 stage.register(mainScene);
+stage.register(scheduleScene);
 stage.register(driversScene);
 stage.register(constructorsScene);
-stage.register(scheduleScene);
 
 // Middleware registration
 bot.use(stage.middleware());
 bot.use(mainScene);
+bot.use(scheduleScene);
 bot.use(driversScene);
 bot.use(constructorsScene);
-bot.use(scheduleScene);
 
 bot.hears('🗂 Menu', ctx => ctx.scene.enter('mainScene'));
 

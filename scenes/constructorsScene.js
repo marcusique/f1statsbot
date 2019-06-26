@@ -73,65 +73,66 @@ constructorsScene.hears(`🏆 Current Standings (${currentYear})`, ctx => {
 /* Standings by Year [START] */
 constructorsScene.hears('🎖 Standings by year', ctx => {
   ctx.reply(`Enter a year between 1958 and ${currentYear} ⌨️ `);
-  constructorsScene.on('text', ctx => {
-    ctx.scene.state = { value: ctx.message.text };
-    if (
-      ctx.scene.state.value >= 1958 &&
-      ctx.scene.state.value <= new Date().getFullYear()
-    ) {
-      axios
-        .get(`${apiUrl}${ctx.message.text}/constructorStandings.json`)
-        .then(res => {
-          const constructorsStandings =
-            res.data.MRData.StandingsTable.StandingsLists[0]
-              .ConstructorStandings;
-          let preparedReply = [];
-          for (let i = 0; i < constructorsStandings.length; i++) {
-            if (i === 0) {
-              preparedReply.push(
-                `${i + 1}. ${constructorsStandings[i].Constructor.name} (${
-                  constructorsStandings[i].points
-                }) 🥇`
-              );
-            } else if (i === 1) {
-              preparedReply.push(
-                `${i + 1}. ${constructorsStandings[i].Constructor.name} (${
-                  constructorsStandings[i].points
-                }) 🥈`
-              );
-            } else if (i === 2) {
-              preparedReply.push(
-                `${i + 1}. ${constructorsStandings[i].Constructor.name} (${
-                  constructorsStandings[i].points
-                }) 🥉`
-              );
-            } else {
-              preparedReply.push(
-                `${i + 1}. ${constructorsStandings[i].Constructor.name} (${
-                  constructorsStandings[i].points
-                })`
-              );
-            }
+});
+
+constructorsScene.hears(/^[0-9]{4}$/, ctx => {
+  ctx.scene.state = { value: ctx.message.text };
+  if (
+    ctx.scene.state.value >= 1958 &&
+    ctx.scene.state.value <= new Date().getFullYear()
+  ) {
+    axios
+      .get(`${apiUrl}${ctx.message.text}/constructorStandings.json`)
+      .then(res => {
+        const constructorsStandings =
+          res.data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
+        let preparedReply = [];
+        for (let i = 0; i < constructorsStandings.length; i++) {
+          if (i === 0) {
+            preparedReply.push(
+              `${i + 1}. ${constructorsStandings[i].Constructor.name} (${
+                constructorsStandings[i].points
+              }) 🥇`
+            );
+          } else if (i === 1) {
+            preparedReply.push(
+              `${i + 1}. ${constructorsStandings[i].Constructor.name} (${
+                constructorsStandings[i].points
+              }) 🥈`
+            );
+          } else if (i === 2) {
+            preparedReply.push(
+              `${i + 1}. ${constructorsStandings[i].Constructor.name} (${
+                constructorsStandings[i].points
+              }) 🥉`
+            );
+          } else {
+            preparedReply.push(
+              `${i + 1}. ${constructorsStandings[i].Constructor.name} (${
+                constructorsStandings[i].points
+              })`
+            );
           }
-          ctx.reply(
-            `<b>🏎 Constructors Standings in ${
-              ctx.message.text
-            }:</b> \n\n${preparedReply.join('\n')}`,
-            { parse_mode: 'HTML' }
-          );
-          ctx.scene.reenter();
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    } else {
-      ctx.reply(`Enter a year between 1958 and ${currentYear} ⌨️ `);
-    }
-  });
+        }
+        ctx.reply(
+          `<b>🏎 Constructors Standings in ${
+            ctx.message.text
+          }:</b> \n\n${preparedReply.join('\n')}`,
+          { parse_mode: 'HTML' }
+        );
+        ctx.scene.reenter();
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  } else {
+    ctx.reply(`Enter a year between 1958 and ${currentYear} ⌨️ `);
+  }
 });
 /* Standings by Year [END] */
 
 constructorsScene.hears('🗂 Main Menu', ctx => {
+  ctx.scene.leave('constructorsScene');
   ctx.scene.enter('mainScene');
 });
 
