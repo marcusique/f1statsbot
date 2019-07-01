@@ -2,6 +2,7 @@ const Telegraf = require('telegraf'),
   Markup = require('telegraf/markup'),
   Stage = require('telegraf/stage'),
   session = require('telegraf/session'),
+  logger = require('./config/logger'),
   keys = require('./config/keys'),
   mainScene = require('./scenes/mainScene'),
   driversScene = require('./scenes/driversScene'),
@@ -13,6 +14,10 @@ bot.use(session());
 
 /* Welcome Message */
 bot.start(ctx => {
+  logger.log({
+    level: 'info',
+    message: `${ctx.from.username} and ${ctx.from.first_name}`
+  });
   ctx.reply(
     `Hi there, ${ctx.from.first_name} 👋🏻
 I can help you to navigate in the world of Formula 1! 🏎 
