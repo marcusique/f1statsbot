@@ -75,15 +75,65 @@ scheduleScene.hears(`🗓 Current Schedule (${currentYear})`, ctx => {
 });
 
 scheduleScene.hears('🔙 Previous Race', ctx => {
-  axios.get(`${apiUrl}current/last/results.json`).then(res => {
-    const results = res.data.MRData.RaceTable.Races[0].Results;
-    const raceName = res.data.MRData.RaceTable.Races[0].raceName;
-    const gpName = res.data.MRData.RaceTable.Races[0].Circuit.Location.country;
-    const wikiReportUrl = res.data.MRData.RaceTable.Races[0].url;
-    let preparedReply = [];
-    for (let i = 0; i < results.length; i++) {
-      if (i === 0) {
-        if (results[i].FastestLap.rank == 1) {
+  axios
+    .get(`${apiUrl}current/last/results.json`)
+    .then(res => {
+      const results = res.data.MRData.RaceTable.Races[0].Results;
+      const raceName = res.data.MRData.RaceTable.Races[0].raceName;
+      const gpName =
+        res.data.MRData.RaceTable.Races[0].Circuit.Location.country;
+      const wikiReportUrl = res.data.MRData.RaceTable.Races[0].url;
+      let preparedReply = [];
+      for (let i = 0; i < results.length; i++) {
+        if (i === 0) {
+          if (results[i].FastestLap.rank && results[i].FastestLap.rank == 1) {
+            preparedReply.push(
+              `${i + 1}. ${results[i].Driver.givenName} ${
+                results[i].Driver.familyName
+              } (${results[i].points})🥇 (⏱ – ${
+                results[i].FastestLap.Time.time
+              })`
+            );
+          } else {
+            preparedReply.push(
+              `${i + 1}. ${results[i].Driver.givenName} ${
+                results[i].Driver.familyName
+              } (${results[i].points}) 🥇`
+            );
+          }
+        } else if (i === 1) {
+          if (results[i].FastestLap.rank && results[i].FastestLap.rank == 1) {
+            preparedReply.push(
+              `${i + 1}. ${results[i].Driver.givenName} ${
+                results[i].Driver.familyName
+              } (${results[i].points})🥈 (⏱ – ${
+                results[i].FastestLap.Time.time
+              })`
+            );
+          } else {
+            preparedReply.push(
+              `${i + 1}. ${results[i].Driver.givenName} ${
+                results[i].Driver.familyName
+              } (${results[i].points}) 🥈`
+            );
+          }
+        } else if (i === 2) {
+          if (results[i].FastestLap.rank && results[i].FastestLap.rank == 1) {
+            preparedReply.push(
+              `${i + 1}. ${results[i].Driver.givenName} ${
+                results[i].Driver.familyName
+              } (${results[i].points})🥉 (⏱ – ${
+                results[i].FastestLap.Time.time
+              })`
+            );
+          } else {
+            preparedReply.push(
+              `${i + 1}. ${results[i].Driver.givenName} ${
+                results[i].Driver.familyName
+              } (${results[i].points}) 🥉`
+            );
+          }
+        } else if (results[i].FastestLap.rank == 1) {
           preparedReply.push(
             `${i + 1}. ${results[i].Driver.givenName} ${
               results[i].Driver.familyName
@@ -93,59 +143,24 @@ scheduleScene.hears('🔙 Previous Race', ctx => {
           preparedReply.push(
             `${i + 1}. ${results[i].Driver.givenName} ${
               results[i].Driver.familyName
-            } (${results[i].points}) 🥇`
+            } (${results[i].points})`
           );
         }
-      } else if (i === 1) {
-        if (results[i].FastestLap.rank == 1) {
-          preparedReply.push(
-            `${i + 1}. ${results[i].Driver.givenName} ${
-              results[i].Driver.familyName
-            } (${results[i].points}) (⏱ – ${results[i].FastestLap.Time.time})`
-          );
-        } else {
-          preparedReply.push(
-            `${i + 1}. ${results[i].Driver.givenName} ${
-              results[i].Driver.familyName
-            } (${results[i].points}) 🥈`
-          );
-        }
-      } else if (i === 2) {
-        if (results[i].FastestLap.rank == 1) {
-          preparedReply.push(
-            `${i + 1}. ${results[i].Driver.givenName} ${
-              results[i].Driver.familyName
-            } (${results[i].points}) (⏱ – ${results[i].FastestLap.Time.time})`
-          );
-        } else {
-          preparedReply.push(
-            `${i + 1}. ${results[i].Driver.givenName} ${
-              results[i].Driver.familyName
-            } (${results[i].points}) 🥉`
-          );
-        }
-      } else if (results[i].FastestLap.rank == 1) {
-        preparedReply.push(
-          `${i + 1}. ${results[i].Driver.givenName} ${
-            results[i].Driver.familyName
-          } (${results[i].points}) (⏱ – ${results[i].FastestLap.Time.time})`
-        );
-      } else {
-        preparedReply.push(
-          `${i + 1}. ${results[i].Driver.givenName} ${
-            results[i].Driver.familyName
-          } (${results[i].points})`
-        );
       }
-    }
-    ctx.reply(
-      `${flag(gpName)}${raceName} results: \n\n${preparedReply.join('\n')}`,
-      Markup.inlineKeyboard([
-        Markup.urlButton('Grand Prix Report (Wikipedia)', `${wikiReportUrl}`)
-      ]).extra()
-    );
-    ctx.scene.reenter();
-  });
+      ctx.reply(
+        `${flag(gpName)}${raceName} results: \n\n${preparedReply.join('\n')}`,
+        Markup.inlineKeyboard([
+          Markup.urlButton('Grand Prix Report (Wikipedia)', `${wikiReportUrl}`)
+        ]).extra()
+      );
+      ctx.scene.reenter();
+    })
+    .catch(err => {
+      console.log(err);
+      ctx.reply(
+        'Oh snap! 🤖 We are either preparing the results, or there was an unfortunate error. Please try again later! '
+      );
+    });
 });
 
 scheduleScene.hears('🔜 Next Race', ctx => {
@@ -257,6 +272,7 @@ scheduleScene.hears('🔙 Previous Qualification', ctx => {
 });
 
 scheduleScene.hears('🗂 Main Menu', ctx => {
+  ctx.scene.leave('scheduleScene');
   ctx.scene.enter('mainScene');
 });
 
