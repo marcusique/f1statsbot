@@ -1,5 +1,5 @@
 const winston = require('winston'),
-  keys = require('./keys');
+  keys = require('../config/keys');
 require('winston-mongodb');
 
 //winston.add(new winston.transports.MongoDB());
