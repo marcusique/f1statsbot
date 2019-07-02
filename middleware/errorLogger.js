@@ -11,13 +11,13 @@ const errorLogger = winston.createLogger({
       level: 'error',
       db: keys.mongoUri,
       collection: 'errors'
-    }),
-    new winston.transports.File({
-      level: 'error',
-      filename: `${appRoot}/logs/errors.log`,
-      timestamp: true,
-      handleExceptions: true
     })
+    // new winston.transports.File({
+    //   level: 'error',
+    //   filename: `${appRoot}/logs/errors.log`,
+    //   timestamp: true,
+    //   handleExceptions: true
+    // })
   ]
 });
 

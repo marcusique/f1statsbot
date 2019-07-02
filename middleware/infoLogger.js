@@ -11,11 +11,11 @@ const infoLogger = winston.createLogger({
       db: keys.mongoUri,
       collection: 'info',
       level: 'info'
-    }),
-    new winston.transports.File({
-      level: 'info',
-      filename: `${appRoot}/logs/info.log`
     })
+    // new winston.transports.File({
+    //   level: 'info',
+    //   filename: `${appRoot}/logs/info.log`
+    // })
   ]
 });
 
