@@ -26,9 +26,12 @@ scheduleScene.enter(ctx => {
 scheduleScene.hears(`🗓 Current Schedule (${currentYear})`, ctx => {
   axios
     .all([
-      axios.get(`${apiUrl}current.json`),
+      axios.get(`${apiUrl}currennt.json`),
       axios.get(`${apiUrl}current/driverStandings.json`)
     ])
+    .catch(err => {
+      console.log(err.message);
+    })
     .then(
       axios.spread((resSchedule, resStandings) => {
         const currentSchedule = resSchedule.data.MRData.RaceTable.Races;

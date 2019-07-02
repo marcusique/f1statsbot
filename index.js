@@ -2,7 +2,8 @@ const Telegraf = require('telegraf'),
   Markup = require('telegraf/markup'),
   Stage = require('telegraf/stage'),
   session = require('telegraf/session'),
-  logger = require('./middleware/logger'),
+  infoLogger = require('./middleware/infoLogger'),
+  errorLogger = require('./middleware/errorLogger'),
   keys = require('./config/keys'),
   mainScene = require('./scenes/mainScene'),
   driversScene = require('./scenes/driversScene'),
@@ -14,7 +15,7 @@ bot.use(session());
 
 /* Welcome Message */
 bot.start(ctx => {
-  logger.log({
+  infoLogger.log({
     level: 'info',
     message: `${ctx.from.username} and ${ctx.from.first_name}`
   });
@@ -32,6 +33,10 @@ Hit /help to learn more about me or go straight to the main menu by pressing the
 
 /* Help Message */
 bot.help(ctx => {
+  errorLogger.log({
+    level: 'error',
+    message: `${ctx.from.username} error bld`
+  });
   ctx.reply(`To navigate through my functionality, simply follow the menu buttons ☑️
 If you experience any troubles using me, hit /start every time something goes wrong. I am still learning, so don't be harsh on me 🙏🏻
 

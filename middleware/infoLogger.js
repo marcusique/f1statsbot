@@ -2,17 +2,16 @@ const winston = require('winston'),
   keys = require('../config/keys');
 require('winston-mongodb');
 
-//winston.add(new winston.transports.MongoDB());
-const logger = winston.createLogger({
-  level: 'error',
+const infoLogger = winston.createLogger({
+  level: 'info',
   format: winston.format.json(),
   transports: [
     new winston.transports.MongoDB({
       db: keys.mongoUri,
-      collection: 'errors',
+      collection: 'info',
       level: 'info'
     })
   ]
 });
 
-module.exports = logger;
+module.exports = infoLogger;
