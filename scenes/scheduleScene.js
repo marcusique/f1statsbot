@@ -219,7 +219,7 @@ scheduleScene.hears('🔙 Previous Race', ctx => {
 
 scheduleScene.hears('🔜 Next Race', ctx => {
   axios
-    .get(`${apiUrl}current/last/resumlts.json`)
+    .get(`${apiUrl}current/last/results.json`)
     .then(res => {
       const lastRace = parseInt(res.data.MRData.RaceTable.round);
       const nextRace = lastRace + 1;
