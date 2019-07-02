@@ -3,7 +3,6 @@ const Telegraf = require('telegraf'),
   Stage = require('telegraf/stage'),
   session = require('telegraf/session'),
   infoLogger = require('./middleware/infoLogger'),
-  appRoot = require('app-root-path'),
   keys = require('./config/keys'),
   mainScene = require('./scenes/mainScene'),
   driversScene = require('./scenes/driversScene'),
@@ -12,7 +11,6 @@ const Telegraf = require('telegraf'),
   bot = new Telegraf(keys.telegramBotToken);
 
 bot.use(session());
-console.log(appRoot.path);
 
 /* Welcome Message */
 bot.start(ctx => {
