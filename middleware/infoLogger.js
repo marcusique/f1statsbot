@@ -1,5 +1,6 @@
 const winston = require('winston'),
-  keys = require('../config/keys');
+  keys = require('../config/keys'),
+  appRoot = require('app-root-path');
 require('winston-mongodb');
 
 const infoLogger = winston.createLogger({
@@ -10,6 +11,10 @@ const infoLogger = winston.createLogger({
       db: keys.mongoUri,
       collection: 'info',
       level: 'info'
+    }),
+    new winston.transports.File({
+      level: 'info',
+      filename: `${appRoot}/logs/info.log`
     })
   ]
 });

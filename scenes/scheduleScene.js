@@ -1,5 +1,7 @@
 const Scene = require('telegraf/scenes/base'),
   Markup = require('telegraf/markup'),
+  infoLogger = require('../middleware/infoLogger'),
+  errorLogger = require('../middleware/errorLogger'),
   axios = require('axios'),
   dateFormat = require('dateformat'),
   keys = require('../config/keys'),
@@ -9,6 +11,15 @@ const Scene = require('telegraf/scenes/base'),
 
 const scheduleScene = new Scene('scheduleScene');
 scheduleScene.enter(ctx => {
+  infoLogger.log({
+    level: 'info',
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, TG_DATE: ${ctx.message.date}`
+  });
+
   return ctx.reply(
     '🗓 Select from the menu below ⬇️',
     Markup.keyboard([
@@ -26,11 +37,23 @@ scheduleScene.enter(ctx => {
 scheduleScene.hears(`🗓 Current Schedule (${currentYear})`, ctx => {
   axios
     .all([
-      axios.get(`${apiUrl}currennt.json`),
+      axios.get(`${apiUrl}current.json`),
       axios.get(`${apiUrl}current/driverStandings.json`)
     ])
     .catch(err => {
-      console.log(err.message);
+      ctx.reply(
+        `Oh snap! 🤖 We are either preparing the results 🕵🏻‍♂️ or there was an unfortunate error ❌. I've already notified my developer 👨🏻‍💻 Please try again later!`
+      );
+      errorLogger.log({
+        level: 'error',
+        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+          ctx.from.first_name
+        } ${ctx.from.last_name}, MESSAGE_ID: ${
+          ctx.message.message_id
+        }, MESSAGE: ${ctx.message.text}, TG_DATE: ${
+          ctx.message.date
+        }, ERROR_MESSAGE: ${err.message}`
+      });
     })
     .then(
       axios.spread((resSchedule, resStandings) => {
@@ -75,6 +98,15 @@ scheduleScene.hears(`🗓 Current Schedule (${currentYear})`, ctx => {
         ctx.scene.reenter();
       })
     );
+
+  infoLogger.log({
+    level: 'info',
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, TG_DATE: ${ctx.message.date}`
+  });
 });
 
 scheduleScene.hears('🔙 Previous Race', ctx => {
@@ -159,16 +191,35 @@ scheduleScene.hears('🔙 Previous Race', ctx => {
       ctx.scene.reenter();
     })
     .catch(err => {
-      console.log(err);
       ctx.reply(
-        'Oh snap! 🤖 We are either preparing the results, or there was an unfortunate error. Please try again later! '
+        `Oh snap! 🤖 We are either preparing the results 🕵🏻‍♂️ or there was an unfortunate error ❌. I've already notified my developer 👨🏻‍💻 Please try again later!`
       );
+
+      errorLogger.log({
+        level: 'error',
+        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+          ctx.from.first_name
+        } ${ctx.from.last_name}, MESSAGE_ID: ${
+          ctx.message.message_id
+        }, MESSAGE: ${ctx.message.text}, TG_DATE: ${
+          ctx.message.date
+        }, ERROR_MESSAGE: ${err.message}`
+      });
     });
+
+  infoLogger.log({
+    level: 'info',
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, TG_DATE: ${ctx.message.date}`
+  });
 });
 
 scheduleScene.hears('🔜 Next Race', ctx => {
   axios
-    .get(`${apiUrl}current/last/results.json`)
+    .get(`${apiUrl}current/last/resumlts.json`)
     .then(res => {
       const lastRace = parseInt(res.data.MRData.RaceTable.round);
       const nextRace = lastRace + 1;
@@ -198,15 +249,50 @@ scheduleScene.hears('🔜 Next Race', ctx => {
             ctx.scene.reenter();
           })
           .catch(err => {
-            console.log(err);
+            ctx.reply(
+              `Oh snap! 🤖 We are either preparing the results 🕵🏻‍♂️ or there was an unfortunate error ❌. I've already notified my developer 👨🏻‍💻 Please try again later!`
+            );
+
+            errorLogger.log({
+              level: 'error',
+              message: `CHAT: ${ctx.from.id}, USERNAME: ${
+                ctx.from.username
+              }, NAME: ${ctx.from.first_name} ${
+                ctx.from.last_name
+              }, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+                ctx.message.text
+              }, TG_DATE: ${ctx.message.date}, ERROR_MESSAGE: ${err.message}`
+            });
           });
       } else {
         ctx.reply('Current season is over. See you next season ✊🏻');
       }
     })
     .catch(err => {
-      console.log(err);
+      ctx.reply(
+        `Oh snap! 🤖 We are either preparing the results 🕵🏻‍♂️ or there was an unfortunate error ❌. I've already notified my developer 👨🏻‍💻 Please try again later!`
+      );
+
+      errorLogger.log({
+        level: 'error',
+        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+          ctx.from.first_name
+        } ${ctx.from.last_name}, MESSAGE_ID: ${
+          ctx.message.message_id
+        }, MESSAGE: ${ctx.message.text}, TG_DATE: ${
+          ctx.message.date
+        }, ERROR_MESSAGE: ${err.message}`
+      });
     });
+
+  infoLogger.log({
+    level: 'info',
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, TG_DATE: ${ctx.message.date}`
+  });
 });
 
 scheduleScene.hears('🔙 Previous Qualification', ctx => {
@@ -266,17 +352,57 @@ scheduleScene.hears('🔙 Previous Qualification', ctx => {
           ctx.scene.reenter();
         })
         .catch(err => {
-          console.log(err);
+          errorLogger.log({
+            level: 'error',
+            message: `CHAT: ${ctx.from.id}, USERNAME: ${
+              ctx.from.username
+            }, NAME: ${ctx.from.first_name} ${
+              ctx.from.last_name
+            }, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+              ctx.message.text
+            }, TG_DATE: ${ctx.message.date}, ERROR_MESSAGE: ${err.message}`
+          });
         });
     })
     .catch(err => {
-      console.log(err);
+      ctx.reply(
+        `Oh snap! 🤖 We are either preparing the results 🕵🏻‍♂️ or there was an unfortunate error ❌. I've already notified my developer 👨🏻‍💻 Please try again later!`
+      );
+      
+      errorLogger.log({
+        level: 'error',
+        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+          ctx.from.first_name
+        } ${ctx.from.last_name}, MESSAGE_ID: ${
+          ctx.message.message_id
+        }, MESSAGE: ${ctx.message.text}, TG_DATE: ${
+          ctx.message.date
+        }, ERROR_MESSAGE: ${err.message}`
+      });
     });
+
+  infoLogger.log({
+    level: 'info',
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, TG_DATE: ${ctx.message.date}`
+  });
 });
 
 scheduleScene.hears('🗂 Main Menu', ctx => {
   ctx.scene.leave('scheduleScene');
   ctx.scene.enter('mainScene');
+
+  infoLogger.log({
+    level: 'info',
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, TG_DATE: ${ctx.message.date}`
+  });
 });
 
 module.exports = scheduleScene;

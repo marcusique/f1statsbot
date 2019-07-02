@@ -3,7 +3,7 @@ const Telegraf = require('telegraf'),
   Stage = require('telegraf/stage'),
   session = require('telegraf/session'),
   infoLogger = require('./middleware/infoLogger'),
-  errorLogger = require('./middleware/errorLogger'),
+  appRoot = require('app-root-path'),
   keys = require('./config/keys'),
   mainScene = require('./scenes/mainScene'),
   driversScene = require('./scenes/driversScene'),
@@ -12,13 +12,10 @@ const Telegraf = require('telegraf'),
   bot = new Telegraf(keys.telegramBotToken);
 
 bot.use(session());
+console.log(appRoot.path);
 
 /* Welcome Message */
 bot.start(ctx => {
-  infoLogger.log({
-    level: 'info',
-    message: `${ctx.from.username} and ${ctx.from.first_name}`
-  });
   ctx.reply(
     `Hi there, ${ctx.from.first_name} 👋🏻
 I can help you to navigate in the world of Formula 1! 🏎 
@@ -29,14 +26,18 @@ Hit /help to learn more about me or go straight to the main menu by pressing the
       .resize()
       .extra()
   );
+  infoLogger.log({
+    level: 'info',
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, TG_DATE: ${ctx.message.date}`
+  });
 });
 
 /* Help Message */
 bot.help(ctx => {
-  errorLogger.log({
-    level: 'error',
-    message: `${ctx.from.username} error bld`
-  });
   ctx.reply(`To navigate through my functionality, simply follow the menu buttons ☑️
 If you experience any troubles using me, hit /start every time something goes wrong. I am still learning, so don't be harsh on me 🙏🏻
 
@@ -57,6 +58,15 @@ I constantly learn new stuff, so you might see new functionality as time goes by
 If you are ready to start, hit the 🗂 Menu button below ⬇️
 
   `);
+
+  infoLogger.log({
+    level: 'info',
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, TG_DATE: ${ctx.message.date}`
+  });
 });
 
 // Create scene manager
@@ -78,6 +88,17 @@ bot.use(scheduleScene);
 bot.use(driversScene);
 bot.use(constructorsScene);
 
-bot.hears('🗂 Menu', ctx => ctx.scene.enter('mainScene'));
+bot.hears('🗂 Menu', ctx => {
+  ctx.scene.enter('mainScene');
+
+  infoLogger.log({
+    level: 'info',
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, TG_DATE: ${ctx.message.date}`
+  });
+});
 
 bot.launch();

@@ -1,5 +1,7 @@
 const Scene = require('telegraf/scenes/base'),
   Markup = require('telegraf/markup'),
+  infoLogger = require('../middleware/infoLogger'),
+  errorLogger = require('../middleware/errorLogger'),
   axios = require('axios'),
   keys = require('../config/keys'),
   apiUrl = keys.apiUrl,
@@ -7,6 +9,15 @@ const Scene = require('telegraf/scenes/base'),
 
 const driversScene = new Scene('driversScene');
 driversScene.enter(ctx => {
+  infoLogger.log({
+    level: 'info',
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, TG_DATE: ${ctx.message.date}`
+  });
+
   return ctx.reply(
     '👱🏻‍♂️ Select from the menu below ⬇️',
     Markup.keyboard([
@@ -81,14 +92,45 @@ driversScene.hears(`🏆 Current Standings (${currentYear})`, ctx => {
       ctx.scene.reenter();
     })
     .catch(err => {
-      console.log(err);
+      ctx.reply(
+        `Oh snap! 🤖 We are either preparing the results 🕵🏻‍♂️ or there was an unfortunate error ❌. I've already notified my developer 👨🏻‍💻 Please try again later!`
+      );
+
+      errorLogger.log({
+        level: 'error',
+        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+          ctx.from.first_name
+        } ${ctx.from.last_name}, MESSAGE_ID: ${
+          ctx.message.message_id
+        }, MESSAGE: ${ctx.message.text}, TG_DATE: ${
+          ctx.message.date
+        }, ERROR_MESSAGE: ${err.message}`
+      });
     });
+
+  infoLogger.log({
+    level: 'info',
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, TG_DATE: ${ctx.message.date}`
+  });
 });
 /* 🏅 Current Standings [END] */
 
 /* Standings by Year [START] */
 driversScene.hears('🎖 Standings by year', ctx => {
   ctx.reply(`Enter a year between 1950 and ${currentYear} ⌨️ `);
+
+  infoLogger.log({
+    level: 'info',
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, TG_DATE: ${ctx.message.date}`
+  });
 });
 
 driversScene.hears(/^[0-9]{4}$/, ctx => {
@@ -155,17 +197,48 @@ driversScene.hears(/^[0-9]{4}$/, ctx => {
         ctx.scene.reenter();
       })
       .catch(err => {
-        console.log(err);
+        ctx.reply(
+          `Oh snap! 🤖 We are either preparing the results 🕵🏻‍♂️ or there was an unfortunate error ❌. I've already notified my developer 👨🏻‍💻 Please try again later!`
+        );
+
+        errorLogger.log({
+          level: 'error',
+          message: `CHAT: ${ctx.from.id}, USERNAME: ${
+            ctx.from.username
+          }, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${
+            ctx.message.message_id
+          }, MESSAGE: ${ctx.message.text}, TG_DATE: ${
+            ctx.message.date
+          }, ERROR_MESSAGE: ${err.message}`
+        });
       });
   } else {
     ctx.reply(`Enter a year between 1950 and ${currentYear} ⌨️ `);
   }
+
+  infoLogger.log({
+    level: 'info',
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, TG_DATE: ${ctx.message.date}`
+  });
 });
 /* Standings by Year [END] */
 
 driversScene.hears('🗂 Main Menu', ctx => {
   ctx.scene.leave('driversScene');
   ctx.scene.enter('mainScene');
+
+  infoLogger.log({
+    level: 'info',
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, TG_DATE: ${ctx.message.date}`
+  });
 });
 
 module.exports = driversScene;
