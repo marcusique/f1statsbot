@@ -23,7 +23,6 @@ scheduleScene.enter(ctx => {
   return ctx.reply(
     '🗓 Select from the menu below ⬇️',
     Markup.keyboard([
-      ['🔙 Previous Qualification', '🔙 Previous Race'],
       ['🔜 Next Race'],
       [`🗓 Current Schedule (${currentYear})`],
       ['🗂 Main Menu']
@@ -108,7 +107,6 @@ scheduleScene.hears(`🗓 Current Schedule (${currentYear})`, ctx => {
     }, TG_DATE: ${ctx.message.date}`
   });
 });
-
 
 scheduleScene.hears('🔜 Next Race', ctx => {
   axios

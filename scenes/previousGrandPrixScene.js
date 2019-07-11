@@ -24,7 +24,8 @@ previousGrandPrixScene.enter(ctx => {
     '⏮ Select from the menu below ⬇️',
     Markup.keyboard([
       ['⏮ Qualification Results'],
-      ['⏮ Race Results (w/ fastest lap)', '⏮ Race Results (w/ gaps)'],
+      ['⏮ Race Results (w/ fastest lap)'],
+      ['⏮ Race Results (w/ gaps)'],
       ['⏮ Race Results (w/ starting position)'],
       ['🗂 Main Menu']
     ])
