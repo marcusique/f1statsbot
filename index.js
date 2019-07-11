@@ -8,6 +8,7 @@ const Telegraf = require('telegraf'),
   driversScene = require('./scenes/driversScene'),
   constructorsScene = require('./scenes/constructorsScene'),
   scheduleScene = require('./scenes/scheduleScene'),
+  previousGrandPrixScene = require('./scenes/previousGrandPrixScene'),
   bot = new Telegraf(keys.telegramBotToken);
 
 bot.use(session());
@@ -78,6 +79,7 @@ stage.register(mainScene);
 stage.register(scheduleScene);
 stage.register(driversScene);
 stage.register(constructorsScene);
+stage.register(previousGrandPrixScene);
 
 // Middleware registration
 bot.use(stage.middleware());
@@ -85,9 +87,23 @@ bot.use(mainScene);
 bot.use(scheduleScene);
 bot.use(driversScene);
 bot.use(constructorsScene);
+bot.use(previousGrandPrixScene);
 
 bot.hears('🗂 Menu', ctx => {
   ctx.scene.enter('mainScene');
+
+  infoLogger.log({
+    level: 'info',
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, TG_DATE: ${ctx.message.date}`
+  });
+});
+
+bot.command('new', ctx => {
+  ctx.reply(`What's new`);
 
   infoLogger.log({
     level: 'info',
