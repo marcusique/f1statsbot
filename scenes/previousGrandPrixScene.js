@@ -159,49 +159,43 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ fastest lap)', ctx => {
         if (i === 0) {
           if (results[i].FastestLap.rank && results[i].FastestLap.rank == 1) {
             preparedReply.push(
-              `${i + 1}. ${results[i].Driver.givenName} ${
+              `🥇 ${results[i].Driver.givenName} ${
                 results[i].Driver.familyName
-              } (${results[i].points})🥇 (⏱ – ${
-                results[i].FastestLap.Time.time
-              })`
+              } (${results[i].points}) (⏱ – ${results[i].FastestLap.Time.time})`
             );
           } else {
             preparedReply.push(
-              `${i + 1}. ${results[i].Driver.givenName} ${
+              `🥇 ${results[i].Driver.givenName} ${
                 results[i].Driver.familyName
-              } (${results[i].points}) 🥇`
+              } (${results[i].points})`
             );
           }
         } else if (i === 1) {
           if (results[i].FastestLap.rank && results[i].FastestLap.rank == 1) {
             preparedReply.push(
-              `${i + 1}. ${results[i].Driver.givenName} ${
+              `🥈 ${results[i].Driver.givenName} ${
                 results[i].Driver.familyName
-              } (${results[i].points})🥈 (⏱ – ${
-                results[i].FastestLap.Time.time
-              })`
+              } (${results[i].points}) (⏱ – ${results[i].FastestLap.Time.time})`
             );
           } else {
             preparedReply.push(
-              `${i + 1}. ${results[i].Driver.givenName} ${
+              `🥈 ${results[i].Driver.givenName} ${
                 results[i].Driver.familyName
-              } (${results[i].points}) 🥈`
+              } (${results[i].points})`
             );
           }
         } else if (i === 2) {
           if (results[i].FastestLap.rank && results[i].FastestLap.rank == 1) {
             preparedReply.push(
-              `${i + 1}. ${results[i].Driver.givenName} ${
+              `🥉 ${results[i].Driver.givenName} ${
                 results[i].Driver.familyName
-              } (${results[i].points})🥉 (⏱ – ${
-                results[i].FastestLap.Time.time
-              })`
+              } (${results[i].points}) (⏱ – ${results[i].FastestLap.Time.time})`
             );
           } else {
             preparedReply.push(
-              `${i + 1}. ${results[i].Driver.givenName} ${
+              `🥉 ${results[i].Driver.givenName} ${
                 results[i].Driver.familyName
-              } (${results[i].points}) 🥉`
+              } (${results[i].points})`
             );
           }
         } else if (results[i].FastestLap.rank == 1) {
@@ -254,7 +248,85 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ fastest lap)', ctx => {
 });
 
 previousGrandPrixScene.hears('⏮ Race Results (w/ gaps)', ctx => {
-  ctx.reply('gaps');
+  axios
+    .get(`${apiUrl}current/last/results.json`)
+    .then(res => {
+      const results = res.data.MRData.RaceTable.Races[0].Results;
+      const raceName = res.data.MRData.RaceTable.Races[0].raceName;
+      const gpName =
+        res.data.MRData.RaceTable.Races[0].Circuit.Location.country;
+      const wikiReportUrl = res.data.MRData.RaceTable.Races[0].url;
+      let preparedReply = [];
+      for (let i = 0; i < results.length; i++) {
+        if (i === 0) {
+          preparedReply.push(
+            `🥇 ${results[i].Driver.givenName} ${
+              results[i].Driver.familyName
+            } (${results[i].Time.time})`
+          );
+        } else if (i === 1) {
+          preparedReply.push(
+            `🥈 ${results[i].Driver.givenName} ${
+              results[i].Driver.familyName
+            } (${results[i].Time.time})`
+          );
+        } else if (i === 2) {
+          preparedReply.push(
+            `🥉 ${results[i].Driver.givenName} ${
+              results[i].Driver.familyName
+            } (${results[i].Time.time})`
+          );
+        } else {
+          if (results[i].Time) {
+            preparedReply.push(
+              `${i + 1}. ${results[i].Driver.givenName} ${
+                results[i].Driver.familyName
+              } (${results[i].Time.time})`
+            );
+          } else {
+            preparedReply.push(
+              `${i + 1}. ${results[i].Driver.givenName} ${
+                results[i].Driver.familyName
+              } (${results[i].status})`
+            );
+          }
+        }
+      }
+      ctx.reply(
+        `${flag(
+          gpName
+        )}${raceName} results (with gaps): \n\n${preparedReply.join('\n')}`,
+        Markup.inlineKeyboard([
+          Markup.urlButton('Grand Prix Report (Wikipedia)', `${wikiReportUrl}`)
+        ]).extra()
+      );
+      ctx.scene.reenter();
+    })
+    .catch(err => {
+      ctx.reply(
+        `Oh snap! 🤖 We are either preparing the results 🕵🏻‍♂️ or there was an unfortunate error ❌. I've already notified my developer 👨🏻‍💻 Please try again later!`
+      );
+
+      errorLogger.log({
+        level: 'error',
+        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+          ctx.from.first_name
+        } ${ctx.from.last_name}, MESSAGE_ID: ${
+          ctx.message.message_id
+        }, MESSAGE: ${ctx.message.text}, TG_DATE: ${
+          ctx.message.date
+        }, ERROR_MESSAGE: ${err.message}`
+      });
+    });
+
+  infoLogger.log({
+    level: 'info',
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, TG_DATE: ${ctx.message.date}`
+  });
 });
 
 previousGrandPrixScene.hears('⏮ Race Results (w/ starting position)', ctx => {

@@ -43,43 +43,27 @@ driversScene.hears(`🏆 Current Standings (${currentYear})`, ctx => {
       for (let i = 0; i < driverStandings.length; i++) {
         if (i === 0) {
           preparedReply.push(
-            i +
-              1 +
-              '. ' +
-              driverStandings[i].Driver.givenName +
-              ' ' +
-              driverStandings[i].Driver.familyName +
-              ` (${driverStandings[i].points}) 🥇`
+            `🥇 ${driverStandings[i].Driver.givenName} ${
+              driverStandings[i].Driver.familyName
+            } (${driverStandings[i].points})`
           );
         } else if (i === 1) {
           preparedReply.push(
-            i +
-              1 +
-              '. ' +
-              driverStandings[i].Driver.givenName +
-              ' ' +
-              driverStandings[i].Driver.familyName +
-              ` (${driverStandings[i].points}) 🥈`
+            `🥈 ${driverStandings[i].Driver.givenName} ${
+              driverStandings[i].Driver.familyName
+            } (${driverStandings[i].points})`
           );
         } else if (i === 2) {
           preparedReply.push(
-            i +
-              1 +
-              '. ' +
-              driverStandings[i].Driver.givenName +
-              ' ' +
-              driverStandings[i].Driver.familyName +
-              ` (${driverStandings[i].points}) 🥉`
+            `🥉 ${driverStandings[i].Driver.givenName} ${
+              driverStandings[i].Driver.familyName
+            } (${driverStandings[i].points})`
           );
         } else {
           preparedReply.push(
-            i +
-              1 +
-              '. ' +
-              driverStandings[i].Driver.givenName +
-              ' ' +
-              driverStandings[i].Driver.familyName +
-              ` (${driverStandings[i].points})`
+            `${i + 1}. ${driverStandings[i].Driver.givenName} ${
+              driverStandings[i].Driver.familyName
+            } (${driverStandings[i].points})`
           );
         }
       }
@@ -148,43 +132,27 @@ driversScene.hears(/^[0-9]{4}$/, ctx => {
         for (let i = 0; i < driverStandings.length; i++) {
           if (i === 0) {
             preparedReply.push(
-              i +
-                1 +
-                '. ' +
-                driverStandings[i].Driver.givenName +
-                ' ' +
-                driverStandings[i].Driver.familyName +
-                ` (${driverStandings[i].points}) 🥇`
+              `🥇 ${driverStandings[i].Driver.givenName} ${
+                driverStandings[i].Driver.familyName
+              } (${driverStandings[i].points})`
             );
           } else if (i === 1) {
             preparedReply.push(
-              i +
-                1 +
-                '. ' +
-                driverStandings[i].Driver.givenName +
-                ' ' +
-                driverStandings[i].Driver.familyName +
-                ` (${driverStandings[i].points}) 🥈`
+              `🥈 ${driverStandings[i].Driver.givenName} ${
+                driverStandings[i].Driver.familyName
+              } (${driverStandings[i].points})`
             );
           } else if (i === 2) {
             preparedReply.push(
-              i +
-                1 +
-                '. ' +
-                driverStandings[i].Driver.givenName +
-                ' ' +
-                driverStandings[i].Driver.familyName +
-                ` (${driverStandings[i].points}) 🥉`
+              `🥉 ${driverStandings[i].Driver.givenName} ${
+                driverStandings[i].Driver.familyName
+              } (${driverStandings[i].points})`
             );
           } else {
             preparedReply.push(
-              i +
-                1 +
-                '. ' +
-                driverStandings[i].Driver.givenName +
-                ' ' +
-                driverStandings[i].Driver.familyName +
-                ` (${driverStandings[i].points})`
+              `${i + 1}. ${driverStandings[i].Driver.givenName} ${
+                driverStandings[i].Driver.familyName
+              } (${driverStandings[i].points})`
             );
           }
         }
