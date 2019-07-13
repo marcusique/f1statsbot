@@ -47,10 +47,14 @@ As of today you can 💪🏻:
 👱🏻‍♂️ Get driver standings by a given year
 🏎 Get current constructor standings
 🏎 Get constructor standings by a given year
-🗓 Get previous qualification results
-🗓 Get previous race results (including fastest lap)
+⏮ Get previous qualification results
+⏮ Get previous race results (with points and fastest lap)
+⏮ Get previous race results (with gaps)
+⏮ Get previous race results (with starting position)
 🗓 Get next race schedule
 🗓 Get schedule for current season
+
+Hit /new to see changelog for the last update.
 
 I constantly learn new stuff, so you might see new functionality as time goes by 📚
 
@@ -103,7 +107,15 @@ bot.hears('🗂 Menu', ctx => {
 });
 
 bot.command('new', ctx => {
-  ctx.reply(`What's new`);
+  ctx.reply(`🤖 New features in July 2019 update:
+
+🗂 Restructured menu
+⏮ Get previous race results (with points and fastest lap)
+⏮ Get previous race results (with gaps)
+⏮ Get previous race results (with starting position)
+
+Hit /help to learn more about my features!
+  `);
 
   infoLogger.log({
     level: 'info',

@@ -68,7 +68,7 @@ driversScene.hears(`🏆 Current Standings (${currentYear})`, ctx => {
         }
       }
       ctx.reply(
-        `<b>Current Driver standings after ${numOfLastRace} race(s):</b> \n\n${preparedReply.join(
+        `<b>🏆 Current Driver standings after ${numOfLastRace} race(s):</b> \n\n${preparedReply.join(
           '\n'
         )}`,
         { parse_mode: 'HTML' }
@@ -157,7 +157,7 @@ driversScene.hears(/^[0-9]{4}$/, ctx => {
           }
         }
         ctx.reply(
-          `<b>Driver Standings in ${
+          `<b>🎖 Driver Standings in ${
             ctx.message.text
           }:</b> \n\n${preparedReply.join('\n')}`,
           { parse_mode: 'HTML' }

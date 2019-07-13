@@ -43,21 +43,21 @@ constructorsScene.hears(`🏆 Current Standings (${currentYear})`, ctx => {
       for (let i = 0; i < constructorStandings.length; i++) {
         if (i === 0) {
           preparedReply.push(
-            `${i + 1}. ${constructorStandings[i].Constructor.name} (${
+            `🥇 ${constructorStandings[i].Constructor.name} (${
               constructorStandings[i].points
-            }) 🥇`
+            })`
           );
         } else if (i === 1) {
           preparedReply.push(
-            `${i + 1}. ${constructorStandings[i].Constructor.name} (${
+            `🥈 ${constructorStandings[i].Constructor.name} (${
               constructorStandings[i].points
-            }) 🥈`
+            })`
           );
         } else if (i === 2) {
           preparedReply.push(
-            `${i + 1}. ${constructorStandings[i].Constructor.name} (${
+            `🥉 ${constructorStandings[i].Constructor.name} (${
               constructorStandings[i].points
-            }) 🥉`
+            })`
           );
         } else {
           preparedReply.push(
@@ -68,7 +68,7 @@ constructorsScene.hears(`🏆 Current Standings (${currentYear})`, ctx => {
         }
       }
       ctx.reply(
-        `<b>Current 🏎 Constructors Standings after ${numOfLastRace} race(s):\n\n</b>${preparedReply.join(
+        `<b>🏆 Current Constructors Standings after ${numOfLastRace} race(s):\n\n</b>${preparedReply.join(
           '\n'
         )}`,
         { parse_mode: 'HTML' }
@@ -132,21 +132,21 @@ constructorsScene.hears(/^[0-9]{4}$/, ctx => {
         for (let i = 0; i < constructorsStandings.length; i++) {
           if (i === 0) {
             preparedReply.push(
-              `${i + 1}. ${constructorsStandings[i].Constructor.name} (${
+              `🥇 ${constructorsStandings[i].Constructor.name} (${
                 constructorsStandings[i].points
-              }) 🥇`
+              })`
             );
           } else if (i === 1) {
             preparedReply.push(
-              `${i + 1}. ${constructorsStandings[i].Constructor.name} (${
+              `🥈 ${constructorsStandings[i].Constructor.name} (${
                 constructorsStandings[i].points
-              }) 🥈`
+              })`
             );
           } else if (i === 2) {
             preparedReply.push(
-              `${i + 1}. ${constructorsStandings[i].Constructor.name} (${
+              `🥉 ${constructorsStandings[i].Constructor.name} (${
                 constructorsStandings[i].points
-              }) 🥉`
+              })`
             );
           } else {
             preparedReply.push(
@@ -157,7 +157,7 @@ constructorsScene.hears(/^[0-9]{4}$/, ctx => {
           }
         }
         ctx.reply(
-          `<b>🏎 Constructors Standings in ${
+          `<b>🎖 Constructors Standings in ${
             ctx.message.text
           }:</b> \n\n${preparedReply.join('\n')}`,
           { parse_mode: 'HTML' }
