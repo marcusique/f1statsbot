@@ -9,7 +9,7 @@ This is a [Telegram](https://core.telegram.org/bots) bot built on top of Node.js
 
 # How to use
 In order to use this bot, you need to have a Telegram account. To start using this bot, you should either:
-1. Look it up in the global search in Telegram app (@f1statsbot)
+1. Look it up in the global search in Telegram app (@f1statsbot), or
 2. Use [this link](https://t.me/F1StatsBot) to add it to your chats
 
 # Commands
