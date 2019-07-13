@@ -5,14 +5,18 @@
 <p align="center">Telegram bot (@F1StatsBot) to retrieve Formula One championship statistics</p>
 
 # Details
+
 This is a [Telegram](https://core.telegram.org/bots) bot built on top of Node.js and [Telegraf](https://telegraf.js.org/) that retrieves statistics from the [Ergast Developer API](http://ergast.com/mrd/) based on pre-difined commands.
 
 # How to use
+
 In order to use this bot, you need to have a Telegram account. To start using this bot, you should either:
+
 1. Look it up in the global search in Telegram app (@f1statsbot), or
 2. Use [this link](https://t.me/F1StatsBot) to add it to your chats
 
 # Commands
+
 <strong>Global commands:</strong></br>
 <em>/start</em> – launch or restart the bot</br>
 <em>/help</em> – get the list of bot's features</br>
