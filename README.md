@@ -2,7 +2,7 @@
   <img src="assets/logo.png" width="180" height="180">
   <h1 align="center">F1 Stats Bot</h1>
 </p>
-Telegram bot to retrieve Formula One championship statistics
+<p align="center">Telegram bot (@F1StatsBot) to retrieve Formula One championship statistics</p>
 
 # Details
 This is a [Telegram](https://core.telegram.org/bots) bot built on top of Node.js and [Telegraf](https://telegraf.js.org/) that retrieves statistics from the [Ergast Developer API](http://ergast.com/mrd/) based on pre-difined commands.
