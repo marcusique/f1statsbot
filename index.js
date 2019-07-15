@@ -127,4 +127,15 @@ Hit /help to learn more about my features!
   });
 });
 
+bot.command('cancel', ctx => {
+  if (ctx.session.__scenes.current) {
+    ctx.scene.leave(ctx.session.__scenes.current);
+    ctx.reply('🛑 Action cancelled, returning to Main Menu 🗂');
+    ctx.scene.enter('mainScene');
+  } else {
+    ctx.reply('🛑 Action cancelled, returning to Main Menu 🗂');
+    ctx.scene.enter('mainScene');
+  }
+});
+
 bot.launch();

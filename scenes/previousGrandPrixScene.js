@@ -340,83 +340,83 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ starting position)', ctx => {
 
       for (let i = 0; i < results.length; i++) {
         if (i === 0) {
-          if (results[i].position < results[i].grid) {
+          if (i + 1 < results[i].grid) {
             preparedReply.push(
               `🥇 ${results[i].Driver.givenName} ${
                 results[i].Driver.familyName
-              } (from ${results[i].grid} ⤴️)`
+              } ⤴️ from ${results[i].grid}`
             );
-          } else if (results[i].position > results[i].grid) {
+          } else if (i + 1 > results[i].grid) {
             preparedReply.push(
               `🥇 ${results[i].Driver.givenName} ${
                 results[i].Driver.familyName
-              } (from ${results[i].grid} ⤵️)`
+              } ⤵️ from ${results[i].grid}`
             );
           } else {
             preparedReply.push(
               `🥇 ${results[i].Driver.givenName} ${
                 results[i].Driver.familyName
-              } (from ${results[i].grid} ⬅️)`
+              } ⬅️ from ${results[i].grid}`
             );
           }
         } else if (i === 1) {
-          if (results[i].position < results[i].grid) {
+          if (i + 1 < results[i].grid) {
             preparedReply.push(
               `🥈 ${results[i].Driver.givenName} ${
                 results[i].Driver.familyName
-              } (from ${results[i].grid} ⤴️)`
+              } ⤴️ from ${results[i].grid}`
             );
-          } else if (results[i].position > results[i].grid) {
+          } else if (i + 1 > results[i].grid) {
             preparedReply.push(
               `🥈 ${results[i].Driver.givenName} ${
                 results[i].Driver.familyName
-              } (from ${results[i].grid} ⤵️)`
+              } ⤵️ from ${results[i].grid}`
             );
           } else {
             preparedReply.push(
               `🥇 ${results[i].Driver.givenName} ${
                 results[i].Driver.familyName
-              } (from ${results[i].grid} ⬅️)`
+              } ⬅️ from ${results[i].grid}`
             );
           }
         } else if (i === 2) {
-          if (results[i].position < results[i].grid) {
+          if (i + 1 < results[i].grid) {
             preparedReply.push(
               `🥉 ${results[i].Driver.givenName} ${
                 results[i].Driver.familyName
-              } (from ${results[i].grid} ⤴️)`
+              } ⤴️ from ${results[i].grid}`
             );
-          } else if (results[i].position > results[i].grid) {
+          } else if (i + 1 > results[i].grid) {
             preparedReply.push(
               `🥉 ${results[i].Driver.givenName} ${
                 results[i].Driver.familyName
-              } (from ${results[i].grid} ⤵️)`
+              } ⤵️ from ${results[i].grid}`
             );
           } else {
             preparedReply.push(
               `🥉 ${results[i].Driver.givenName} ${
                 results[i].Driver.familyName
-              } (from ${results[i].grid} ⬅️)`
+              } ⬅️ from ${results[i].grid}`
             );
           }
         } else {
-          if (results[i].position < results[i].grid) {
+          if (i + 1 < results[i].grid) {
             preparedReply.push(
               `${i + 1}. ${results[i].Driver.givenName} ${
                 results[i].Driver.familyName
-              } (from ${results[i].grid} ⤴️)`
+              } ⤴️ from ${results[i].grid}`
             );
-          } else if (results[i].position > results[i].grid) {
+          } else if (i + 1 > results[i].grid) {
             preparedReply.push(
               `${i + 1}. ${results[i].Driver.givenName} ${
                 results[i].Driver.familyName
-              } (from ${results[i].grid} ⤵️)`
+              } ⤵️ from ${results[i].grid}`
             );
           } else {
             preparedReply.push(
               `${i + 1}. ${results[i].Driver.givenName} ${
                 results[i].Driver.familyName
-              } (from ${results[i].grid} ⬅️)`
+              } ⬅️ from ${results[i].grid}`
             );
           }
         }
