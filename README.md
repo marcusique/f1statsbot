@@ -6,7 +6,7 @@
 
 # Details
 
-This is a [Telegram](https://core.telegram.org/bots) bot built on top of Node.js and [Telegraf](https://telegraf.js.org/) that retrieves statistics from the [Ergast Developer API](http://ergast.com/mrd/) based on pre-difined commands.
+This is a [Telegram](https://core.telegram.org/bots) bot built on top of Node.js and [Telegraf](https://telegraf.js.org/) that retrieves statistics from the [Ergast Developer API](http://ergast.com/mrd/) based on pre-defined commands.
 
 # How to use
 
@@ -27,7 +27,8 @@ In order to use this bot, you need to have a Telegram account. To start using th
 <em>Get driver standings by a given year</em> – returns driver standing by a year entered by user</br>
 <em>Get current constructor standings</em> – returns current year's constructor's standings</br>
 <em>Get constructor standings by a given year</em> – returns constructor's standing by a year entered by user</br>
-<em>Get previous qualification results</em> – returns results of the previous qualification</br>
+<em>Get 
+  vious qualification results</em> – returns results of the previous qualification</br>
 <em>Get previous race results (with points and fastest lap)</em> – returns results of the previous race including points earned and fastest lap</br>
 <em>Get previous race results (with gaps)</em> – returns results of the previous race including gaps between drivers</br>
 <em>Get previous race results (with starting position)</em> – returns results of the previous race including starting position</br>
