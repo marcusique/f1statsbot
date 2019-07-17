@@ -9,9 +9,15 @@ const Telegraf = require('telegraf'),
   constructorsScene = require('./scenes/constructorsScene'),
   scheduleScene = require('./scenes/scheduleScene'),
   previousGrandPrixScene = require('./scenes/previousGrandPrixScene'),
+  redis = require('redis'),
   bot = new Telegraf(keys.telegramBotToken);
 
 bot.use(session());
+const redisClient = redis.createClient();
+
+redisClient.on('error', err => {
+  console.log(err);
+});
 
 /* Welcome Message */
 bot.start(ctx => {
