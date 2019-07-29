@@ -3,7 +3,6 @@ const Scene = require('telegraf/scenes/base'),
   infoLogger = require('../middleware/infoLogger'),
   errorLogger = require('../middleware/errorLogger'),
   axios = require('axios'),
-  redis = require('../config/redis'),
   keys = require('../config/keys'),
   apiUrl = keys.apiUrl,
   currentYear = new Date().getFullYear();
@@ -34,89 +33,71 @@ driversScene.enter(ctx => {
 
 /* 🏅 Current Standings [START] */
 driversScene.hears(`🏆 Current Standings (${currentYear})`, ctx => {
-  redis.lrange('results', 0, -1, (err, preparedReply) => {
-    if (err) {
-      console.log(err);
-    } else if (preparedReply.length > 0) {
-      console.log('there is reply in REDIS!');
+  axios
+    .get(`${apiUrl}current/driverStandings.json`)
+    .then(res => {
+      const numOfLastRace =
+        res.data.MRData.StandingsTable.StandingsLists[0].round;
+      const driverStandings =
+        res.data.MRData.StandingsTable.StandingsLists[0].DriverStandings;
+      let preparedReply = [];
+      for (let i = 0; i < driverStandings.length; i++) {
+        if (i === 0) {
+          preparedReply.push(
+            `🥇 ${driverStandings[i].Driver.givenName} ${
+              driverStandings[i].Driver.familyName
+            } (${driverStandings[i].points})`
+          );
+        } else if (i === 1) {
+          preparedReply.push(
+            `🥈 ${driverStandings[i].Driver.givenName} ${
+              driverStandings[i].Driver.familyName
+            } (${driverStandings[i].points})`
+          );
+        } else if (i === 2) {
+          preparedReply.push(
+            `🥉 ${driverStandings[i].Driver.givenName} ${
+              driverStandings[i].Driver.familyName
+            } (${driverStandings[i].points})`
+          );
+        } else {
+          preparedReply.push(
+            `${i + 1}. ${driverStandings[i].Driver.givenName} ${
+              driverStandings[i].Driver.familyName
+            } (${driverStandings[i].points})`
+          );
+        }
+      }
       ctx.reply(
-        `<b>🏆 Current Driver standings after:</b> \n\n${preparedReply.join(
+        `<b>🏆 Current Driver standings after ${numOfLastRace} race(s):</b> \n\n${preparedReply.join(
           '\n'
         )}`,
         { parse_mode: 'HTML' }
       );
       ctx.scene.reenter();
-    } else {
-      console.log('there is no reply in redis :(');
-      axios
-        .get(`${apiUrl}current/driverStandings.json`)
-        .then(res => {
-          const numOfLastRace =
-            res.data.MRData.StandingsTable.StandingsLists[0].round;
-          const driverStandings =
-            res.data.MRData.StandingsTable.StandingsLists[0].DriverStandings;
-          let preparedReply = [];
-          for (let i = 0; i < driverStandings.length; i++) {
-            if (i === 0) {
-              preparedReply.push(
-                `🥇 ${driverStandings[i].Driver.givenName} ${
-                  driverStandings[i].Driver.familyName
-                } (${driverStandings[i].points})`
-              );
-            } else if (i === 1) {
-              preparedReply.push(
-                `🥈 ${driverStandings[i].Driver.givenName} ${
-                  driverStandings[i].Driver.familyName
-                } (${driverStandings[i].points})`
-              );
-            } else if (i === 2) {
-              preparedReply.push(
-                `🥉 ${driverStandings[i].Driver.givenName} ${
-                  driverStandings[i].Driver.familyName
-                } (${driverStandings[i].points})`
-              );
-            } else {
-              preparedReply.push(
-                `${i + 1}. ${driverStandings[i].Driver.givenName} ${
-                  driverStandings[i].Driver.familyName
-                } (${driverStandings[i].points})`
-              );
-            }
-          }
-          redis.rpush.apply(redis, ['results'].concat(preparedReply));
-          redis.expire('results', 20);
-          ctx.reply(
-            `<b>🏆 Current Driver standings after ${numOfLastRace} race(s):</b> \n\n${preparedReply.join(
-              '\n'
-            )}`,
-            { parse_mode: 'HTML' }
-          );
-          ctx.scene.reenter();
-        })
-        .catch(err => {
-          ctx.reply(
-            `Oh snap! 🤖 We are either preparing the results 🕵🏻‍♂️ or there was an unfortunate error ❌. I've already notified my developer 👨🏻‍💻 Please try again later!`
-          );
-          errorLogger.log({
-            level: 'error',
-            message: `CHAT: ${ctx.from.id}, USERNAME: ${
-              ctx.from.username
-            }, NAME: ${ctx.from.first_name} ${
-              ctx.from.last_name
-            }, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-              ctx.message.text
-            }, TG_DATE: ${ctx.message.date}, ERROR_MESSAGE: ${err.message}`
-          });
-        });
-      infoLogger.log({
-        level: 'info',
+    })
+    .catch(err => {
+      ctx.reply(
+        `Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`
+      );
+      errorLogger.log({
+        level: 'error',
         message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
           ctx.from.first_name
         } ${ctx.from.last_name}, MESSAGE_ID: ${
           ctx.message.message_id
-        }, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
+        }, MESSAGE: ${ctx.message.text}, TG_DATE: ${
+          ctx.message.date
+        }, ERROR_MESSAGE: ${err.message}`
       });
-    }
+    });
+  infoLogger.log({
+    level: 'info',
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, TG_DATE: ${ctx.message.date}`
   });
 });
 /* 🏅 Current Standings [END] */
@@ -184,7 +165,7 @@ driversScene.hears(/^[0-9]{4}$/, ctx => {
       })
       .catch(err => {
         ctx.reply(
-          `Oh snap! 🤖 We are either preparing the results 🕵🏻‍♂️ or there was an unfortunate error ❌. I've already notified my developer 👨🏻‍💻 Please try again later!`
+          `Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`
         );
 
         errorLogger.log({

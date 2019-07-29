@@ -106,7 +106,7 @@ previousGrandPrixScene.hears('⏮ Qualification Results', ctx => {
     })
     .catch(err => {
       ctx.reply(
-        `Oh snap! 🤖 We are either preparing the results 🕵🏻‍♂️ or there was an unfortunate error ❌. I've already notified my developer 👨🏻‍💻 Please try again later!`
+        `Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`
       );
 
       errorLogger.log({
@@ -223,21 +223,19 @@ previousGrandPrixScene.hears(
       })
       .catch(err => {
         ctx.reply(
-          `Oh snap! 🤖 We are either preparing the results 🕵🏻‍♂️ or there was an unfortunate error ❌. I've already notified my developer 👨🏻‍💻 Please try again later!`
+          `Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`
         );
 
-        console.log(err);
-
-        // errorLogger.log({
-        //   level: 'error',
-        //   message: `CHAT: ${ctx.from.id}, USERNAME: ${
-        //     ctx.from.username
-        //   }, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${
-        //     ctx.message.message_id
-        //   }, MESSAGE: ${ctx.message.text}, TG_DATE: ${
-        //     ctx.message.date
-        //   }, ERROR_MESSAGE: ${err.message}`
-        // });
+        errorLogger.log({
+          level: 'error',
+          message: `CHAT: ${ctx.from.id}, USERNAME: ${
+            ctx.from.username
+          }, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${
+            ctx.message.message_id
+          }, MESSAGE: ${ctx.message.text}, TG_DATE: ${
+            ctx.message.date
+          }, ERROR_MESSAGE: ${err.message}`
+        });
       });
 
     infoLogger.log({
@@ -308,7 +306,7 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ gaps)', ctx => {
     })
     .catch(err => {
       ctx.reply(
-        `Oh snap! 🤖 We are either preparing the results 🕵🏻‍♂️ or there was an unfortunate error ❌. I've already notified my developer 👨🏻‍💻 Please try again later!`
+        `Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`
       );
 
       errorLogger.log({
@@ -441,7 +439,7 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ starting position)', ctx => {
     })
     .catch(err => {
       ctx.reply(
-        `Oh snap! 🤖 We are either preparing the results 🕵🏻‍♂️ or there was an unfortunate error ❌. I've already notified my developer 👨🏻‍💻 Please try again later!`
+        `Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`
       );
 
       errorLogger.log({
