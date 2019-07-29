@@ -8,6 +8,7 @@ const Scene = require('telegraf/scenes/base'),
   currentYear = new Date().getFullYear();
 
 const driversScene = new Scene('driversScene');
+
 driversScene.enter(ctx => {
   infoLogger.log({
     level: 'info',
@@ -77,9 +78,8 @@ driversScene.hears(`🏆 Current Standings (${currentYear})`, ctx => {
     })
     .catch(err => {
       ctx.reply(
-        `Oh snap! 🤖 We are either preparing the results 🕵🏻‍♂️ or there was an unfortunate error ❌. I've already notified my developer 👨🏻‍💻 Please try again later!`
+        `Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`
       );
-
       errorLogger.log({
         level: 'error',
         message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
@@ -91,7 +91,6 @@ driversScene.hears(`🏆 Current Standings (${currentYear})`, ctx => {
         }, ERROR_MESSAGE: ${err.message}`
       });
     });
-
   infoLogger.log({
     level: 'info',
     message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
@@ -166,7 +165,7 @@ driversScene.hears(/^[0-9]{4}$/, ctx => {
       })
       .catch(err => {
         ctx.reply(
-          `Oh snap! 🤖 We are either preparing the results 🕵🏻‍♂️ or there was an unfortunate error ❌. I've already notified my developer 👨🏻‍💻 Please try again later!`
+          `Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`
         );
 
         errorLogger.log({

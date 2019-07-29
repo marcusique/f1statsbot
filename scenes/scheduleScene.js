@@ -41,7 +41,7 @@ scheduleScene.hears(`🗓 Current Schedule (${currentYear})`, ctx => {
     ])
     .catch(err => {
       ctx.reply(
-        `Oh snap! 🤖 We are either preparing the results 🕵🏻‍♂️ or there was an unfortunate error ❌. I've already notified my developer 👨🏻‍💻 Please try again later!`
+        `Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`
       );
       errorLogger.log({
         level: 'error',
@@ -141,7 +141,7 @@ scheduleScene.hears('🔜 Next Race', ctx => {
           })
           .catch(err => {
             ctx.reply(
-              `Oh snap! 🤖 We are either preparing the results 🕵🏻‍♂️ or there was an unfortunate error ❌. I've already notified my developer 👨🏻‍💻 Please try again later!`
+              `Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`
             );
 
             errorLogger.log({
@@ -161,7 +161,7 @@ scheduleScene.hears('🔜 Next Race', ctx => {
     })
     .catch(err => {
       ctx.reply(
-        `Oh snap! 🤖 We are either preparing the results 🕵🏻‍♂️ or there was an unfortunate error ❌. I've already notified my developer 👨🏻‍💻 Please try again later!`
+        `Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`
       );
 
       errorLogger.log({

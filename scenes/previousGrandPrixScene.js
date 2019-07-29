@@ -106,7 +106,7 @@ previousGrandPrixScene.hears('⏮ Qualification Results', ctx => {
     })
     .catch(err => {
       ctx.reply(
-        `Oh snap! 🤖 We are either preparing the results 🕵🏻‍♂️ or there was an unfortunate error ❌. I've already notified my developer 👨🏻‍💻 Please try again later!`
+        `Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`
       );
 
       errorLogger.log({
@@ -145,7 +145,7 @@ previousGrandPrixScene.hears(
         let preparedReply = [];
         for (let i = 0; i < results.length; i++) {
           if (i === 0) {
-            if (results[i].FastestLap.rank && results[i].FastestLap.rank == 1) {
+            if (results[i].FastestLap && results[i].FastestLap.rank == 1) {
               preparedReply.push(
                 `🥇 ${results[i].Driver.givenName} ${
                   results[i].Driver.familyName
@@ -161,7 +161,7 @@ previousGrandPrixScene.hears(
               );
             }
           } else if (i === 1) {
-            if (results[i].FastestLap.rank && results[i].FastestLap.rank == 1) {
+            if (results[i].FastestLap && results[i].FastestLap.rank == 1) {
               preparedReply.push(
                 `🥈 ${results[i].Driver.givenName} ${
                   results[i].Driver.familyName
@@ -177,7 +177,7 @@ previousGrandPrixScene.hears(
               );
             }
           } else if (i === 2) {
-            if (results[i].FastestLap.rank && results[i].FastestLap.rank == 1) {
+            if (results[i].FastestLap && results[i].FastestLap.rank == 1) {
               preparedReply.push(
                 `🥉 ${results[i].Driver.givenName} ${
                   results[i].Driver.familyName
@@ -192,18 +192,22 @@ previousGrandPrixScene.hears(
                 } (${results[i].points})`
               );
             }
-          } else if (results[i].FastestLap.rank == 1) {
-            preparedReply.push(
-              `${i + 1}. ${results[i].Driver.givenName} ${
-                results[i].Driver.familyName
-              } (${results[i].points}) (⏱ – ${results[i].FastestLap.Time.time})`
-            );
           } else {
-            preparedReply.push(
-              `${i + 1}. ${results[i].Driver.givenName} ${
-                results[i].Driver.familyName
-              } (${results[i].points})`
-            );
+            if (results[i].FastestLap && results[i].FastestLap.rank == 1) {
+              preparedReply.push(
+                `${i + 1}. ${results[i].Driver.givenName} ${
+                  results[i].Driver.familyName
+                } (${results[i].points}) (⏱ – ${
+                  results[i].FastestLap.Time.time
+                })`
+              );
+            } else {
+              preparedReply.push(
+                `${i + 1}. ${results[i].Driver.givenName} ${
+                  results[i].Driver.familyName
+                } (${results[i].points})`
+              );
+            }
           }
         }
         ctx.reply(
@@ -219,7 +223,7 @@ previousGrandPrixScene.hears(
       })
       .catch(err => {
         ctx.reply(
-          `Oh snap! 🤖 We are either preparing the results 🕵🏻‍♂️ or there was an unfortunate error ❌. I've already notified my developer 👨🏻‍💻 Please try again later!`
+          `Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`
         );
 
         errorLogger.log({
@@ -302,7 +306,7 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ gaps)', ctx => {
     })
     .catch(err => {
       ctx.reply(
-        `Oh snap! 🤖 We are either preparing the results 🕵🏻‍♂️ or there was an unfortunate error ❌. I've already notified my developer 👨🏻‍💻 Please try again later!`
+        `Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`
       );
 
       errorLogger.log({
@@ -435,7 +439,7 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ starting position)', ctx => {
     })
     .catch(err => {
       ctx.reply(
-        `Oh snap! 🤖 We are either preparing the results 🕵🏻‍♂️ or there was an unfortunate error ❌. I've already notified my developer 👨🏻‍💻 Please try again later!`
+        `Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`
       );
 
       errorLogger.log({
