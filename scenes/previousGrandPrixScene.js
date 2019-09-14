@@ -13,11 +13,7 @@ const previousGrandPrixScene = new Scene('previousGrandPrixScene');
 previousGrandPrixScene.enter(ctx => {
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
-      ctx.from.first_name
-    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-      ctx.message.text
-    }, TG_DATE: ${ctx.message.date}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
   });
 
   return ctx.reply(
@@ -94,13 +90,7 @@ previousGrandPrixScene.hears('⏮ Qualification Results', ctx => {
         .catch(err => {
           errorLogger.log({
             level: 'error',
-            message: `CHAT: ${ctx.from.id}, USERNAME: ${
-              ctx.from.username
-            }, NAME: ${ctx.from.first_name} ${
-              ctx.from.last_name
-            }, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-              ctx.message.text
-            }, TG_DATE: ${ctx.message.date}, ERROR_MESSAGE: ${err.message}`
+            message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}, ERROR_MESSAGE: ${err.message}`
           });
         });
     })
@@ -111,23 +101,13 @@ previousGrandPrixScene.hears('⏮ Qualification Results', ctx => {
 
       errorLogger.log({
         level: 'error',
-        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
-          ctx.from.first_name
-        } ${ctx.from.last_name}, MESSAGE_ID: ${
-          ctx.message.message_id
-        }, MESSAGE: ${ctx.message.text}, TG_DATE: ${
-          ctx.message.date
-        }, ERROR_MESSAGE: ${err.message}`
+        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}, ERROR_MESSAGE: ${err.message}`
       });
     });
 
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
-      ctx.from.first_name
-    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-      ctx.message.text
-    }, TG_DATE: ${ctx.message.date}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
   });
 });
 
@@ -147,49 +127,31 @@ previousGrandPrixScene.hears(
           if (i === 0) {
             if (results[i].FastestLap && results[i].FastestLap.rank == 1) {
               preparedReply.push(
-                `🥇 ${results[i].Driver.givenName} ${
-                  results[i].Driver.familyName
-                } (${results[i].points}) (⏱ – ${
-                  results[i].FastestLap.Time.time
-                })`
+                `🥇 ${results[i].Driver.givenName} ${results[i].Driver.familyName} (${results[i].points}) (⏱ – ${results[i].FastestLap.Time.time})`
               );
             } else {
               preparedReply.push(
-                `🥇 ${results[i].Driver.givenName} ${
-                  results[i].Driver.familyName
-                } (${results[i].points})`
+                `🥇 ${results[i].Driver.givenName} ${results[i].Driver.familyName} (${results[i].points})`
               );
             }
           } else if (i === 1) {
             if (results[i].FastestLap && results[i].FastestLap.rank == 1) {
               preparedReply.push(
-                `🥈 ${results[i].Driver.givenName} ${
-                  results[i].Driver.familyName
-                } (${results[i].points}) (⏱ – ${
-                  results[i].FastestLap.Time.time
-                })`
+                `🥈 ${results[i].Driver.givenName} ${results[i].Driver.familyName} (${results[i].points}) (⏱ – ${results[i].FastestLap.Time.time})`
               );
             } else {
               preparedReply.push(
-                `🥈 ${results[i].Driver.givenName} ${
-                  results[i].Driver.familyName
-                } (${results[i].points})`
+                `🥈 ${results[i].Driver.givenName} ${results[i].Driver.familyName} (${results[i].points})`
               );
             }
           } else if (i === 2) {
             if (results[i].FastestLap && results[i].FastestLap.rank == 1) {
               preparedReply.push(
-                `🥉 ${results[i].Driver.givenName} ${
-                  results[i].Driver.familyName
-                } (${results[i].points}) (⏱ – ${
-                  results[i].FastestLap.Time.time
-                })`
+                `🥉 ${results[i].Driver.givenName} ${results[i].Driver.familyName} (${results[i].points}) (⏱ – ${results[i].FastestLap.Time.time})`
               );
             } else {
               preparedReply.push(
-                `🥉 ${results[i].Driver.givenName} ${
-                  results[i].Driver.familyName
-                } (${results[i].points})`
+                `🥉 ${results[i].Driver.givenName} ${results[i].Driver.familyName} (${results[i].points})`
               );
             }
           } else {
@@ -228,23 +190,13 @@ previousGrandPrixScene.hears(
 
         errorLogger.log({
           level: 'error',
-          message: `CHAT: ${ctx.from.id}, USERNAME: ${
-            ctx.from.username
-          }, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${
-            ctx.message.message_id
-          }, MESSAGE: ${ctx.message.text}, TG_DATE: ${
-            ctx.message.date
-          }, ERROR_MESSAGE: ${err.message}`
+          message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}, ERROR_MESSAGE: ${err.message}`
         });
       });
 
     infoLogger.log({
       level: 'info',
-      message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
-        ctx.from.first_name
-      } ${ctx.from.last_name}, MESSAGE_ID: ${
-        ctx.message.message_id
-      }, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
+      message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
     });
   }
 );
@@ -262,21 +214,15 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ gaps)', ctx => {
       for (let i = 0; i < results.length; i++) {
         if (i === 0) {
           preparedReply.push(
-            `🥇 ${results[i].Driver.givenName} ${
-              results[i].Driver.familyName
-            } (${results[i].Time.time})`
+            `🥇 ${results[i].Driver.givenName} ${results[i].Driver.familyName} (${results[i].Time.time})`
           );
         } else if (i === 1) {
           preparedReply.push(
-            `🥈 ${results[i].Driver.givenName} ${
-              results[i].Driver.familyName
-            } (${results[i].Time.time})`
+            `🥈 ${results[i].Driver.givenName} ${results[i].Driver.familyName} (${results[i].Time.time})`
           );
         } else if (i === 2) {
           preparedReply.push(
-            `🥉 ${results[i].Driver.givenName} ${
-              results[i].Driver.familyName
-            } (${results[i].Time.time})`
+            `🥉 ${results[i].Driver.givenName} ${results[i].Driver.familyName} (${results[i].Time.time})`
           );
         } else {
           if (results[i].Time) {
@@ -311,23 +257,13 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ gaps)', ctx => {
 
       errorLogger.log({
         level: 'error',
-        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
-          ctx.from.first_name
-        } ${ctx.from.last_name}, MESSAGE_ID: ${
-          ctx.message.message_id
-        }, MESSAGE: ${ctx.message.text}, TG_DATE: ${
-          ctx.message.date
-        }, ERROR_MESSAGE: ${err.message}`
+        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}, ERROR_MESSAGE: ${err.message}`
       });
     });
 
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
-      ctx.from.first_name
-    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-      ctx.message.text
-    }, TG_DATE: ${ctx.message.date}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
   });
 });
 
@@ -344,73 +280,55 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ starting position)', ctx => {
 
       for (let i = 0; i < results.length; i++) {
         if (i === 0) {
-          if (i + 1 < results[i].grid) {
+          if (results[i].grid == 0 || i + 1 < results[i].grid) {
             preparedReply.push(
-              `🥇 ${results[i].Driver.givenName} ${
-                results[i].Driver.familyName
-              } ⤴️ from ${results[i].grid}`
+              `🥇 ${results[i].Driver.givenName} ${results[i].Driver.familyName} ⤴️ from ${results[i].grid}`
             );
-          } else if (i + 1 > results[i].grid) {
+          } else if (i + 1 > results[i].grid && results[i].grid != 0) {
             preparedReply.push(
-              `🥇 ${results[i].Driver.givenName} ${
-                results[i].Driver.familyName
-              } ⤵️ from ${results[i].grid}`
+              `🥇 ${results[i].Driver.givenName} ${results[i].Driver.familyName} ⤵️ from ${results[i].grid}`
             );
           } else {
             preparedReply.push(
-              `🥇 ${results[i].Driver.givenName} ${
-                results[i].Driver.familyName
-              } ⬅️ from ${results[i].grid}`
+              `🥇 ${results[i].Driver.givenName} ${results[i].Driver.familyName} ⬅️ from ${results[i].grid}`
             );
           }
         } else if (i === 1) {
-          if (i + 1 < results[i].grid) {
+          if (results[i].grid == 0 || i + 1 < results[i].grid) {
             preparedReply.push(
-              `🥈 ${results[i].Driver.givenName} ${
-                results[i].Driver.familyName
-              } ⤴️ from ${results[i].grid}`
+              `🥈 ${results[i].Driver.givenName} ${results[i].Driver.familyName} ⤴️ from ${results[i].grid}`
             );
-          } else if (i + 1 > results[i].grid) {
+          } else if (i + 1 > results[i].grid && results[i].grid != 0) {
             preparedReply.push(
-              `🥈 ${results[i].Driver.givenName} ${
-                results[i].Driver.familyName
-              } ⤵️ from ${results[i].grid}`
+              `🥈 ${results[i].Driver.givenName} ${results[i].Driver.familyName} ⤵️ from ${results[i].grid}`
             );
           } else {
             preparedReply.push(
-              `🥇 ${results[i].Driver.givenName} ${
-                results[i].Driver.familyName
-              } ⬅️ from ${results[i].grid}`
+              `🥇 ${results[i].Driver.givenName} ${results[i].Driver.familyName} ⬅️ from ${results[i].grid}`
             );
           }
         } else if (i === 2) {
-          if (i + 1 < results[i].grid) {
+          if (results[i].grid == 0 || i + 1 < results[i].grid) {
             preparedReply.push(
-              `🥉 ${results[i].Driver.givenName} ${
-                results[i].Driver.familyName
-              } ⤴️ from ${results[i].grid}`
+              `🥉 ${results[i].Driver.givenName} ${results[i].Driver.familyName} ⤴️ from ${results[i].grid}`
             );
-          } else if (i + 1 > results[i].grid) {
+          } else if (i + 1 > results[i].grid && results[i].grid != 0) {
             preparedReply.push(
-              `🥉 ${results[i].Driver.givenName} ${
-                results[i].Driver.familyName
-              } ⤵️ from ${results[i].grid}`
+              `🥉 ${results[i].Driver.givenName} ${results[i].Driver.familyName} ⤵️ from ${results[i].grid}`
             );
           } else {
             preparedReply.push(
-              `🥉 ${results[i].Driver.givenName} ${
-                results[i].Driver.familyName
-              } ⬅️ from ${results[i].grid}`
+              `🥉 ${results[i].Driver.givenName} ${results[i].Driver.familyName} ⬅️ from ${results[i].grid}`
             );
           }
         } else {
-          if (i + 1 < results[i].grid) {
+          if (results[i].grid == 0 || i + 1 < results[i].grid) {
             preparedReply.push(
               `${i + 1}. ${results[i].Driver.givenName} ${
                 results[i].Driver.familyName
               } ⤴️ from ${results[i].grid}`
             );
-          } else if (i + 1 > results[i].grid) {
+          } else if (i + 1 > results[i].grid && results[i].grid != 0) {
             preparedReply.push(
               `${i + 1}. ${results[i].Driver.givenName} ${
                 results[i].Driver.familyName
@@ -444,23 +362,13 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ starting position)', ctx => {
 
       errorLogger.log({
         level: 'error',
-        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
-          ctx.from.first_name
-        } ${ctx.from.last_name}, MESSAGE_ID: ${
-          ctx.message.message_id
-        }, MESSAGE: ${ctx.message.text}, TG_DATE: ${
-          ctx.message.date
-        }, ERROR_MESSAGE: ${err.message}`
+        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}, ERROR_MESSAGE: ${err.message}`
       });
     });
 
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
-      ctx.from.first_name
-    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-      ctx.message.text
-    }, TG_DATE: ${ctx.message.date}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
   });
 });
 
@@ -470,11 +378,7 @@ previousGrandPrixScene.hears('🗂 Main Menu', ctx => {
 
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
-      ctx.from.first_name
-    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-      ctx.message.text
-    }, TG_DATE: ${ctx.message.date}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
   });
 });
 
