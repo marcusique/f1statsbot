@@ -27,11 +27,7 @@ Hit /help to learn more about me or go straight to the main menu by pressing the
   );
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
-      ctx.from.first_name
-    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-      ctx.message.text
-    }, TG_DATE: ${ctx.message.date}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
   });
 });
 
@@ -64,11 +60,7 @@ If you are ready to start, hit the 🗂 Menu button below ⬇️
 
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
-      ctx.from.first_name
-    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-      ctx.message.text
-    }, TG_DATE: ${ctx.message.date}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
   });
 });
 
@@ -98,32 +90,22 @@ bot.hears('🗂 Menu', ctx => {
 
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
-      ctx.from.first_name
-    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-      ctx.message.text
-    }, TG_DATE: ${ctx.message.date}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
   });
 });
 
 bot.command('new', ctx => {
-  ctx.reply(`🤖 New features in July 2019 update:
+  ctx.reply(`🤖 New features in September 2019 update:
 
-🗂 Restructured menu
-⏮ Get previous race results (with points and fastest lap)
-⏮ Get previous race results (with gaps)
-⏮ Get previous race results (with starting position)
+  👱🏻‍ Nationality flags in Driver standings
+  🏎 Nationality flags in Constructor standings
 
 Hit /help to learn more about my features!
   `);
 
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
-      ctx.from.first_name
-    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-      ctx.message.text
-    }, TG_DATE: ${ctx.message.date}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
   });
 });
 

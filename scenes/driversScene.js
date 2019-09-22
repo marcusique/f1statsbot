@@ -3,6 +3,7 @@ const Scene = require('telegraf/scenes/base'),
   infoLogger = require('../middleware/infoLogger'),
   errorLogger = require('../middleware/errorLogger'),
   axios = require('axios'),
+  { flag } = require('country-emoji'),
   keys = require('../config/keys'),
   apiUrl = keys.apiUrl,
   currentYear = new Date().getFullYear();
@@ -12,11 +13,7 @@ const driversScene = new Scene('driversScene');
 driversScene.enter(ctx => {
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
-      ctx.from.first_name
-    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-      ctx.message.text
-    }, TG_DATE: ${ctx.message.date}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
   });
 
   return ctx.reply(
@@ -46,25 +43,33 @@ driversScene.hears(`🏆 Current Standings (${currentYear})`, ctx => {
           preparedReply.push(
             `🥇 ${driverStandings[i].Driver.givenName} ${
               driverStandings[i].Driver.familyName
-            } (${driverStandings[i].points})`
+            } ${flag(driverStandings[i].Driver.nationality)} (${
+              driverStandings[i].points
+            })`
           );
         } else if (i === 1) {
           preparedReply.push(
             `🥈 ${driverStandings[i].Driver.givenName} ${
               driverStandings[i].Driver.familyName
-            } (${driverStandings[i].points})`
+            } ${flag(driverStandings[i].Driver.nationality)} (${
+              driverStandings[i].points
+            })`
           );
         } else if (i === 2) {
           preparedReply.push(
             `🥉 ${driverStandings[i].Driver.givenName} ${
               driverStandings[i].Driver.familyName
-            } (${driverStandings[i].points})`
+            } ${flag(driverStandings[i].Driver.nationality)} (${
+              driverStandings[i].points
+            })`
           );
         } else {
           preparedReply.push(
             `${i + 1}. ${driverStandings[i].Driver.givenName} ${
               driverStandings[i].Driver.familyName
-            } (${driverStandings[i].points})`
+            } ${flag(driverStandings[i].Driver.nationality)} (${
+              driverStandings[i].points
+            })`
           );
         }
       }
@@ -82,22 +87,12 @@ driversScene.hears(`🏆 Current Standings (${currentYear})`, ctx => {
       );
       errorLogger.log({
         level: 'error',
-        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
-          ctx.from.first_name
-        } ${ctx.from.last_name}, MESSAGE_ID: ${
-          ctx.message.message_id
-        }, MESSAGE: ${ctx.message.text}, TG_DATE: ${
-          ctx.message.date
-        }, ERROR_MESSAGE: ${err.message}`
+        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}, ERROR_MESSAGE: ${err.message}`
       });
     });
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
-      ctx.from.first_name
-    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-      ctx.message.text
-    }, TG_DATE: ${ctx.message.date}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
   });
 });
 /* 🏅 Current Standings [END] */
@@ -108,11 +103,7 @@ driversScene.hears('🎖 Standings by year', ctx => {
 
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
-      ctx.from.first_name
-    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-      ctx.message.text
-    }, TG_DATE: ${ctx.message.date}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
   });
 });
 
@@ -133,25 +124,33 @@ driversScene.hears(/^[0-9]{4}$/, ctx => {
             preparedReply.push(
               `🥇 ${driverStandings[i].Driver.givenName} ${
                 driverStandings[i].Driver.familyName
-              } (${driverStandings[i].points})`
+              } ${flag(driverStandings[i].Driver.nationality)} (${
+                driverStandings[i].points
+              })`
             );
           } else if (i === 1) {
             preparedReply.push(
               `🥈 ${driverStandings[i].Driver.givenName} ${
                 driverStandings[i].Driver.familyName
-              } (${driverStandings[i].points})`
+              } ${flag(driverStandings[i].Driver.nationality)} (${
+                driverStandings[i].points
+              })`
             );
           } else if (i === 2) {
             preparedReply.push(
               `🥉 ${driverStandings[i].Driver.givenName} ${
                 driverStandings[i].Driver.familyName
-              } (${driverStandings[i].points})`
+              } ${flag(driverStandings[i].Driver.nationality)} (${
+                driverStandings[i].points
+              })`
             );
           } else {
             preparedReply.push(
               `${i + 1}. ${driverStandings[i].Driver.givenName} ${
                 driverStandings[i].Driver.familyName
-              } (${driverStandings[i].points})`
+              } ${flag(driverStandings[i].Driver.nationality)} (${
+                driverStandings[i].points
+              })`
             );
           }
         }
@@ -170,13 +169,7 @@ driversScene.hears(/^[0-9]{4}$/, ctx => {
 
         errorLogger.log({
           level: 'error',
-          message: `CHAT: ${ctx.from.id}, USERNAME: ${
-            ctx.from.username
-          }, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${
-            ctx.message.message_id
-          }, MESSAGE: ${ctx.message.text}, TG_DATE: ${
-            ctx.message.date
-          }, ERROR_MESSAGE: ${err.message}`
+          message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}, ERROR_MESSAGE: ${err.message}`
         });
       });
   } else {
@@ -185,11 +178,7 @@ driversScene.hears(/^[0-9]{4}$/, ctx => {
 
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
-      ctx.from.first_name
-    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-      ctx.message.text
-    }, TG_DATE: ${ctx.message.date}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
   });
 });
 /* Standings by Year [END] */
@@ -200,11 +189,7 @@ driversScene.hears('🗂 Main Menu', ctx => {
 
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
-      ctx.from.first_name
-    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-      ctx.message.text
-    }, TG_DATE: ${ctx.message.date}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
   });
 });
 
