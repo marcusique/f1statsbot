@@ -312,7 +312,7 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ starting position)', ctx => {
 
       for (let i = 0; i < results.length; i++) {
         if (i === 0) {
-          if (i + 1 < results[i].grid) {
+          if (results[i].grid == 0 || i + 1 < results[i].grid) {
             preparedReply.push(
               `🥇 ${results[i].Driver.givenName} ${
                 results[i].Driver.familyName
@@ -320,7 +320,7 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ starting position)', ctx => {
                 results[i].grid
               }`
             );
-          } else if (i + 1 > results[i].grid) {
+          } else if (i + 1 > results[i].grid && results[i].grid != 0) {
             preparedReply.push(
               `🥇 ${results[i].Driver.givenName} ${
                 results[i].Driver.familyName
@@ -338,7 +338,7 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ starting position)', ctx => {
             );
           }
         } else if (i === 1) {
-          if (i + 1 < results[i].grid) {
+          if (results[i].grid == 0 || i + 1 < results[i].grid) {
             preparedReply.push(
               `🥈 ${results[i].Driver.givenName} ${
                 results[i].Driver.familyName
@@ -346,7 +346,7 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ starting position)', ctx => {
                 results[i].grid
               }`
             );
-          } else if (i + 1 > results[i].grid) {
+          } else if (i + 1 > results[i].grid && results[i].grid != 0) {
             preparedReply.push(
               `🥈 ${results[i].Driver.givenName} ${
                 results[i].Driver.familyName
@@ -364,7 +364,7 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ starting position)', ctx => {
             );
           }
         } else if (i === 2) {
-          if (i + 1 < results[i].grid) {
+          if (results[i].grid == 0 || i + 1 < results[i].grid) {
             preparedReply.push(
               `🥉 ${results[i].Driver.givenName} ${
                 results[i].Driver.familyName
@@ -372,7 +372,7 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ starting position)', ctx => {
                 results[i].grid
               }`
             );
-          } else if (i + 1 > results[i].grid) {
+          } else if (i + 1 > results[i].grid && results[i].grid != 0) {
             preparedReply.push(
               `🥉 ${results[i].Driver.givenName} ${
                 results[i].Driver.familyName
@@ -390,7 +390,7 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ starting position)', ctx => {
             );
           }
         } else {
-          if (i + 1 < results[i].grid) {
+          if (results[i].grid == 0 || i + 1 < results[i].grid) {
             preparedReply.push(
               `${i + 1}. ${results[i].Driver.givenName} ${
                 results[i].Driver.familyName
@@ -398,7 +398,7 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ starting position)', ctx => {
                 results[i].grid
               }`
             );
-          } else if (i + 1 > results[i].grid) {
+          } else if (i + 1 > results[i].grid && results[i].grid != 0) {
             preparedReply.push(
               `${i + 1}. ${results[i].Driver.givenName} ${
                 results[i].Driver.familyName
