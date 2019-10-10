@@ -109,33 +109,33 @@ constructorsScene.hears(/^[0-9]{4}$/, ctx => {
     axios
       .get(`${apiUrl}${ctx.message.text}/constructorStandings.json`)
       .then(res => {
-        const constructorsStandings =
+        const constructorStandings =
           res.data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
         let preparedReply = [];
-        for (let i = 0; i < constructorsStandings.length; i++) {
+        for (let i = 0; i < constructorStandings.length; i++) {
           if (i === 0) {
             preparedReply.push(
-              `🥇 ${constructorsStandings[i].Constructor.name} ${flag(
+              `🥇 ${constructorStandings[i].Constructor.name} ${flag(
                 constructorStandings[i].Constructor.nationality
-              )} (${constructorsStandings[i].points})`
+              )} (${constructorStandings[i].points})`
             );
           } else if (i === 1) {
             preparedReply.push(
-              `🥈 ${constructorsStandings[i].Constructor.name} ${flag(
+              `🥈 ${constructorStandings[i].Constructor.name} ${flag(
                 constructorStandings[i].Constructor.nationality
-              )} (${constructorsStandings[i].points})`
+              )} (${constructorStandings[i].points})`
             );
           } else if (i === 2) {
             preparedReply.push(
-              `🥉 ${constructorsStandings[i].Constructor.name} ${flag(
+              `🥉 ${constructorStandings[i].Constructor.name} ${flag(
                 constructorStandings[i].Constructor.nationality
-              )} (${constructorsStandings[i].points})`
+              )} (${constructorStandings[i].points})`
             );
           } else {
             preparedReply.push(
-              `${i + 1}. ${constructorsStandings[i].Constructor.name} ${flag(
+              `${i + 1}. ${constructorStandings[i].Constructor.name} ${flag(
                 constructorStandings[i].Constructor.nationality
-              )} (${constructorsStandings[i].points})`
+              )} (${constructorStandings[i].points})`
             );
           }
         }
