@@ -89,7 +89,7 @@ scheduleScene.hears(`🗓 Current Schedule (${currentYear})`, ctx => {
           }
         }
         ctx.reply(
-          `<b>Race on Schedule for ${currentYear}:</b>\n\n${preparedReply.join(
+          `<b>Race Schedule for ${currentYear}:</b>\n\n${preparedReply.join(
             '\n'
           )}`,
           { parse_mode: 'HTML' }

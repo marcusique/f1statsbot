@@ -15,11 +15,11 @@
     "country-emoji": "^1.5.0",
     "dateformat": "^3.0.3",
     "redis": "^2.8.0",
-    "telegraf": "^3.32.0",
+    "telegraf": "^3.33.0",
     "winston": "^3.2.1",
     "winston-mongodb": "^5.0.0"
   },
   "devDependencies": {
-    "nodemon": "^1.19.3"
+    "nodemon": "^1.19.4"
   }
 }
