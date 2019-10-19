@@ -7,17 +7,17 @@ const errorLogger = winston.createLogger({
   level: 'error',
   format: winston.format.json(),
   transports: [
-    new winston.transports.MongoDB({
-      level: 'error',
-      db: keys.mongoUri,
-      collection: 'errors'
-    })
-    // new winston.transports.File({
+    // new winston.transports.MongoDB({
     //   level: 'error',
-    //   filename: `${appRoot}/logs/errors.log`,
-    //   timestamp: true,
-    //   handleExceptions: true
+    //   db: keys.mongoUri,
+    //   collection: 'errors'
     // })
+    new winston.transports.File({
+      level: 'error',
+      filename: `${appRoot}/logs/errors.log`,
+      timestamp: true,
+      handleExceptions: true
+    })
   ]
 });
 

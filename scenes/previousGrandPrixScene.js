@@ -2,6 +2,7 @@ const Scene = require('telegraf/scenes/base'),
   Markup = require('telegraf/markup'),
   infoLogger = require('../middleware/infoLogger'),
   errorLogger = require('../middleware/errorLogger'),
+  lib = require('../middleware/lib'),
   axios = require('axios'),
   keys = require('../config/keys'),
   { flag } = require('country-emoji'),
@@ -13,7 +14,11 @@ const previousGrandPrixScene = new Scene('previousGrandPrixScene');
 previousGrandPrixScene.enter(ctx => {
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, DATE: ${lib.returnDate(ctx.message.date)}`
   });
 
   return ctx.reply(
@@ -96,7 +101,15 @@ previousGrandPrixScene.hears('⏮ Qualification Results', ctx => {
         .catch(err => {
           errorLogger.log({
             level: 'error',
-            message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}, ERROR_MESSAGE: ${err.message}`
+            message: `CHAT: ${ctx.from.id}, USERNAME: ${
+              ctx.from.username
+            }, NAME: ${ctx.from.first_name} ${
+              ctx.from.last_name
+            }, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+              ctx.message.text
+            }, DATE: ${lib.returnDate(ctx.message.date)}, ERROR_MESSAGE: ${
+              err.message
+            }`
           });
         });
     })
@@ -107,13 +120,23 @@ previousGrandPrixScene.hears('⏮ Qualification Results', ctx => {
 
       errorLogger.log({
         level: 'error',
-        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}, ERROR_MESSAGE: ${err.message}`
+        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+          ctx.from.first_name
+        } ${ctx.from.last_name}, MESSAGE_ID: ${
+          ctx.message.message_id
+        }, MESSAGE: ${ctx.message.text}, DATE: ${lib.returnDate(
+          ctx.message.date
+        )}, ERROR_MESSAGE: ${err.message}`
       });
     });
 
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, DATE: ${lib.returnDate(ctx.message.date)}`
   });
 });
 
@@ -214,13 +237,25 @@ previousGrandPrixScene.hears(
 
         errorLogger.log({
           level: 'error',
-          message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}, ERROR_MESSAGE: ${err.message}`
+          message: `CHAT: ${ctx.from.id}, USERNAME: ${
+            ctx.from.username
+          }, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${
+            ctx.message.message_id
+          }, MESSAGE: ${ctx.message.text}, DATE: ${lib.returnDate(
+            ctx.message.date
+          )}, ERROR_MESSAGE: ${err.message}`
         });
       });
 
     infoLogger.log({
       level: 'info',
-      message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
+      message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+        ctx.from.first_name
+      } ${ctx.from.last_name}, MESSAGE_ID: ${
+        ctx.message.message_id
+      }, MESSAGE: ${ctx.message.text}, DATE: ${lib.returnDate(
+        ctx.message.date
+      )}`
     });
   }
 );
@@ -289,13 +324,23 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ gaps)', ctx => {
 
       errorLogger.log({
         level: 'error',
-        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}, ERROR_MESSAGE: ${err.message}`
+        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+          ctx.from.first_name
+        } ${ctx.from.last_name}, MESSAGE_ID: ${
+          ctx.message.message_id
+        }, MESSAGE: ${ctx.message.text}, DATE: ${lib.returnDate(
+          ctx.message.date
+        )}, ERROR_MESSAGE: ${err.message}`
       });
     });
 
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, DATE: ${lib.returnDate(ctx.message.date)}`
   });
 });
 
@@ -436,13 +481,23 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ starting position)', ctx => {
 
       errorLogger.log({
         level: 'error',
-        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}, ERROR_MESSAGE: ${err.message}`
+        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+          ctx.from.first_name
+        } ${ctx.from.last_name}, MESSAGE_ID: ${
+          ctx.message.message_id
+        }, MESSAGE: ${ctx.message.text}, DATE: ${lib.returnDate(
+          ctx.message.date
+        )}, ERROR_MESSAGE: ${err.message}`
       });
     });
 
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, DATE: ${lib.returnDate(ctx.message.date)}`
   });
 });
 
@@ -452,7 +507,11 @@ previousGrandPrixScene.hears('🗂 Main Menu', ctx => {
 
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, DATE: ${lib.returnDate(ctx.message.date)}`
   });
 });
 

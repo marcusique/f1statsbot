@@ -1,6 +1,7 @@
 const Scene = require('telegraf/scenes/base'),
   Markup = require('telegraf/markup'),
-  infoLogger = require('../middleware/infoLogger');
+  infoLogger = require('../middleware/infoLogger'),
+  lib = require('../middleware/lib');
 
 const mainScene = new Scene('mainScene');
 
@@ -11,7 +12,7 @@ mainScene.enter(ctx => {
       ctx.from.first_name
     } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
       ctx.message.text
-    }, TG_DATE: ${ctx.message.date}`
+    }, DATE: ${lib.returnDate(ctx.message.date)}`
   });
 
   return ctx.reply(
@@ -35,7 +36,7 @@ mainScene.hears('👱🏻‍♂️ Drivers', ctx => {
       ctx.from.first_name
     } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
       ctx.message.text
-    }, TG_DATE: ${ctx.message.date}`
+    }, DATE: ${lib.returnDate(ctx.message.date)}`
   });
 });
 
@@ -48,7 +49,7 @@ mainScene.hears('🏎 Constructors', ctx => {
       ctx.from.first_name
     } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
       ctx.message.text
-    }, TG_DATE: ${ctx.message.date}`
+    }, DATE: ${lib.returnDate(ctx.message.date)}`
   });
 });
 
@@ -61,7 +62,7 @@ mainScene.hears('🗓 Schedule', ctx => {
       ctx.from.first_name
     } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
       ctx.message.text
-    }, TG_DATE: ${ctx.message.date}`
+    }, DATE: ${lib.returnDate(ctx.message.date)}`
   });
 });
 
@@ -74,7 +75,7 @@ mainScene.hears('⏮ Previous Grand Prix', ctx => {
       ctx.from.first_name
     } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
       ctx.message.text
-    }, TG_DATE: ${ctx.message.date}`
+    }, DATE: ${lib.returnDate(ctx.message.date)}`
   });
 });
 
@@ -87,7 +88,7 @@ mainScene.hears(/^[0-9]{4}$/, ctx => {
       ctx.from.first_name
     } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
       ctx.message.text
-    }, TG_DATE: ${ctx.message.date}`
+    }, DATE: ${lib.returnDate(ctx.message.date)}`
   });
 });
 

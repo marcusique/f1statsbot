@@ -3,6 +3,7 @@ const Telegraf = require('telegraf'),
   Stage = require('telegraf/stage'),
   session = require('telegraf/session'),
   infoLogger = require('./middleware/infoLogger'),
+  lib = require('./middleware/lib'),
   keys = require('./config/keys'),
   mainScene = require('./scenes/mainScene'),
   driversScene = require('./scenes/driversScene'),
@@ -27,7 +28,11 @@ Hit /help to learn more about me or go straight to the main menu by pressing the
   );
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, DATE: ${lib.returnDate(ctx.message.date)}`
   });
 });
 
@@ -60,7 +65,11 @@ If you are ready to start, hit the 🗂 Menu button below ⬇️
 
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, DATE: ${lib.returnDate(ctx.message.date)}`
   });
 });
 
@@ -90,7 +99,7 @@ bot.hears('🗂 Menu', ctx => {
 
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, DATE: ${lib.returnDate(ctx.message.date)}`
   });
 });
 
@@ -105,7 +114,7 @@ Hit /help to learn more about my features!
 
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, DATE: ${lib.returnDate(ctx.message.date)}`
   });
 });
 

@@ -2,6 +2,7 @@ const Scene = require('telegraf/scenes/base'),
   Markup = require('telegraf/markup'),
   infoLogger = require('../middleware/infoLogger'),
   errorLogger = require('../middleware/errorLogger'),
+  lib = require('../middleware/lib'),
   axios = require('axios'),
   { flag } = require('country-emoji'),
   keys = require('../config/keys'),
@@ -12,7 +13,11 @@ const constructorsScene = new Scene('constructorsScene');
 constructorsScene.enter(ctx => {
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, DATE: ${lib.returnDate(ctx.message.date)}`
   });
 
   return ctx.reply(
@@ -79,13 +84,23 @@ constructorsScene.hears(`🏆 Current Standings (${currentYear})`, ctx => {
 
       errorLogger.log({
         level: 'error',
-        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}, ERROR_MESSAGE: ${err.message}`
+        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+          ctx.from.first_name
+        } ${ctx.from.last_name}, MESSAGE_ID: ${
+          ctx.message.message_id
+        }, MESSAGE: ${ctx.message.text}, DATE: ${lib.returnDate(
+          ctx.message.date
+        )}, ERROR_MESSAGE: ${err.message}`
       });
     });
 
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, DATE: ${lib.returnDate(ctx.message.date)}`
   });
 });
 /* 🏆 Current Standings [END] */
@@ -96,7 +111,11 @@ constructorsScene.hears('🎖 Standings by year', ctx => {
 
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, DATE: ${lib.returnDate(ctx.message.date)}`
   });
 });
 
@@ -154,7 +173,13 @@ constructorsScene.hears(/^[0-9]{4}$/, ctx => {
 
         errorLogger.log({
           level: 'error',
-          message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}, ERROR_MESSAGE: ${err.message}`
+          message: `CHAT: ${ctx.from.id}, USERNAME: ${
+            ctx.from.username
+          }, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${
+            ctx.message.message_id
+          }, MESSAGE: ${ctx.message.text}, DATE: ${lib.returnDate(
+            ctx.message.date
+          )}, ERROR_MESSAGE: ${err.message}`
         });
       });
   } else {
@@ -163,7 +188,11 @@ constructorsScene.hears(/^[0-9]{4}$/, ctx => {
 
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, DATE: ${lib.returnDate(ctx.message.date)}`
   });
 });
 /* Standings by Year [END] */
@@ -174,7 +203,11 @@ constructorsScene.hears('🗂 Main Menu', ctx => {
 
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, TG_DATE: ${ctx.message.date}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, DATE: ${lib.returnDate(ctx.message.date)}`
   });
 });
 

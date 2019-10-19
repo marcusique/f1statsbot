@@ -2,6 +2,7 @@ const Scene = require('telegraf/scenes/base'),
   Markup = require('telegraf/markup'),
   infoLogger = require('../middleware/infoLogger'),
   errorLogger = require('../middleware/errorLogger'),
+  lib = require('../middleware/lib'),
   axios = require('axios'),
   dateFormat = require('dateformat'),
   keys = require('../config/keys'),
@@ -17,7 +18,7 @@ scheduleScene.enter(ctx => {
       ctx.from.first_name
     } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
       ctx.message.text
-    }, TG_DATE: ${ctx.message.date}`
+    }, DATE: ${lib.returnDate(ctx.message.date)}`
   });
 
   return ctx.reply(
@@ -49,9 +50,9 @@ scheduleScene.hears(`🗓 Current Schedule (${currentYear})`, ctx => {
           ctx.from.first_name
         } ${ctx.from.last_name}, MESSAGE_ID: ${
           ctx.message.message_id
-        }, MESSAGE: ${ctx.message.text}, TG_DATE: ${
+        }, MESSAGE: ${ctx.message.text}, DATE: ${lib.returnDate(
           ctx.message.date
-        }, ERROR_MESSAGE: ${err.message}`
+        )}, ERROR_MESSAGE: ${err.message}`
       });
     })
     .then(
@@ -104,7 +105,7 @@ scheduleScene.hears(`🗓 Current Schedule (${currentYear})`, ctx => {
       ctx.from.first_name
     } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
       ctx.message.text
-    }, TG_DATE: ${ctx.message.date}`
+    }, DATE: ${lib.returnDate(ctx.message.date)}`
   });
 });
 
@@ -152,7 +153,9 @@ scheduleScene.hears('🔜 Next Race', ctx => {
                 ctx.from.last_name
               }, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
                 ctx.message.text
-              }, TG_DATE: ${ctx.message.date}, ERROR_MESSAGE: ${err.message}`
+              }, DATE: ${lib.returnDate(ctx.message.date)}, ERROR_MESSAGE: ${
+                err.message
+              }`
             });
           });
       } else {
@@ -170,9 +173,9 @@ scheduleScene.hears('🔜 Next Race', ctx => {
           ctx.from.first_name
         } ${ctx.from.last_name}, MESSAGE_ID: ${
           ctx.message.message_id
-        }, MESSAGE: ${ctx.message.text}, TG_DATE: ${
+        }, MESSAGE: ${ctx.message.text}, DATE: ${lib.returnDate(
           ctx.message.date
-        }, ERROR_MESSAGE: ${err.message}`
+        )}, ERROR_MESSAGE: ${err.message}`
       });
     });
 
@@ -182,7 +185,7 @@ scheduleScene.hears('🔜 Next Race', ctx => {
       ctx.from.first_name
     } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
       ctx.message.text
-    }, TG_DATE: ${ctx.message.date}`
+    }, DATE: ${lib.returnDate(ctx.message.date)}`
   });
 });
 
@@ -196,7 +199,7 @@ scheduleScene.hears('🗂 Main Menu', ctx => {
       ctx.from.first_name
     } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
       ctx.message.text
-    }, TG_DATE: ${ctx.message.date}`
+    }, DATE: ${lib.returnDate(ctx.message.date)}`
   });
 });
 
