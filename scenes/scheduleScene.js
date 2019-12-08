@@ -160,6 +160,7 @@ scheduleScene.hears('🔜 Next Race', ctx => {
           });
       } else {
         ctx.reply('Current season is over. See you next season ✊🏻');
+        ctx.scene.reenter();
       }
     })
     .catch(err => {
