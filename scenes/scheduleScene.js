@@ -25,7 +25,7 @@ scheduleScene.enter(ctx => {
     '🗓 Select from the menu below ⬇️',
     Markup.keyboard([
       ['🔜 Next Race'],
-      [`🗓 Current Schedule (${currentYear})`],
+      [`🗓 Current Schedule`],
       ['🗂 Main Menu']
     ])
       .oneTime()
@@ -34,7 +34,7 @@ scheduleScene.enter(ctx => {
   );
 });
 
-scheduleScene.hears(`🗓 Current Schedule (${currentYear})`, ctx => {
+scheduleScene.hears(`🗓 Current Schedule`, ctx => {
   axios
     .all([
       axios.get(`${apiUrl}current.json`),
