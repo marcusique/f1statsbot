@@ -39,11 +39,8 @@ Hit /help to learn more about me or go straight to the main menu by pressing the
 /* Help Message */
 bot.help(ctx => {
   ctx.reply(`To navigate through my functionality, simply follow the menu buttons ☑️
-If you experience any troubles using me, hit /start every time something goes wrong. I am still learning, so don't be harsh on me 🙏🏻
 
-⚠️ I don't support persistent sessions yet ☹️, so if my developer updates me – you will lose your session with me. In this case just hit /start and everything should be ok 👍🏻.
-
-As of today you can 💪🏻:
+As of today you I can:
 👱🏻‍♂️ Get current driver standings
 👱🏻‍♂️ Get driver standings by a given year
 🏎 Get current constructor standings
@@ -56,8 +53,6 @@ As of today you can 💪🏻:
 🗓 Get schedule for current season
 
 Hit /new to see changelog for the last update.
-
-I constantly learn new stuff, so you might see new functionality as time goes by 📚
 
 If you are ready to start, hit the 🗂 Menu button below ⬇️
 
