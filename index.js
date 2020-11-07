@@ -15,29 +15,42 @@ const Telegraf = require('telegraf'),
 bot.use(session());
 
 /* Welcome Message */
-bot.start(ctx => {
-  ctx.reply(
-    `Hi there, ${ctx.from.first_name} 👋🏻
-I can help you to navigate in the world of Formula 1! 🏎 
-Forget about checking race stats in browser, I will help you to get them much faster 💨
-Hit /help to learn more about me or go straight to the main menu by pressing the button below ⬇️`,
-    Markup.keyboard([['🗂 Menu']])
-      .oneTime()
-      .resize()
-      .extra()
-  );
+bot.start((ctx) => {
+  if (ctx.from.first_name) {
+    ctx.reply(
+      `Hi there, ${ctx.from.first_name} 👋🏻
+  I can help you to navigate in the world of Formula 1! 🏎 
+  Forget about checking race stats in browser, I will help you to get them much faster 💨
+  Hit /help to learn more about me or go straight to the main menu by pressing the button below ⬇️`,
+      Markup.keyboard([['🗂 Menu']])
+        .oneTime()
+        .resize()
+        .extra()
+    );
+  } else {
+    ctx.reply(
+      `Hi there 👋🏻
+  I can help you to navigate in the world of Formula 1! 🏎 
+  Forget about checking race stats in browser, I will help you to get them much faster 💨
+  Hit /help to learn more about me or go straight to the main menu by pressing the button below ⬇️`,
+      Markup.keyboard([['🗂 Menu']])
+        .oneTime()
+        .resize()
+        .extra()
+    );
+  }
   infoLogger.log({
     level: 'info',
     message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
       ctx.from.first_name
     } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
       ctx.message.text
-    }, DATE: ${lib.returnDate(ctx.message.date)}`
+    }, DATE: ${lib.returnDate(ctx.message.date)}`,
   });
 });
 
 /* Help Message */
-bot.help(ctx => {
+bot.help((ctx) => {
   ctx.reply(`To navigate through my functionality, simply follow the menu buttons ☑️
 
 As of today you I can:
@@ -64,7 +77,7 @@ If you are ready to start, hit the 🗂 Menu button below ⬇️
       ctx.from.first_name
     } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
       ctx.message.text
-    }, DATE: ${lib.returnDate(ctx.message.date)}`
+    }, DATE: ${lib.returnDate(ctx.message.date)}`,
   });
 });
 
@@ -89,16 +102,20 @@ bot.use(driversScene);
 bot.use(constructorsScene);
 bot.use(previousGrandPrixScene);
 
-bot.hears('🗂 Menu', ctx => {
+bot.hears('🗂 Menu', (ctx) => {
   ctx.scene.enter('mainScene');
 
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, DATE: ${lib.returnDate(ctx.message.date)}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, DATE: ${lib.returnDate(ctx.message.date)}`,
   });
 });
 
-bot.command('new', ctx => {
+bot.command('new', (ctx) => {
   ctx.reply(`🤖 New features in September 2019 update:
 
   👱🏻‍ Nationality flags in Driver standings
@@ -109,11 +126,15 @@ Hit /help to learn more about my features!
 
   infoLogger.log({
     level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${ctx.message.text}, DATE: ${lib.returnDate(ctx.message.date)}`
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, DATE: ${lib.returnDate(ctx.message.date)}`,
   });
 });
 
-bot.command('cancel', ctx => {
+bot.command('cancel', (ctx) => {
   if (ctx.session.__scenes.current) {
     ctx.scene.leave(ctx.session.__scenes.current);
     ctx.reply('🛑 Action cancelled, returning to Main Menu 🗂');
