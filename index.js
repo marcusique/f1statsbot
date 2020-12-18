@@ -114,10 +114,9 @@ bot.hears('🗂 Menu', (ctx) => {
 });
 
 bot.command('new', (ctx) => {
-  ctx.reply(`🤖 New features in September 2019 update:
+  ctx.reply(`🤖 December 2020 update:
 
-  👱🏻‍ Nationality flags in Driver standings
-  🏎 Nationality flags in Constructor standings
+Added teams in driver standings; Fixed next race issue when the season is over
 
 Hit /help to learn more about my features!
   `);
