@@ -116,7 +116,7 @@ scheduleScene.hears('🔜 Next Race', ctx => {
       const lastRace = parseInt(res.data.MRData.RaceTable.round);
       const nextRace = lastRace + 1;
       const totalRaces = parseInt(res.data.MRData.total) + 1;
-      if (nextRace <= totalRaces) {
+      if (nextRace > totalRaces) {
         axios
           .get(`${apiUrl}current/${nextRace}.json`)
           .then(res => {

@@ -18,9 +18,8 @@ bot.use(session());
 bot.start((ctx) => {
   if (ctx.from.first_name) {
     ctx.reply(
-      `Hi there, ${ctx.from.first_name} 👋🏻
+  `Hi there, ${ctx.from.first_name} 👋🏻
   I can help you to navigate in the world of Formula 1! 🏎 
-  Forget about checking race stats in browser, I will help you to get them much faster 💨
   Hit /help to learn more about me or go straight to the main menu by pressing the button below ⬇️`,
       Markup.keyboard([['🗂 Menu']])
         .oneTime()
@@ -29,9 +28,8 @@ bot.start((ctx) => {
     );
   } else {
     ctx.reply(
-      `Hi there 👋🏻
+  `Hi there 👋🏻
   I can help you to navigate in the world of Formula 1! 🏎 
-  Forget about checking race stats in browser, I will help you to get them much faster 💨
   Hit /help to learn more about me or go straight to the main menu by pressing the button below ⬇️`,
       Markup.keyboard([['🗂 Menu']])
         .oneTime()
@@ -55,9 +53,9 @@ bot.help((ctx) => {
 
 As of today you I can:
 👱🏻‍♂️ Get current driver standings
-👱🏻‍♂️ Get driver standings by a given year
+👱🏻‍♂️ Get driver standings for a given year
 🏎 Get current constructor standings
-🏎 Get constructor standings by a given year
+🏎 Get constructor standings for a given year
 ⏮ Get previous qualification results
 ⏮ Get previous race results (with points and fastest lap)
 ⏮ Get previous race results (with gaps)
@@ -65,7 +63,7 @@ As of today you I can:
 🗓 Get next race schedule
 🗓 Get schedule for current season
 
-Hit /new to see changelog for the last update.
+Hit /new to see changelog for the latest update.
 
 If you are ready to start, hit the 🗂 Menu button below ⬇️
 
