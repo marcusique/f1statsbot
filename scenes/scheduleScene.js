@@ -11,36 +11,32 @@ const Scene = require('telegraf/scenes/base'),
   currentYear = new Date().getFullYear();
 
 const scheduleScene = new Scene('scheduleScene');
-scheduleScene.enter(ctx => {
+scheduleScene.enter((ctx) => {
   infoLogger.log({
     level: 'info',
     message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
       ctx.from.first_name
     } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
       ctx.message.text
-    }, DATE: ${lib.returnDate(ctx.message.date)}`
+    }, DATE: ${lib.returnDate(ctx.message.date)}`,
   });
 
   return ctx.reply(
     '🗓 Select from the menu below ⬇️',
-    Markup.keyboard([
-      ['🔜 Next Race'],
-      [`🗓 Current Schedule`],
-      ['🗂 Main Menu']
-    ])
+    Markup.keyboard([['🔜 Next Race'], [`🗓 Current Schedule`], ['🗂 Main Menu']])
       .oneTime()
       .resize()
       .extra()
   );
 });
 
-scheduleScene.hears(`🗓 Current Schedule`, ctx => {
+scheduleScene.hears(`🗓 Current Schedule`, (ctx) => {
   axios
     .all([
       axios.get(`${apiUrl}current.json`),
-      axios.get(`${apiUrl}current/driverStandings.json`)
+      axios.get(`${apiUrl}current/driverStandings.json`),
     ])
-    .catch(err => {
+    .catch((err) => {
       ctx.reply(
         `Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`
       );
@@ -52,7 +48,7 @@ scheduleScene.hears(`🗓 Current Schedule`, ctx => {
           ctx.message.message_id
         }, MESSAGE: ${ctx.message.text}, DATE: ${lib.returnDate(
           ctx.message.date
-        )}, ERROR_MESSAGE: ${err.message}`
+        )}, ERROR_MESSAGE: ${err.message}`,
       });
     })
     .then(
@@ -105,21 +101,21 @@ scheduleScene.hears(`🗓 Current Schedule`, ctx => {
       ctx.from.first_name
     } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
       ctx.message.text
-    }, DATE: ${lib.returnDate(ctx.message.date)}`
+    }, DATE: ${lib.returnDate(ctx.message.date)}`,
   });
 });
 
-scheduleScene.hears('🔜 Next Race', ctx => {
+scheduleScene.hears('🔜 Next Race', (ctx) => {
   axios
     .get(`${apiUrl}current/last/results.json`)
-    .then(res => {
+    .then((res) => {
       const lastRace = parseInt(res.data.MRData.RaceTable.round);
       const nextRace = lastRace + 1;
-      const totalRaces = parseInt(res.data.MRData.total) + 1;
-      if (nextRace > totalRaces) {
+      //const totalRaces = parseInt(res.data.MRData.total) + 1;
+      if (nextRace <= lastRace) {
         axios
           .get(`${apiUrl}current/${nextRace}.json`)
-          .then(res => {
+          .then((res) => {
             const raceInfo = res.data.MRData.RaceTable;
             const gpWikiLink = raceInfo.Races[0].url;
             ctx.reply(
@@ -135,12 +131,12 @@ scheduleScene.hears('🔜 Next Race', ctx => {
                 'longDate'
               )} (Sunday).`,
               Markup.inlineKeyboard([
-                Markup.urlButton('Wikipedia', `${gpWikiLink}`)
+                Markup.urlButton('Wikipedia', `${gpWikiLink}`),
               ]).extra()
             );
             ctx.scene.reenter();
           })
-          .catch(err => {
+          .catch((err) => {
             ctx.reply(
               `Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`
             );
@@ -155,7 +151,7 @@ scheduleScene.hears('🔜 Next Race', ctx => {
                 ctx.message.text
               }, DATE: ${lib.returnDate(ctx.message.date)}, ERROR_MESSAGE: ${
                 err.message
-              }`
+              }`,
             });
           });
       } else {
@@ -163,7 +159,7 @@ scheduleScene.hears('🔜 Next Race', ctx => {
         ctx.scene.reenter();
       }
     })
-    .catch(err => {
+    .catch((err) => {
       ctx.reply(
         `Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`
       );
@@ -176,7 +172,7 @@ scheduleScene.hears('🔜 Next Race', ctx => {
           ctx.message.message_id
         }, MESSAGE: ${ctx.message.text}, DATE: ${lib.returnDate(
           ctx.message.date
-        )}, ERROR_MESSAGE: ${err.message}`
+        )}, ERROR_MESSAGE: ${err.message}`,
       });
     });
 
@@ -186,11 +182,11 @@ scheduleScene.hears('🔜 Next Race', ctx => {
       ctx.from.first_name
     } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
       ctx.message.text
-    }, DATE: ${lib.returnDate(ctx.message.date)}`
+    }, DATE: ${lib.returnDate(ctx.message.date)}`,
   });
 });
 
-scheduleScene.hears('🗂 Main Menu', ctx => {
+scheduleScene.hears('🗂 Main Menu', (ctx) => {
   ctx.scene.leave('scheduleScene');
   ctx.scene.enter('mainScene');
 
@@ -200,7 +196,7 @@ scheduleScene.hears('🗂 Main Menu', ctx => {
       ctx.from.first_name
     } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
       ctx.message.text
-    }, DATE: ${lib.returnDate(ctx.message.date)}`
+    }, DATE: ${lib.returnDate(ctx.message.date)}`,
   });
 });
 

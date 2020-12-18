@@ -18,9 +18,10 @@ bot.use(session());
 bot.start((ctx) => {
   if (ctx.from.first_name) {
     ctx.reply(
-  `Hi there, ${ctx.from.first_name} 👋🏻
-  I can help you to navigate in the world of Formula 1! 🏎 
-  Hit /help to learn more about me or go straight to the main menu by pressing the button below ⬇️`,
+`Hi there, ${ctx.from.first_name} 👋🏻
+
+I can help you to navigate in the world of Formula 1! 🏎 
+Hit /help to learn more about me or go straight to the main menu by pressing the button below ⬇️`,
       Markup.keyboard([['🗂 Menu']])
         .oneTime()
         .resize()
@@ -28,9 +29,10 @@ bot.start((ctx) => {
     );
   } else {
     ctx.reply(
-  `Hi there 👋🏻
-  I can help you to navigate in the world of Formula 1! 🏎 
-  Hit /help to learn more about me or go straight to the main menu by pressing the button below ⬇️`,
+`Hi there 👋🏻
+
+I can help you to navigate in the world of Formula 1! 🏎 
+Hit /help to learn more about me or go straight to the main menu by pressing the button below ⬇️`,
       Markup.keyboard([['🗂 Menu']])
         .oneTime()
         .resize()
