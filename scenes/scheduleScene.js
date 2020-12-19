@@ -1,5 +1,6 @@
 const Scene = require('telegraf/scenes/base'),
   Markup = require('telegraf/markup'),
+  Extra = require('telegraf/extra'),
   infoLogger = require('../middleware/infoLogger'),
   errorLogger = require('../middleware/errorLogger'),
   lib = require('../middleware/lib'),
@@ -9,6 +10,11 @@ const Scene = require('telegraf/scenes/base'),
   { flag } = require('country-emoji'),
   apiUrl = keys.apiUrl,
   currentYear = new Date().getFullYear();
+
+/* Declare params for replies */
+const extra = Extra.markup();
+extra.parse_mode = 'HTML';
+extra.webPreview(false);
 
 const scheduleScene = new Scene('scheduleScene');
 scheduleScene.enter((ctx) => {
@@ -23,13 +29,18 @@ scheduleScene.enter((ctx) => {
 
   return ctx.reply(
     '🗓 Select from the menu below ⬇️',
-    Markup.keyboard([['🔜 Next Race'], [`🗓 Current Schedule`], ['🗂 Main Menu']])
+    Markup.keyboard([
+      ['🔜 Next Race'],
+      ['🗓 Current Schedule', '🗓 Historical Schedule'],
+      ['🗂 Main Menu'],
+    ])
       .oneTime()
       .resize()
       .extra()
   );
 });
 
+/* Current Schedule [START] */
 scheduleScene.hears(`🗓 Current Schedule`, (ctx) => {
   axios
     .all([
@@ -89,7 +100,7 @@ scheduleScene.hears(`🗓 Current Schedule`, (ctx) => {
           `<b>Race Schedule for ${currentYear}:</b>\n\n${preparedReply.join(
             '\n'
           )}`,
-          { parse_mode: 'HTML' }
+          extra
         );
         ctx.scene.reenter();
       })
@@ -104,7 +115,84 @@ scheduleScene.hears(`🗓 Current Schedule`, (ctx) => {
     }, DATE: ${lib.returnDate(ctx.message.date)}`,
   });
 });
+/* Current Schedule [END] */
 
+/* Historical Schedule [START] */
+scheduleScene.hears('🗓 Historical Schedule', (ctx) => {
+  ctx.reply(`Enter a year between 1950 and ${currentYear} ⌨️ `);
+
+  infoLogger.log({
+    level: 'info',
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, DATE: ${lib.returnDate(ctx.message.date)}`,
+  });
+});
+
+scheduleScene.hears(/^[0-9]{4}$/, (ctx) => {
+  ctx.scene.state = { value: ctx.message.text };
+  if (
+    ctx.scene.state.value >= 1950 &&
+    ctx.scene.state.value <= new Date().getFullYear()
+  ) {
+    axios
+      .get(`${apiUrl}${ctx.scene.state.value}.json`)
+      .then((res) => {
+        const races = res.data.MRData.RaceTable.Races;
+        let preparedReply = [];
+
+        for (let i = 0; i < races.length; i++) {
+          preparedReply.push(
+            `${i + 1}. ${flag(races[i].Circuit.Location.country)} ${
+              races[i].raceName
+            } (${races[i].Circuit.circuitName}) – ${dateFormat(
+              races[i].date,
+              'mmmm dS, yyyy'
+            )}. <a href="${races[i].url}">Report</a>.`
+          );
+        }
+        ctx.reply(
+          `<b>🗓 Historical Schedule for ${
+            ctx.message.text
+          }:</b> \n\n${preparedReply.join('\n')}`,
+          extra
+        );
+        ctx.scene.reenter();
+      })
+      .catch((err) => {
+        ctx.reply(
+          `Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`
+        );
+
+        errorLogger.log({
+          level: 'error',
+          message: `CHAT: ${ctx.from.id}, USERNAME: ${
+            ctx.from.username
+          }, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${
+            ctx.message.message_id
+          }, MESSAGE: ${ctx.message.text}, DATE: ${lib.returnDate(
+            ctx.message.date
+          )}, ERROR_MESSAGE: ${err.message}`,
+        });
+      });
+  } else {
+    ctx.reply(`Enter a year between 1950 and ${currentYear} ⌨️ `);
+  }
+
+  infoLogger.log({
+    level: 'info',
+    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
+      ctx.from.first_name
+    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+      ctx.message.text
+    }, DATE: ${lib.returnDate(ctx.message.date)}`,
+  });
+});
+/* Historical Schedule [END] */
+
+/* Next Race [START] */
 scheduleScene.hears('🔜 Next Race', (ctx) => {
   axios
     .get(`${apiUrl}current/last/results.json`)
@@ -199,5 +287,6 @@ scheduleScene.hears('🗂 Main Menu', (ctx) => {
     }, DATE: ${lib.returnDate(ctx.message.date)}`,
   });
 });
+/* Next Race [END] */
 
 module.exports = scheduleScene;
