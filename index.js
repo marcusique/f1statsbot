@@ -1,16 +1,17 @@
-const Telegraf = require("telegraf"),
-  Markup = require("telegraf/markup"),
-  Stage = require("telegraf/stage"),
-  session = require("telegraf/session"),
-  lib = require("./middleware/lib"),
-  keys = require("./config/keys"),
-  mainScene = require("./scenes/mainScene"),
-  driversScene = require("./scenes/driversScene"),
-  constructorsScene = require("./scenes/constructorsScene"),
-  scheduleScene = require("./scenes/scheduleScene"),
-  previousGrandPrixScene = require("./scenes/previousGrandPrixScene"),
+const Telegraf = require('telegraf'),
+  Markup = require('telegraf/markup'),
+  Stage = require('telegraf/stage'),
+  session = require('telegraf/session'),
+  lib = require('./middleware/lib'),
+  keys = require('./config/keys'),
+  mainScene = require('./scenes/mainScene'),
+  driversScene = require('./scenes/driversScene'),
+  constructorsScene = require('./scenes/constructorsScene'),
+  scheduleScene = require('./scenes/scheduleScene'),
+  previousGrandPrixScene = require('./scenes/previousGrandPrixScene'),
   bot = new Telegraf(keys.telegramBotToken);
 
+lib.clearLogs();
 bot.use(session());
 
 /* Welcome Message */
@@ -21,7 +22,7 @@ bot.start((ctx) => {
 
 I can help you to navigate in the world of Formula 1! 🏎 
 Hit /help to learn more about me or go straight to the main menu by pressing the button below ⬇️`,
-      Markup.keyboard([["🗂 Menu"]])
+      Markup.keyboard([['🗂 Menu']])
         .oneTime()
         .resize()
         .extra()
@@ -32,13 +33,13 @@ Hit /help to learn more about me or go straight to the main menu by pressing the
 
 I can help you to navigate in the world of Formula 1! 🏎 
 Hit /help to learn more about me or go straight to the main menu by pressing the button below ⬇️`,
-      Markup.keyboard([["🗂 Menu"]])
+      Markup.keyboard([['🗂 Menu']])
         .oneTime()
         .resize()
         .extra()
     );
   }
-  lib.logEvent("info", ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
+  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 
 /* Help Message */
@@ -62,11 +63,11 @@ Hit /new to see changelog for the latest update.
 If you are ready to start, hit the 🗂 Menu button below ⬇️
 
   `);
-  lib.logEvent("info", ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
+  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 
 // Create scene manager
-const stage = new Stage([mainScene, scheduleScene, driversScene, constructorsScene], { default: "mainScene" });
+const stage = new Stage([mainScene, scheduleScene, driversScene, constructorsScene], { default: 'mainScene' });
 
 // Scene registration
 stage.register(mainScene);
@@ -83,12 +84,12 @@ bot.use(driversScene);
 bot.use(constructorsScene);
 bot.use(previousGrandPrixScene);
 
-bot.hears("🗂 Menu", (ctx) => {
-  ctx.scene.enter("mainScene");
-  lib.logEvent("info", ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
+bot.hears('🗂 Menu', (ctx) => {
+  ctx.scene.enter('mainScene');
+  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 
-bot.command("new", (ctx) => {
+bot.command('new', (ctx) => {
   ctx.reply(`🤖 December 2020 update:
 
 Added teams in driver standings; Fixed next race issue when the season is over
@@ -96,19 +97,19 @@ Added teams in driver standings; Fixed next race issue when the season is over
 Hit /help to learn more about my features!
   `);
 
-  lib.logEvent("info", ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
+  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 
-bot.command("cancel", (ctx) => {
+bot.command('cancel', (ctx) => {
   if (ctx.session.__scenes.current) {
     ctx.scene.leave(ctx.session.__scenes.current);
-    ctx.reply("🛑 Action cancelled, returning to Main Menu 🗂");
-    ctx.scene.enter("mainScene");
-    lib.logEvent("info", ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
+    ctx.reply('🛑 Action cancelled, returning to Main Menu 🗂');
+    ctx.scene.enter('mainScene');
+    lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
   } else {
-    ctx.reply("🛑 Action cancelled, returning to Main Menu 🗂");
-    ctx.scene.enter("mainScene");
-    lib.logEvent("info", ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
+    ctx.reply('🛑 Action cancelled, returning to Main Menu 🗂');
+    ctx.scene.enter('mainScene');
+    lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
   }
 });
 

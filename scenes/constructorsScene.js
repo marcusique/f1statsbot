@@ -24,7 +24,7 @@ constructorsScene.enter((ctx) => {
 /* 🏆 Current Standings [START] */
 constructorsScene.hears(`🏆 Current Standings`, (ctx) => {
   axios
-    .get(`${apiUrl}current/constructorStandings.json`)
+    .get(`${apiUrl}current/constructorStandings.jsjon`)
     .then((res) => {
       const numOfLastRace = res.data.MRData.StandingsTable.StandingsLists[0].round;
       const constructorStandings = res.data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
@@ -45,13 +45,7 @@ constructorsScene.hears(`🏆 Current Standings`, (ctx) => {
     })
     .catch((err) => {
       ctx.reply(`Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`);
-
-      errorLogger.log({
-        level: 'error',
-        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-          ctx.message.text
-        }, DATE: ${lib.returnDate(ctx.message.date)}, ERROR_MESSAGE: ${err.message}`,
-      });
+      lib.logEvent('error', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, err.message);
     });
   lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
@@ -67,7 +61,7 @@ constructorsScene.hears(/^[0-9]{4}$/, (ctx) => {
   ctx.scene.state = { value: ctx.message.text };
   if (ctx.scene.state.value >= 1958 && ctx.scene.state.value <= new Date().getFullYear()) {
     axios
-      .get(`${apiUrl}${ctx.message.text}/constructorStandings.json`)
+      .get(`${apiUrl}${ctx.message.text}/constructorStandings.jsjon`)
       .then((res) => {
         const constructorStandings = res.data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
         let preparedReply = [];
@@ -79,7 +73,9 @@ constructorsScene.hears(/^[0-9]{4}$/, (ctx) => {
           } else if (i === 2) {
             preparedReply.push(`🥉 ${constructorStandings[i].Constructor.name} ${flag(constructorStandings[i].Constructor.nationality)} (${constructorStandings[i].points})`);
           } else {
-            preparedReply.push(`${i + 1}. ${constructorStandings[i].Constructor.name} ${flag(constructorStandings[i].Constructor.nationality)} (${constructorStandings[i].points})`);
+            preparedReply.push(
+              `${i + 1}. ${constructorStandings[i].Constructor.name} ${flag(constructorStandings[i].Constructor.nationality)} (${constructorStandings[i].points})`
+            );
           }
         }
         ctx.reply(`<b>🎖 Constructors Standings in ${ctx.message.text}:</b> \n\n${preparedReply.join('\n')}`, { parse_mode: 'HTML' });
@@ -88,12 +84,7 @@ constructorsScene.hears(/^[0-9]{4}$/, (ctx) => {
       .catch((err) => {
         ctx.reply(`Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`);
 
-        errorLogger.log({
-          level: 'error',
-          message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-            ctx.message.text
-          }, DATE: ${lib.returnDate(ctx.message.date)}, ERROR_MESSAGE: ${err.message}`,
-        });
+        lib.logEvent('error', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, err.message);
       });
   } else {
     ctx.reply(`Enter a year between 1958 and ${currentYear} ⌨️ `);

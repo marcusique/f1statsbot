@@ -1,6 +1,5 @@
 const Scene = require('telegraf/scenes/base'),
   Markup = require('telegraf/markup'),
-  errorLogger = require('../middleware/errorLogger'),
   lib = require('../middleware/lib'),
   axios = require('axios'),
   keys = require('../config/keys'),
@@ -15,7 +14,13 @@ previousGrandPrixScene.enter((ctx) => {
 
   return ctx.reply(
     '⏮ Select from the menu below ⬇️',
-    Markup.keyboard([['⏮ Qualification Results'], ['⏮ Race Results (w/ points & fastest lap)'], ['⏮ Race Results (w/ gaps)'], ['⏮ Race Results (w/ starting position)'], ['🗂 Main Menu']])
+    Markup.keyboard([
+      ['⏮ Qualification Results'],
+      ['⏮ Race Results (w/ points & fastest lap)'],
+      ['⏮ Race Results (w/ gaps)'],
+      ['⏮ Race Results (w/ starting position)'],
+      ['🗂 Main Menu'],
+    ])
       .oneTime()
       .resize()
       .extra()
@@ -39,15 +44,21 @@ previousGrandPrixScene.hears('⏮ Qualification Results', (ctx) => {
           for (let i = 0; i < qualifyingResults.length; i++) {
             if (qualifyingResults[i].Q3 && qualifyingResults[i].Q2 && qualifyingResults[i].Q1) {
               preparedReply.push(
-                `${i + 1}. ${qualifyingResults[i].Driver.givenName} ${qualifyingResults[i].Driver.familyName} ${flag(qualifyingResults[i].Driver.nationality)} (${qualifyingResults[i].Q3})`
+                `${i + 1}. ${qualifyingResults[i].Driver.givenName} ${qualifyingResults[i].Driver.familyName} ${flag(qualifyingResults[i].Driver.nationality)} (${
+                  qualifyingResults[i].Q3
+                })`
               );
             } else if (qualifyingResults[i].Q2 && qualifyingResults[i].Q1) {
               preparedReply.push(
-                `${i + 1}. ${qualifyingResults[i].Driver.givenName} ${qualifyingResults[i].Driver.familyName} ${flag(qualifyingResults[i].Driver.nationality)} (${qualifyingResults[i].Q2})`
+                `${i + 1}. ${qualifyingResults[i].Driver.givenName} ${qualifyingResults[i].Driver.familyName} ${flag(qualifyingResults[i].Driver.nationality)} (${
+                  qualifyingResults[i].Q2
+                })`
               );
             } else {
               preparedReply.push(
-                `${i + 1}. ${qualifyingResults[i].Driver.givenName} ${qualifyingResults[i].Driver.familyName} ${flag(qualifyingResults[i].Driver.nationality)} (${qualifyingResults[i].Q1})`
+                `${i + 1}. ${qualifyingResults[i].Driver.givenName} ${qualifyingResults[i].Driver.familyName} ${flag(qualifyingResults[i].Driver.nationality)} (${
+                  qualifyingResults[i].Q1
+                })`
               );
             }
           }
@@ -58,23 +69,12 @@ previousGrandPrixScene.hears('⏮ Qualification Results', (ctx) => {
           ctx.scene.reenter();
         })
         .catch((err) => {
-          errorLogger.log({
-            level: 'error',
-            message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-              ctx.message.text
-            }, DATE: ${lib.returnDate(ctx.message.date)}, ERROR_MESSAGE: ${err.message}`,
-          });
+          lib.logEvent('error', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, err.message);
         });
     })
     .catch((err) => {
       ctx.reply(`Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`);
-
-      errorLogger.log({
-        level: 'error',
-        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-          ctx.message.text
-        }, DATE: ${lib.returnDate(ctx.message.date)}, ERROR_MESSAGE: ${err.message}`,
-      });
+      lib.logEvent('error', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, err.message);
     });
   lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
@@ -92,7 +92,9 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ points & fastest lap)', (ctx)
         if (i === 0) {
           if (results[i].FastestLap && results[i].FastestLap.rank == 1) {
             preparedReply.push(
-              `🥇 ${results[i].Driver.givenName} ${results[i].Driver.familyName} ${flag(results[i].Driver.nationality)} (${results[i].points}) (⏱ – ${results[i].FastestLap.Time.time})`
+              `🥇 ${results[i].Driver.givenName} ${results[i].Driver.familyName} ${flag(results[i].Driver.nationality)} (${results[i].points}) (⏱ – ${
+                results[i].FastestLap.Time.time
+              })`
             );
           } else {
             preparedReply.push(`🥇 ${results[i].Driver.givenName} ${results[i].Driver.familyName} ${flag(results[i].Driver.nationality)} (${results[i].points})`);
@@ -100,7 +102,9 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ points & fastest lap)', (ctx)
         } else if (i === 1) {
           if (results[i].FastestLap && results[i].FastestLap.rank == 1) {
             preparedReply.push(
-              `🥈 ${results[i].Driver.givenName} ${results[i].Driver.familyName} ${flag(results[i].Driver.nationality)} (${results[i].points}) (⏱ – ${results[i].FastestLap.Time.time})`
+              `🥈 ${results[i].Driver.givenName} ${results[i].Driver.familyName} ${flag(results[i].Driver.nationality)} (${results[i].points}) (⏱ – ${
+                results[i].FastestLap.Time.time
+              })`
             );
           } else {
             preparedReply.push(`🥈 ${results[i].Driver.givenName} ${results[i].Driver.familyName} ${flag(results[i].Driver.nationality)} (${results[i].points})`);
@@ -108,7 +112,9 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ points & fastest lap)', (ctx)
         } else if (i === 2) {
           if (results[i].FastestLap && results[i].FastestLap.rank == 1) {
             preparedReply.push(
-              `🥉 ${results[i].Driver.givenName} ${results[i].Driver.familyName} ${flag(results[i].Driver.nationality)} (${results[i].points}) (⏱ – ${results[i].FastestLap.Time.time})`
+              `🥉 ${results[i].Driver.givenName} ${results[i].Driver.familyName} ${flag(results[i].Driver.nationality)} (${results[i].points}) (⏱ – ${
+                results[i].FastestLap.Time.time
+              })`
             );
           } else {
             preparedReply.push(`🥉 ${results[i].Driver.givenName} ${results[i].Driver.familyName} ${flag(results[i].Driver.nationality)} (${results[i].points})`);
@@ -116,25 +122,24 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ points & fastest lap)', (ctx)
         } else {
           if (results[i].FastestLap && results[i].FastestLap.rank == 1) {
             preparedReply.push(
-              `${i + 1}. ${results[i].Driver.givenName} ${results[i].Driver.familyName} ${flag(results[i].Driver.nationality)} (${results[i].points}) (⏱ – ${results[i].FastestLap.Time.time})`
+              `${i + 1}. ${results[i].Driver.givenName} ${results[i].Driver.familyName} ${flag(results[i].Driver.nationality)} (${results[i].points}) (⏱ – ${
+                results[i].FastestLap.Time.time
+              })`
             );
           } else {
             preparedReply.push(`${i + 1}. ${results[i].Driver.givenName} ${results[i].Driver.familyName} ${flag(results[i].Driver.nationality)} (${results[i].points})`);
           }
         }
       }
-      ctx.reply(`${flag(gpName)}${raceName} results: \n\n${preparedReply.join('\n')}`, Markup.inlineKeyboard([Markup.urlButton('Grand Prix Report (Wikipedia)', `${wikiReportUrl}`)]).extra());
+      ctx.reply(
+        `${flag(gpName)}${raceName} results: \n\n${preparedReply.join('\n')}`,
+        Markup.inlineKeyboard([Markup.urlButton('Grand Prix Report (Wikipedia)', `${wikiReportUrl}`)]).extra()
+      );
       ctx.scene.reenter();
     })
     .catch((err) => {
       ctx.reply(`Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`);
-
-      errorLogger.log({
-        level: 'error',
-        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-          ctx.message.text
-        }, DATE: ${lib.returnDate(ctx.message.date)}, ERROR_MESSAGE: ${err.message}`,
-      });
+      lib.logEvent('error', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, err.message);
     });
   lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
@@ -171,13 +176,7 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ gaps)', (ctx) => {
     })
     .catch((err) => {
       ctx.reply(`Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`);
-
-      errorLogger.log({
-        level: 'error',
-        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-          ctx.message.text
-        }, DATE: ${lib.returnDate(ctx.message.date)}, ERROR_MESSAGE: ${err.message}`,
-      });
+      lib.logEvent('error', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, err.message);
     });
   lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
@@ -235,13 +234,7 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ starting position)', (ctx) =>
     })
     .catch((err) => {
       ctx.reply(`Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`);
-
-      errorLogger.log({
-        level: 'error',
-        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-          ctx.message.text
-        }, DATE: ${lib.returnDate(ctx.message.date)}, ERROR_MESSAGE: ${err.message}`,
-      });
+      lib.logEvent('error', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, err.message);
     });
   lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
