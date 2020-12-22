@@ -14,13 +14,7 @@ previousGrandPrixScene.enter((ctx) => {
 
   return ctx.reply(
     '⏮ Select from the menu below ⬇️',
-    Markup.keyboard([
-      ['⏮ Qualification Results'],
-      ['⏮ Race Results (w/ points & fastest lap)'],
-      ['⏮ Race Results (w/ gaps)'],
-      ['⏮ Race Results (w/ starting position)'],
-      ['🗂 Main Menu'],
-    ])
+    Markup.keyboard([['⏮ Qualification Results'], ['⏮ Race Results (w/ points & fastest lap)'], ['⏮ Race Results (w/ gaps)'], ['⏮ Race Results (gained/lost)'], ['🗂 Main Menu']])
       .oneTime()
       .resize()
       .extra()
@@ -181,7 +175,7 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ gaps)', (ctx) => {
   lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 
-previousGrandPrixScene.hears('⏮ Race Results (w/ starting position)', (ctx) => {
+previousGrandPrixScene.hears('⏮ Race Results (gained/lost)', (ctx) => {
   axios
     .get(`${apiUrl}current/last/results.json`)
     .then((res) => {
@@ -227,7 +221,7 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ starting position)', (ctx) =>
         }
       }
       ctx.reply(
-        `${flag(gpName)}${raceName} results (with starting position): \n\n${preparedReply.join('\n')}`,
+        `${flag(gpName)}${raceName} results (gained/lost): \n\n${preparedReply.join('\n')}`,
         Markup.inlineKeyboard([Markup.urlButton('Grand Prix Report (Wikipedia)', `${wikiReportUrl}`)]).extra()
       );
       ctx.scene.reenter();
