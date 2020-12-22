@@ -24,7 +24,7 @@ constructorsScene.enter((ctx) => {
 /* 🏆 Current Standings [START] */
 constructorsScene.hears(`🏆 Current Standings`, (ctx) => {
   axios
-    .get(`${apiUrl}current/constructorStandings.jsjon`)
+    .get(`${apiUrl}current/constructorStandings.json`)
     .then((res) => {
       const numOfLastRace = res.data.MRData.StandingsTable.StandingsLists[0].round;
       const constructorStandings = res.data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
@@ -61,7 +61,7 @@ constructorsScene.hears(/^[0-9]{4}$/, (ctx) => {
   ctx.scene.state = { value: ctx.message.text };
   if (ctx.scene.state.value >= 1958 && ctx.scene.state.value <= new Date().getFullYear()) {
     axios
-      .get(`${apiUrl}${ctx.message.text}/constructorStandings.jsjon`)
+      .get(`${apiUrl}${ctx.message.text}/constructorStandings.json`)
       .then((res) => {
         const constructorStandings = res.data.MRData.StandingsTable.StandingsLists[0].ConstructorStandings;
         let preparedReply = [];
