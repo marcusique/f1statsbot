@@ -1,18 +1,13 @@
 const winston = require('winston'),
-  appRoot = require('app-root-path');
+  keys = require('../config/keys');
 
 const errorLogger = winston.createLogger({
   level: 'error',
   format: winston.format.json(),
   transports: [
-    // new winston.transports.MongoDB({
-    //   level: 'error',
-    //   db: keys.mongoUri,
-    //   collection: 'errors'
-    // })
     new winston.transports.File({
       level: 'error',
-      filename: `${appRoot}/logs/errors.log`,
+      filename: keys.appErrorLogPath,
       timestamp: true,
       handleExceptions: true
     })

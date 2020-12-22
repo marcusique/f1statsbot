@@ -1,5 +1,6 @@
 module.exports = {
   telegramBotToken: process.env.BOT_TOKEN,
   apiUrl: process.env.API_URL,
-  mongoUri: process.env.MONGO_URI
+  appEventLogPath: process.env.APP_EVENT_LOG_PATH,
+  appErrorLogPath: process.env.APP_ERROR_LOG_PATH
 };

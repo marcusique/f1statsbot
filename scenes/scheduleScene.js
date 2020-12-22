@@ -1,7 +1,6 @@
 const Scene = require('telegraf/scenes/base'),
   Markup = require('telegraf/markup'),
   Extra = require('telegraf/extra'),
-  infoLogger = require('../middleware/infoLogger'),
   errorLogger = require('../middleware/errorLogger'),
   lib = require('../middleware/lib'),
   axios = require('axios'),
@@ -18,22 +17,11 @@ extra.webPreview(false);
 
 const scheduleScene = new Scene('scheduleScene');
 scheduleScene.enter((ctx) => {
-  infoLogger.log({
-    level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
-      ctx.from.first_name
-    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-      ctx.message.text
-    }, DATE: ${lib.returnDate(ctx.message.date)}`,
-  });
+  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 
   return ctx.reply(
     '🗓 Select from the menu below ⬇️',
-    Markup.keyboard([
-      ['🔜 Next Race'],
-      ['🗓 Current Schedule', '🗓 Historical Schedule'],
-      ['🗂 Main Menu'],
-    ])
+    Markup.keyboard([['🔜 Next Race'], ['🗓 Current Schedule', '🗓 Historical Schedule'], ['🗂 Main Menu']])
       .oneTime()
       .resize()
       .extra()
@@ -43,100 +31,47 @@ scheduleScene.enter((ctx) => {
 /* Current Schedule [START] */
 scheduleScene.hears(`🗓 Current Schedule`, (ctx) => {
   axios
-    .all([
-      axios.get(`${apiUrl}current.json`),
-      axios.get(`${apiUrl}current/driverStandings.json`),
-    ])
+    .all([axios.get(`${apiUrl}current.json`), axios.get(`${apiUrl}current/driverStandings.json`)])
     .catch((err) => {
-      ctx.reply(
-        `Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`
-      );
+      ctx.reply(`Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`);
       errorLogger.log({
         level: 'error',
-        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
-          ctx.from.first_name
-        } ${ctx.from.last_name}, MESSAGE_ID: ${
-          ctx.message.message_id
-        }, MESSAGE: ${ctx.message.text}, DATE: ${lib.returnDate(
-          ctx.message.date
-        )}, ERROR_MESSAGE: ${err.message}`,
+        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+          ctx.message.text
+        }, DATE: ${lib.returnDate(ctx.message.date)}, ERROR_MESSAGE: ${err.message}`,
       });
     })
     .then(
       axios.spread((resSchedule, resStandings) => {
         const currentSchedule = resSchedule.data.MRData.RaceTable.Races;
-        const racesCompleted = parseInt(
-          resStandings.data.MRData.StandingsTable.StandingsLists[0].round
-        );
+        const racesCompleted = parseInt(resStandings.data.MRData.StandingsTable.StandingsLists[0].round);
         let preparedReply = [];
         for (let i = 0; i < currentSchedule.length; i++) {
           if (i < racesCompleted) {
-            preparedReply.push(
-              `✅${i + 1}. ${flag(
-                currentSchedule[i].Circuit.Location.country
-              )} ${currentSchedule[i].raceName} (${dateFormat(
-                currentSchedule[i].date,
-                'mmm dS'
-              )})`
-            );
+            preparedReply.push(`✅${i + 1}. ${flag(currentSchedule[i].Circuit.Location.country)} ${currentSchedule[i].raceName} (${dateFormat(currentSchedule[i].date, 'mmm dS')})`);
           } else if (i === racesCompleted) {
-            preparedReply.push(
-              `➡️${i + 1}. ${flag(
-                currentSchedule[i].Circuit.Location.country
-              )} ${currentSchedule[i].raceName} (${dateFormat(
-                currentSchedule[i].date,
-                'mmm dS'
-              )})`
-            );
+            preparedReply.push(`➡️${i + 1}. ${flag(currentSchedule[i].Circuit.Location.country)} ${currentSchedule[i].raceName} (${dateFormat(currentSchedule[i].date, 'mmm dS')})`);
           } else {
-            preparedReply.push(
-              `${i + 1}. ${flag(currentSchedule[i].Circuit.Location.country)} ${
-                currentSchedule[i].raceName
-              } (${dateFormat(currentSchedule[i].date, 'mmm dS')})`
-            );
+            preparedReply.push(`${i + 1}. ${flag(currentSchedule[i].Circuit.Location.country)} ${currentSchedule[i].raceName} (${dateFormat(currentSchedule[i].date, 'mmm dS')})`);
           }
         }
-        ctx.reply(
-          `<b>Race Schedule for ${currentYear}:</b>\n\n${preparedReply.join(
-            '\n'
-          )}`,
-          extra
-        );
+        ctx.reply(`<b>Race Schedule for ${currentYear}:</b>\n\n${preparedReply.join('\n')}`, extra);
         ctx.scene.reenter();
       })
     );
-
-  infoLogger.log({
-    level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
-      ctx.from.first_name
-    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-      ctx.message.text
-    }, DATE: ${lib.returnDate(ctx.message.date)}`,
-  });
+  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 /* Current Schedule [END] */
 
 /* Historical Schedule [START] */
 scheduleScene.hears('🗓 Historical Schedule', (ctx) => {
   ctx.reply(`Enter a year between 1950 and ${currentYear} ⌨️ `);
-
-  infoLogger.log({
-    level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
-      ctx.from.first_name
-    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-      ctx.message.text
-    }, DATE: ${lib.returnDate(ctx.message.date)}`,
-  });
+  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 
 scheduleScene.hears(/^[0-9]{4}$/, (ctx) => {
   ctx.scene.state = { value: ctx.message.text };
-  if (
-    ctx.scene.state.value >= 1950 &&
-    ctx.scene.state.value <= new Date().getFullYear()
-  ) {
+  if (ctx.scene.state.value >= 1950 && ctx.scene.state.value <= new Date().getFullYear()) {
     axios
       .get(`${apiUrl}${ctx.scene.state.value}.json`)
       .then((res) => {
@@ -145,50 +80,28 @@ scheduleScene.hears(/^[0-9]{4}$/, (ctx) => {
 
         for (let i = 0; i < races.length; i++) {
           preparedReply.push(
-            `${i + 1}. ${flag(races[i].Circuit.Location.country)} ${
-              races[i].raceName
-            } (${races[i].Circuit.circuitName}) – ${dateFormat(
-              races[i].date,
-              'mmmm dS, yyyy'
-            )}. <a href="${races[i].url}">Report</a>.`
+            `${i + 1}. ${flag(races[i].Circuit.Location.country)} ${races[i].raceName} (${races[i].Circuit.circuitName}) – ${dateFormat(races[i].date, 'mmmm dS, yyyy')}. <a href="${
+              races[i].url
+            }">Report</a>.`
           );
         }
-        ctx.reply(
-          `<b>🗓 Historical Schedule for ${
-            ctx.message.text
-          }:</b> \n\n${preparedReply.join('\n')}`,
-          extra
-        );
+        ctx.reply(`<b>🗓 Historical Schedule for ${ctx.message.text}:</b> \n\n${preparedReply.join('\n')}`, extra);
         ctx.scene.reenter();
       })
       .catch((err) => {
-        ctx.reply(
-          `Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`
-        );
+        ctx.reply(`Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`);
 
         errorLogger.log({
           level: 'error',
-          message: `CHAT: ${ctx.from.id}, USERNAME: ${
-            ctx.from.username
-          }, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${
-            ctx.message.message_id
-          }, MESSAGE: ${ctx.message.text}, DATE: ${lib.returnDate(
-            ctx.message.date
-          )}, ERROR_MESSAGE: ${err.message}`,
+          message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+            ctx.message.text
+          }, DATE: ${lib.returnDate(ctx.message.date)}, ERROR_MESSAGE: ${err.message}`,
         });
       });
   } else {
     ctx.reply(`Enter a year between 1950 and ${currentYear} ⌨️ `);
   }
-
-  infoLogger.log({
-    level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
-      ctx.from.first_name
-    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-      ctx.message.text
-    }, DATE: ${lib.returnDate(ctx.message.date)}`,
-  });
+  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 /* Historical Schedule [END] */
 
@@ -207,39 +120,21 @@ scheduleScene.hears('🔜 Next Race', (ctx) => {
             const raceInfo = res.data.MRData.RaceTable;
             const gpWikiLink = raceInfo.Races[0].url;
             ctx.reply(
-              `The next race is ${flag(
-                raceInfo.Races[0].Circuit.Location.country
-              )} ${raceInfo.Races[0].raceName} at ${
+              `The next race is ${flag(raceInfo.Races[0].Circuit.Location.country)} ${raceInfo.Races[0].raceName} at ${
                 raceInfo.Races[0].Circuit.circuitName
-              }, starting at ${raceInfo.Races[0].time.substring(
-                0,
-                5
-              )} UTC time on ${dateFormat(
-                raceInfo.Races[0].date,
-                'longDate'
-              )} (Sunday).`,
-              Markup.inlineKeyboard([
-                Markup.urlButton('Wikipedia', `${gpWikiLink}`),
-              ]).extra()
+              }, starting at ${raceInfo.Races[0].time.substring(0, 5)} UTC time on ${dateFormat(raceInfo.Races[0].date, 'longDate')} (Sunday).`,
+              Markup.inlineKeyboard([Markup.urlButton('Wikipedia', `${gpWikiLink}`)]).extra()
             );
             ctx.scene.reenter();
           })
           .catch((err) => {
-            ctx.reply(
-              `Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`
-            );
+            ctx.reply(`Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`);
 
             errorLogger.log({
               level: 'error',
-              message: `CHAT: ${ctx.from.id}, USERNAME: ${
-                ctx.from.username
-              }, NAME: ${ctx.from.first_name} ${
-                ctx.from.last_name
-              }, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+              message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
                 ctx.message.text
-              }, DATE: ${lib.returnDate(ctx.message.date)}, ERROR_MESSAGE: ${
-                err.message
-              }`,
+              }, DATE: ${lib.returnDate(ctx.message.date)}, ERROR_MESSAGE: ${err.message}`,
             });
           });
       } else {
@@ -248,44 +143,22 @@ scheduleScene.hears('🔜 Next Race', (ctx) => {
       }
     })
     .catch((err) => {
-      ctx.reply(
-        `Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`
-      );
+      ctx.reply(`Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`);
 
       errorLogger.log({
         level: 'error',
-        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
-          ctx.from.first_name
-        } ${ctx.from.last_name}, MESSAGE_ID: ${
-          ctx.message.message_id
-        }, MESSAGE: ${ctx.message.text}, DATE: ${lib.returnDate(
-          ctx.message.date
-        )}, ERROR_MESSAGE: ${err.message}`,
+        message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${ctx.from.first_name} ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
+          ctx.message.text
+        }, DATE: ${lib.returnDate(ctx.message.date)}, ERROR_MESSAGE: ${err.message}`,
       });
     });
-
-  infoLogger.log({
-    level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
-      ctx.from.first_name
-    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-      ctx.message.text
-    }, DATE: ${lib.returnDate(ctx.message.date)}`,
-  });
+  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 
 scheduleScene.hears('🗂 Main Menu', (ctx) => {
   ctx.scene.leave('scheduleScene');
   ctx.scene.enter('mainScene');
-
-  infoLogger.log({
-    level: 'info',
-    message: `CHAT: ${ctx.from.id}, USERNAME: ${ctx.from.username}, NAME: ${
-      ctx.from.first_name
-    } ${ctx.from.last_name}, MESSAGE_ID: ${ctx.message.message_id}, MESSAGE: ${
-      ctx.message.text
-    }, DATE: ${lib.returnDate(ctx.message.date)}`,
-  });
+  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 /* Next Race [END] */
 
