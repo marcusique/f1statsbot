@@ -3,6 +3,8 @@ const libObj = {},
   errorLogger = require('../middleware/errorLogger'),
   dateFormat = require('dateformat'),
   keys = require('../config/keys'),
+  axios = require('axios'),
+  currentYear = parseInt(new Date().getFullYear()),
   fs = require('fs');
 
 libObj.returnDate = (unixTimestamp) => {

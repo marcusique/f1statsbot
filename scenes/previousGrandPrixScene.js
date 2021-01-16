@@ -26,8 +26,10 @@ previousGrandPrixScene.hears('⏮ Qualification Results', (ctx) => {
     .get(`${apiUrl}current/last/results.json`)
     .then((res) => {
       const lastRace = res.data.MRData.RaceTable.round;
+      const seasonYear = res.data.MRData.RaceTable.season;
+      
       axios
-        .get(`${apiUrl}${currentYear}/${lastRace}/qualifying.json`)
+        .get(`${apiUrl}${seasonYear}/${lastRace}/qualifying.json`)
         .then((res) => {
           const raceName = res.data.MRData.RaceTable.Races[0].raceName;
           const gpName = res.data.MRData.RaceTable.Races[0].Circuit.Location.country;
@@ -64,6 +66,7 @@ previousGrandPrixScene.hears('⏮ Qualification Results', (ctx) => {
         })
         .catch((err) => {
           lib.logEvent('error', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, err.message);
+          ctx.scene.reenter();
         });
     })
     .catch((err) => {
