@@ -39,21 +39,19 @@ scheduleScene.hears(`🗓 Current Schedule`, (ctx) => {
       axios.spread((resSchedule, resStandings) => {
         const currentSchedule = resSchedule.data.MRData.RaceTable.Races;
         const racesCompleted = parseInt(resStandings.data.MRData.StandingsTable.StandingsLists[0].round);
+        const seasonYear = resSchedule.data.MRData.RaceTable.season;
         let preparedReply = [];
+
         for (let i = 0; i < currentSchedule.length; i++) {
           if (i < racesCompleted) {
-            preparedReply.push(
-              `✅${i + 1}. ${flag(currentSchedule[i].Circuit.Location.country)} ${currentSchedule[i].raceName} (${dateFormat(currentSchedule[i].date, 'mmm dS')})`
-            );
+            preparedReply.push(`✅${i + 1}. ${flag(currentSchedule[i].Circuit.Location.country)} ${currentSchedule[i].raceName} (${dateFormat(currentSchedule[i].date, 'mmm dS')})`);
           } else if (i === racesCompleted) {
-            preparedReply.push(
-              `➡️${i + 1}. ${flag(currentSchedule[i].Circuit.Location.country)} ${currentSchedule[i].raceName} (${dateFormat(currentSchedule[i].date, 'mmm dS')})`
-            );
+            preparedReply.push(`➡️${i + 1}. ${flag(currentSchedule[i].Circuit.Location.country)} ${currentSchedule[i].raceName} (${dateFormat(currentSchedule[i].date, 'mmm dS')})`);
           } else {
             preparedReply.push(`${i + 1}. ${flag(currentSchedule[i].Circuit.Location.country)} ${currentSchedule[i].raceName} (${dateFormat(currentSchedule[i].date, 'mmm dS')})`);
           }
         }
-        ctx.reply(`<b>Race Schedule for ${currentYear}:</b>\n\n${preparedReply.join('\n')}`, extra);
+        ctx.reply(`<b>Race Schedule for ${seasonYear}:</b>\n\n${preparedReply.join('\n')}`, extra);
         ctx.scene.reenter();
       })
     );
@@ -78,10 +76,9 @@ scheduleScene.hears(/^[0-9]{4}$/, (ctx) => {
 
         for (let i = 0; i < races.length; i++) {
           preparedReply.push(
-            `${i + 1}. ${flag(races[i].Circuit.Location.country)} ${races[i].raceName} (${races[i].Circuit.circuitName}) – ${dateFormat(
-              races[i].date,
-              'mmmm dS, yyyy'
-            )}. <a href="${races[i].url}">Report</a>`
+            `${i + 1}. ${flag(races[i].Circuit.Location.country)} ${races[i].raceName} (${races[i].Circuit.circuitName}) – ${dateFormat(races[i].date, 'mmmm dS, yyyy')}. <a href="${
+              races[i].url
+            }">Report</a>`
           );
         }
         ctx.reply(`<b>🗓 Historical Schedule for ${ctx.message.text}:</b> \n\n${preparedReply.join('\n')}`, extra);
