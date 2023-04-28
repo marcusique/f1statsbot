@@ -1,6 +1,5 @@
 const Scene = require('telegraf/scenes/base'),
   Markup = require('telegraf/markup'),
-  lib = require('../middleware/lib'),
   axios = require('axios'),
   keys = require('../config/keys'),
   { flag } = require('country-emoji'),
@@ -10,7 +9,6 @@ const Scene = require('telegraf/scenes/base'),
 const previousGrandPrixScene = new Scene('previousGrandPrixScene');
 
 previousGrandPrixScene.enter((ctx) => {
-  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 
   return ctx.reply(
     '⏮ Select from the menu below ⬇️',
@@ -27,7 +25,7 @@ previousGrandPrixScene.hears('⏮ Qualification Results', (ctx) => {
     .then((res) => {
       const lastRace = res.data.MRData.RaceTable.round;
       const seasonYear = res.data.MRData.RaceTable.season;
-      
+
       axios
         .get(`${apiUrl}${seasonYear}/${lastRace}/qualifying.json`)
         .then((res) => {
@@ -40,20 +38,17 @@ previousGrandPrixScene.hears('⏮ Qualification Results', (ctx) => {
           for (let i = 0; i < qualifyingResults.length; i++) {
             if (qualifyingResults[i].Q3 && qualifyingResults[i].Q2 && qualifyingResults[i].Q1) {
               preparedReply.push(
-                `${i + 1}. ${qualifyingResults[i].Driver.givenName} ${qualifyingResults[i].Driver.familyName} ${flag(qualifyingResults[i].Driver.nationality)} (${
-                  qualifyingResults[i].Q3
+                `${i + 1}. ${qualifyingResults[i].Driver.givenName} ${qualifyingResults[i].Driver.familyName} ${flag(qualifyingResults[i].Driver.nationality)} (${qualifyingResults[i].Q3
                 })`
               );
             } else if (qualifyingResults[i].Q2 && qualifyingResults[i].Q1) {
               preparedReply.push(
-                `${i + 1}. ${qualifyingResults[i].Driver.givenName} ${qualifyingResults[i].Driver.familyName} ${flag(qualifyingResults[i].Driver.nationality)} (${
-                  qualifyingResults[i].Q2
+                `${i + 1}. ${qualifyingResults[i].Driver.givenName} ${qualifyingResults[i].Driver.familyName} ${flag(qualifyingResults[i].Driver.nationality)} (${qualifyingResults[i].Q2
                 })`
               );
             } else {
               preparedReply.push(
-                `${i + 1}. ${qualifyingResults[i].Driver.givenName} ${qualifyingResults[i].Driver.familyName} ${flag(qualifyingResults[i].Driver.nationality)} (${
-                  qualifyingResults[i].Q1
+                `${i + 1}. ${qualifyingResults[i].Driver.givenName} ${qualifyingResults[i].Driver.familyName} ${flag(qualifyingResults[i].Driver.nationality)} (${qualifyingResults[i].Q1
                 })`
               );
             }
@@ -65,15 +60,12 @@ previousGrandPrixScene.hears('⏮ Qualification Results', (ctx) => {
           ctx.scene.reenter();
         })
         .catch((err) => {
-          lib.logEvent('error', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, err.message);
           ctx.scene.reenter();
         });
     })
     .catch((err) => {
       ctx.reply(`Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`);
-      lib.logEvent('error', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, err.message);
     });
-  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 
 previousGrandPrixScene.hears('⏮ Race Results (w/ points & fastest lap)', (ctx) => {
@@ -89,8 +81,7 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ points & fastest lap)', (ctx)
         if (i === 0) {
           if (results[i].FastestLap && results[i].FastestLap.rank == 1) {
             preparedReply.push(
-              `🥇 ${results[i].Driver.givenName} ${results[i].Driver.familyName} ${flag(results[i].Driver.nationality)} (${results[i].points}) (⏱ – ${
-                results[i].FastestLap.Time.time
+              `🥇 ${results[i].Driver.givenName} ${results[i].Driver.familyName} ${flag(results[i].Driver.nationality)} (${results[i].points}) (⏱ – ${results[i].FastestLap.Time.time
               })`
             );
           } else {
@@ -99,8 +90,7 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ points & fastest lap)', (ctx)
         } else if (i === 1) {
           if (results[i].FastestLap && results[i].FastestLap.rank == 1) {
             preparedReply.push(
-              `🥈 ${results[i].Driver.givenName} ${results[i].Driver.familyName} ${flag(results[i].Driver.nationality)} (${results[i].points}) (⏱ – ${
-                results[i].FastestLap.Time.time
+              `🥈 ${results[i].Driver.givenName} ${results[i].Driver.familyName} ${flag(results[i].Driver.nationality)} (${results[i].points}) (⏱ – ${results[i].FastestLap.Time.time
               })`
             );
           } else {
@@ -109,8 +99,7 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ points & fastest lap)', (ctx)
         } else if (i === 2) {
           if (results[i].FastestLap && results[i].FastestLap.rank == 1) {
             preparedReply.push(
-              `🥉 ${results[i].Driver.givenName} ${results[i].Driver.familyName} ${flag(results[i].Driver.nationality)} (${results[i].points}) (⏱ – ${
-                results[i].FastestLap.Time.time
+              `🥉 ${results[i].Driver.givenName} ${results[i].Driver.familyName} ${flag(results[i].Driver.nationality)} (${results[i].points}) (⏱ – ${results[i].FastestLap.Time.time
               })`
             );
           } else {
@@ -119,8 +108,7 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ points & fastest lap)', (ctx)
         } else {
           if (results[i].FastestLap && results[i].FastestLap.rank == 1) {
             preparedReply.push(
-              `${i + 1}. ${results[i].Driver.givenName} ${results[i].Driver.familyName} ${flag(results[i].Driver.nationality)} (${results[i].points}) (⏱ – ${
-                results[i].FastestLap.Time.time
+              `${i + 1}. ${results[i].Driver.givenName} ${results[i].Driver.familyName} ${flag(results[i].Driver.nationality)} (${results[i].points}) (⏱ – ${results[i].FastestLap.Time.time
               })`
             );
           } else {
@@ -136,9 +124,7 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ points & fastest lap)', (ctx)
     })
     .catch((err) => {
       ctx.reply(`Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`);
-      lib.logEvent('error', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, err.message);
     });
-  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 
 previousGrandPrixScene.hears('⏮ Race Results (w/ gaps)', (ctx) => {
@@ -173,9 +159,7 @@ previousGrandPrixScene.hears('⏮ Race Results (w/ gaps)', (ctx) => {
     })
     .catch((err) => {
       ctx.reply(`Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`);
-      lib.logEvent('error', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, err.message);
     });
-  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 
 previousGrandPrixScene.hears('⏮ Race Results (gained/lost)', (ctx) => {
@@ -231,15 +215,12 @@ previousGrandPrixScene.hears('⏮ Race Results (gained/lost)', (ctx) => {
     })
     .catch((err) => {
       ctx.reply(`Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`);
-      lib.logEvent('error', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, err.message);
     });
-  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 
 previousGrandPrixScene.hears('🗂 Main Menu', (ctx) => {
   ctx.scene.leave('previousGrandPrix');
   ctx.scene.enter('mainScene');
-  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 
 module.exports = previousGrandPrixScene;

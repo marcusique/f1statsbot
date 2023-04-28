@@ -1,8 +1,7 @@
-const Telegraf = require('telegraf'),
-  Markup = require('telegraf/markup'),
-  Stage = require('telegraf/stage'),
-  session = require('telegraf/session'),
-  lib = require('./middleware/lib'),
+const { Telegraf, Markup, Stage, session } = require('telegraf'),
+  // Markup = require('telegraf/markup'),
+  // Stage = require('telegraf/stage'),
+  // session = require('telegraf/session'),
   keys = require('./config/keys'),
   mainScene = require('./scenes/mainScene'),
   driversScene = require('./scenes/driversScene'),
@@ -11,8 +10,22 @@ const Telegraf = require('telegraf'),
   previousGrandPrixScene = require('./scenes/previousGrandPrixScene'),
   bot = new Telegraf(keys.telegramBotToken);
 
-lib.clearLogs();
 bot.use(session());
+
+bot.telegram.getMe().then((botInfo) => {
+  bot.options.username = botInfo.username;
+  console.log(botInfo.username + ' is now running!');
+});
+
+// bot.command('k', (ctx) => {
+//   return ctx.replyWithMarkdown('<b>Coke</b> or <i>Pepsi?</i>', {
+//     parse_mode: 'HTML',
+//     ...Markup.inlineKeyboard([
+//       Markup.callbackButton('send', 'send')
+//     ], { columns: 1 }).extra()
+//   })
+// })
+
 
 /* Welcome Message */
 bot.start((ctx) => {
@@ -39,7 +52,6 @@ Hit /help to learn more about me or go straight to the main menu by pressing the
         .extra()
     );
   }
-  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 
 /* Help Message */
@@ -63,7 +75,6 @@ Hit /new to see changelog for the latest update.
 If you are ready to start, hit the 🗂 Menu button below ⬇️
 
   `);
-  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 
 // Create scene manager
@@ -86,7 +97,6 @@ bot.use(previousGrandPrixScene);
 
 bot.hears('🗂 Menu', (ctx) => {
   ctx.scene.enter('mainScene');
-  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 
 bot.command('new', (ctx) => {
@@ -96,8 +106,6 @@ Added teams in driver standings; Fixed next race issue when the season is over
 
 Hit /help to learn more about my features!
   `);
-
-  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 
 bot.command('cancel', (ctx) => {
@@ -105,12 +113,14 @@ bot.command('cancel', (ctx) => {
     ctx.scene.leave(ctx.session.__scenes.current);
     ctx.reply('🛑 Action cancelled, returning to Main Menu 🗂');
     ctx.scene.enter('mainScene');
-    lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
   } else {
     ctx.reply('🛑 Action cancelled, returning to Main Menu 🗂');
     ctx.scene.enter('mainScene');
-    lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
   }
 });
+
+// Enable graceful stop
+process.once('SIGINT', () => bot.stop('Graceful stop with SIGINT'));
+process.once('SIGTERM', () => bot.stop('Graceful stop with SIGTERM'));
 
 bot.launch();

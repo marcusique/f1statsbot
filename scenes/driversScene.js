@@ -1,6 +1,5 @@
 const Scene = require('telegraf/scenes/base'),
   Markup = require('telegraf/markup'),
-  lib = require('../middleware/lib'),
   axios = require('axios'),
   { flag } = require('country-emoji'),
   keys = require('../config/keys'),
@@ -10,7 +9,6 @@ const Scene = require('telegraf/scenes/base'),
 const driversScene = new Scene('driversScene');
 
 driversScene.enter((ctx) => {
-  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 
   return ctx.reply(
     '👱🏻‍♂️ Select from the menu below ⬇️',
@@ -53,9 +51,7 @@ driversScene.hears(`🏆 Current Standings`, (ctx) => {
     })
     .catch((err) => {
       ctx.reply(`Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`);
-      lib.logEvent('error', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, err.message);
     });
-  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 /* 🏅 Current Standings (Drivers only) [END] */
 
@@ -99,9 +95,7 @@ driversScene.hears('🏆 Current Standings w/ teams', (ctx) => {
     })
     .catch((err) => {
       ctx.reply(`Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`);
-      lib.logEvent('error', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, err.message);
     });
-  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 
 /* 🏅 Current Standings (Drivers + Teams) [END] */
@@ -109,7 +103,6 @@ driversScene.hears('🏆 Current Standings w/ teams', (ctx) => {
 /* Standings by Year [START] */
 driversScene.hears('🎖 Standings by year', (ctx) => {
   ctx.reply(`Enter a year between 1950 and ${currentYear} ⌨️ `);
-  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 
 driversScene.hears(/^[0-9]{4}$/, (ctx) => {
@@ -152,20 +145,17 @@ driversScene.hears(/^[0-9]{4}$/, (ctx) => {
       })
       .catch((err) => {
         ctx.reply(`Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`);
-        lib.logEvent('error', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, err.message);
       });
   } else {
     ctx.reply(`Enter a year between 1950 and ${currentYear} ⌨️ `);
   }
 
-  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 /* Standings by Year (Drivers only) [END] */
 
 driversScene.hears('🗂 Main Menu', (ctx) => {
   ctx.scene.leave('driversScene');
   ctx.scene.enter('mainScene');
-  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 
 module.exports = driversScene;

@@ -1,7 +1,5 @@
 const Scene = require('telegraf/scenes/base'),
   Markup = require('telegraf/markup'),
-  errorLogger = require('../middleware/errorLogger'),
-  lib = require('../middleware/lib'),
   axios = require('axios'),
   { flag } = require('country-emoji'),
   keys = require('../config/keys'),
@@ -10,8 +8,6 @@ const Scene = require('telegraf/scenes/base'),
 
 const constructorsScene = new Scene('constructorsScene');
 constructorsScene.enter((ctx) => {
-  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
-
   return ctx.reply(
     '🏎 Select from the menu below ⬇️',
     Markup.keyboard([[`🏆 Current Standings`, '🎖 Standings by year'], ['🗂 Main Menu']])
@@ -45,16 +41,13 @@ constructorsScene.hears(`🏆 Current Standings`, (ctx) => {
     })
     .catch((err) => {
       ctx.reply(`Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`);
-      lib.logEvent('error', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, err.message);
     });
-  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 /* 🏆 Current Standings [END] */
 
 /* Standings by Year [START] */
 constructorsScene.hears('🎖 Standings by year', (ctx) => {
   ctx.reply(`Enter a year between 1958 and ${currentYear} ⌨️ `);
-  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 
 constructorsScene.hears(/^[0-9]{4}$/, (ctx) => {
@@ -84,12 +77,10 @@ constructorsScene.hears(/^[0-9]{4}$/, (ctx) => {
       .catch((err) => {
         ctx.reply(`Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`);
 
-        lib.logEvent('error', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, err.message);
       });
   } else {
     ctx.reply(`Enter a year between 1958 and ${currentYear} ⌨️ `);
   }
-  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 /* Standings by Year [END] */
 
@@ -97,7 +88,6 @@ constructorsScene.hears('🗂 Main Menu', (ctx) => {
   ctx.scene.leave('constructorsScene');
   ctx.scene.enter('mainScene');
 
-  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 
 module.exports = constructorsScene;

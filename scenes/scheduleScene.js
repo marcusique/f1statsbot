@@ -1,7 +1,6 @@
 const Scene = require('telegraf/scenes/base'),
   Markup = require('telegraf/markup'),
   Extra = require('telegraf/extra'),
-  lib = require('../middleware/lib'),
   axios = require('axios'),
   dateFormat = require('dateformat'),
   keys = require('../config/keys'),
@@ -16,7 +15,6 @@ extra.webPreview(false);
 
 const scheduleScene = new Scene('scheduleScene');
 scheduleScene.enter((ctx) => {
-  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 
   return ctx.reply(
     '🗓 Select from the menu below ⬇️',
@@ -33,7 +31,6 @@ scheduleScene.hears(`🗓 Current Schedule`, (ctx) => {
     .all([axios.get(`${apiUrl}current.json`), axios.get(`${apiUrl}current/driverStandings.json`)])
     .catch((err) => {
       ctx.reply(`Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`);
-      lib.logEvent('error', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, err.message);
     })
     .then(
       axios.spread((resSchedule, resStandings) => {
@@ -55,14 +52,12 @@ scheduleScene.hears(`🗓 Current Schedule`, (ctx) => {
         ctx.scene.reenter();
       })
     );
-  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 /* Current Schedule [END] */
 
 /* Historical Schedule [START] */
 scheduleScene.hears('🗓 Historical Schedule', (ctx) => {
   ctx.reply(`Enter a year between 1950 and ${currentYear} ⌨️ `);
-  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 
 scheduleScene.hears(/^[0-9]{4}$/, (ctx) => {
@@ -76,8 +71,7 @@ scheduleScene.hears(/^[0-9]{4}$/, (ctx) => {
 
         for (let i = 0; i < races.length; i++) {
           preparedReply.push(
-            `${i + 1}. ${flag(races[i].Circuit.Location.country)} ${races[i].raceName} (${races[i].Circuit.circuitName}) – ${dateFormat(races[i].date, 'mmmm dS, yyyy')}. <a href="${
-              races[i].url
+            `${i + 1}. ${flag(races[i].Circuit.Location.country)} ${races[i].raceName} (${races[i].Circuit.circuitName}) – ${dateFormat(races[i].date, 'mmmm dS, yyyy')}. <a href="${races[i].url
             }">Report</a>`
           );
         }
@@ -86,12 +80,10 @@ scheduleScene.hears(/^[0-9]{4}$/, (ctx) => {
       })
       .catch((err) => {
         ctx.reply(`Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`);
-        lib.logEvent('error', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, err.message);
       });
   } else {
     ctx.reply(`Enter a year between 1950 and ${currentYear} ⌨️ `);
   }
-  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 /* Historical Schedule [END] */
 
@@ -110,8 +102,7 @@ scheduleScene.hears('🔜 Next Race', (ctx) => {
             const raceInfo = res.data.MRData.RaceTable;
             const gpWikiLink = raceInfo.Races[0].url;
             ctx.reply(
-              `The next race is ${flag(raceInfo.Races[0].Circuit.Location.country)} ${raceInfo.Races[0].raceName} at ${
-                raceInfo.Races[0].Circuit.circuitName
+              `The next race is ${flag(raceInfo.Races[0].Circuit.Location.country)} ${raceInfo.Races[0].raceName} at ${raceInfo.Races[0].Circuit.circuitName
               }, starting at ${raceInfo.Races[0].time.substring(0, 5)} UTC time on ${dateFormat(raceInfo.Races[0].date, 'longDate')} (Sunday).`,
               Markup.inlineKeyboard([Markup.urlButton('Wikipedia', `${gpWikiLink}`)]).extra()
             );
@@ -119,7 +110,6 @@ scheduleScene.hears('🔜 Next Race', (ctx) => {
           })
           .catch((err) => {
             ctx.reply(`Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`);
-            lib.logEvent('error', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, err.message);
           });
       } else {
         ctx.reply('Current season is over. See you next season ✊🏻');
@@ -128,15 +118,12 @@ scheduleScene.hears('🔜 Next Race', (ctx) => {
     })
     .catch((err) => {
       ctx.reply(`Oh snap! 🤖 The results are not yet ready or an error occured. Please try again later.`);
-      lib.logEvent('error', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, err.message);
     });
-  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 
 scheduleScene.hears('🗂 Main Menu', (ctx) => {
   ctx.scene.leave('scheduleScene');
   ctx.scene.enter('mainScene');
-  lib.logEvent('info', ctx.from.id, ctx.from.username, ctx.from.first_name, ctx.from.last_name, ctx.message.message_id, ctx.message.text, ctx.message.date, null);
 });
 /* Next Race [END] */
 
